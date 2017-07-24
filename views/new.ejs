@@ -1,0 +1,36 @@
+<% include partials/header %>
+
+<h3>Post a new Finding</h3>
+
+<form action="/findings" method="POST" id="newFindingForm">
+	<h4>Title</h4>
+	<input class="newFindingTextField" type="text" name="title" placeholder="title">
+	<input class="newFindingTextField" type="text" name="subject" placeholder="subject">
+</form>
+
+<h4>Background
+	<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
+</h4>
+<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="background" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
+
+<h4>Findings
+	<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
+</h4>
+<textarea id="newFindingsTextArea" class="newFindingTextArea" name="findings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
+
+<h4>Implications
+	<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
+</h4>
+<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="implications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
+
+<br>
+<a class="btn btn-primary" form="newFindingForm">Submit</button>
+<a class="btn btn-primary" href="/findings">Go back</a>
+
+
+<script type="text/javascript" src="/js/Countable.js"></script>
+<script type="text/javascript" src="/js/newFinding.js"></script>
+
+<% include partials/footer %>
+
+

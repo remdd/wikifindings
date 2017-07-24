@@ -1,0 +1,40 @@
+<% include partials/header %>
+
+<h3>Welcome to WikiFindings - the dynamic repository of lay summaries of research articles.</h3>
+
+<a class="btn btn-primary" href="/findings/new">Post new finding</a>
+
+<br/>
+<br/>
+<br/>
+
+<h3>Recent findings</h3>
+<% findings.forEach(function(finding){ %>
+
+	<div class="fThumbDiv">
+		<div class="fThumbSubject"><%= finding.subject %></div>
+		<div class="fThumbTags">Tagged with: 
+			<% for(var i = 0; i < 5; i ++) {
+				if(finding.tags[i]) { %>
+					<%= finding.tags[i]; %>
+					<% if(i < finding.tags.length - 1 && i < 4) {%>, <% } %> 
+			<% }} %>
+			<% if(finding.tags.length > 5) { %>...<%}%>
+		</div>
+		<h4><%= finding.title %></h4>
+		<p>Authors:
+			<span class="fThumbAuthors">
+				<% for(var i = 0; i < 5; i ++) {
+					if(finding.authors[i]) { %>
+						<%= finding.authors[i]; %>
+						<% if(i < finding.authors.length - 1 && i < 4) {%>, <% } %> 
+				<% }} %>
+				<% if(finding.authors.length > 5) { %>...<%}%>
+			</span>
+			<span class="fThumbDate">Date posted: <%= finding.datePosted %></span>
+		</p>
+	</div>
+
+<% }); %>
+
+<% include partials/footer %>
