@@ -13,25 +13,29 @@
 
 	<div class="fThumbDiv">
 		<div class="fThumbSubject"><%= finding.subject %></div>
-		<div class="fThumbTags">Tagged with: 
-			<% for(var i = 0; i < 5; i ++) {
-				if(finding.tags[i]) { %>
-					<%= finding.tags[i]; %>
-					<% if(i < finding.tags.length - 1 && i < 4) {%>, <% } %> 
-			<% }} %>
-			<% if(finding.tags.length > 5) { %>...<%}%>
+		<div class="fThumbTags">keywords: 
+			<% if(finding.keywords) {
+				for(var i = 0; i < 5; i ++) {
+					if(finding.keywords[i]) { %>
+						<%= finding.keywords[i]; %>
+						<% if(i < finding.keywords.length - 1 && i < 4) {%>, <% } %> 
+				<% }} %>
+				<% if(finding.keywords.length > 5) { %>...<%}%>
+			<% } %>
 		</div>
 		<h4><%= finding.title %></h4>
 		<p>Authors:
 			<span class="fThumbAuthors">
-				<% for(var i = 0; i < 5; i ++) {
-					if(finding.authors[i]) { %>
-						<%= finding.authors[i]; %>
-						<% if(i < finding.authors.length - 1 && i < 4) {%>, <% } %> 
-				<% }} %>
-				<% if(finding.authors.length > 5) { %>...<%}%>
+				<% if(finding.keywords) {
+					for(var i = 0; i < 5; i ++) {
+						if(finding.authors[i]) { %>
+							<%= finding.authors[i]; %>
+							<% if(i < finding.authors.length - 1 && i < 4) {%>, <% } %> 
+					<% }} %>
+					<% if(finding.authors.length > 5) { %>...<%}%>
+				<% } %>
 			</span>
-			<span class="fThumbDate">Published: <%= finding.datePublished %></span>
+			<span class="fThumbDate">Posted <%= finding.datePosted %></span>
 		</p>
 	</div>
 

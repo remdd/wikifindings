@@ -37,6 +37,9 @@
   box-shadow: none;
 }
 */
+.bootstrap-tagsinput {
+  display: inline-block;
+}
 .bootstrap-tagsinput .tag {
   margin-right: 2px;
   color: white;

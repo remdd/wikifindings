@@ -11,6 +11,7 @@ body {
 	text-shadow: 10px 10px 10px rgba(0,0,0,0.1), 3px 3px 3px rgba(0,0,0,0.2);
 }
 .headerLogo {
+	margin-top: 15px;
 	width: 80px;
 	float: left;
 	-webkit-filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
@@ -87,4 +88,6 @@ body {
 }
 form select {
 	margin-right: 30px;
+}
+#tagFieldLabel {
 }

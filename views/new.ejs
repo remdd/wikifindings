@@ -4,10 +4,17 @@
 <script type="text/javascript" src="/js/newFinding.js"></script>
 
 <h3>Post a new Finding</h3>
+<hr />
+
+
+
+
+
+
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="title" placeholder="title">
+	<input class="newFindingTextField" type="text" name="title" placeholder="A single sentence stating the main finding of the work, to give the lay reader an idea of the background and implications of the finding">
 
 	<label for="category"><h4>Category: </h4></label>
 	<select name="category" id="categoryList" placeholder="Select from list">
@@ -23,86 +30,90 @@
 		<option value="" disabled selected>Select from list</option>
 		<optgroup value="natural_sciences">
 			<optgroup value="natural_sciences" label="Astronomy">
-				<option value="astronautics">Astronautics</option>
-				<option value="planetary_science">Planetary science</option>
-				<option value="cosmology">Cosmology</option>
+				<option value="Astronautics">Astronautics</option>
+				<option value="Planetary science">Planetary science</option>
+				<option value="Cosmology">Cosmology</option>
 			</optgroup>
 			<optgroup value="natural_sciences" label="Biology">
-				<option value="anatomy">Anatomy</option>
-				<option value="biochemistry">Biochemistry</option>
-				<option value="botany">Botany</option>
-				<option value="ecology">Ecology</option>
-				<option value="genetics">Genetics</option>
+				<option value="Anatomy">Anatomy</option>
+				<option value="Biochemistry">Biochemistry</option>
+				<option value="Botany">Botany</option>
+				<option value="Ecology">Ecology</option>
+				<option value="Genetics">Genetics</option>
 			</optgroup>
 			<optgroup value="natural_sciences" label="Chemistry">
-				<option value="acid_base_chemistry">Acid base chemistry</option>
-				<option value="biochemistry">Biochemistry</option>
-				<option value="crystallography">Crystallography</option>
-				<option value="chemical_engineering">Chemical engineering</option>
+				<option value="Acid base chemistry">Acid base chemistry</option>
+				<option value="Biochemistry">Biochemistry</option>
+				<option value="Crystallography">Crystallography</option>
+				<option value="Chemical engineering">Chemical engineering</option>
 			</optgroup>
 		</optgroup>
 
 		<optgroup value="social_sciences">
 			<optgroup value="social_sciences" label="Social sciences">
-				<option value="psychology">Psychology</option>
-				<option value="archaeology">Archaeology</option>
-				<option value="economics">Economics</option>
+				<option value="Psychology">Psychology</option>
+				<option value="Archaeology">Archaeology</option>
+				<option value="Economics">Economics</option>
 			</optgroup>
 		</optgroup>
 
 		<optgroup value="behavioural_sciences">
 			<optgroup value="behavioural_sciences" label="Behavioural sciences">
-				<option value="ethology">Ethology</option>
-				<option value="psychology">Psychology</option>
-				<option value="sociobiology">Sociobiology</option>
+				<option value="Ethology">Ethology</option>
+				<option value="Psychology">Psychology</option>
+				<option value="Sociobiology">Sociobiology</option>
 			</optgroup>
 		</optgroup>
 
 		<optgroup value="applied_sciences">
 			<optgroup value="applied_sciences" label="Applied sciences">
-				<option value="acoustics">Acoustics</option>
-				<option value="agriculture">Agriculture</option>
-				<option value="computer_science">Computer science</option>
+				<option value="Acoustics">Acoustics</option>
+				<option value="Agriculture">Agriculture</option>
+				<option value="Computer science">Computer science</option>
 			</optgroup>
 			<optgroup value="applied_sciences" label="Health sciences">
-				<option value="bioengineering">Bioengineering</option>				
-				<option value="dentistry">Dentistry</option>
-				<option value="epidemiology">Epidemiology</option>
-				<option value="medicine">Medicine</option>
-				<option value="nursing">Nursing</option>
+				<option value="Bioengineering">Bioengineering</option>				
+				<option value="Dentistry">Dentistry</option>
+				<option value="Epidemiology">Epidemiology</option>
+				<option value="Medicine">Medicine</option>
+				<option value="Nursing">Nursing</option>
 			</optgroup>
 
 		</optgroup>
-
 	</select>
 
-	<span><a href="#">Subject missing? Report it here</a></span>
+	<span><a href="#">Missing your subject? Report it here</a></span>
 
-	<br>
-	<label for="tagField"><h4>Content tags: </h4></label>
-	<input data-role="tagsinput" name="tagField" class="newFindingTextField tagField">
+	<br />
+<!--	<label for="keywords" id="keywordsLabel"><h4>Keywords: </h4></label>
+	<input name="keywords" data-role="tagsinput">
+-->
+	<hr />
+
+	<h4>Background
+		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
+	</h4>
+	<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="background" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
+
+	<h4>Findings
+		<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
+	</h4>
+	<textarea id="newFindingsTextArea" class="newFindingTextArea" name="findings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
+
+	<h4>Implications
+		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
+	</h4>
+	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="implications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
+	<hr />
+
+	<h4>Authors</h4>
+	
+	<hr />
+	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
+	<a class="btn btn-primary" href="/findings">Go back</a>
 
 </form>
 
-
-<h4>Background
-	<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
-</h4>
-<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="background" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
-
-<h4>Findings
-	<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
-</h4>
-<textarea id="newFindingsTextArea" class="newFindingTextArea" name="findings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
-
-<h4>Implications
-	<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
-</h4>
-<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="implications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
-
-<br>
-<a class="btn btn-primary" form="newFindingForm">Submit</button>
-<a class="btn btn-primary" href="/findings">Go back</a>
 
 <% include partials/footer %>
 

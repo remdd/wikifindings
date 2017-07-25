@@ -46,7 +46,6 @@ $(document).ready(function() {
 		var selected = $('#categoryList').val();
 		$('#subjectList').find('*').each(function() {
 			$(this).attr('hidden', false);
-			console.log($(this));
 			if((($(this).attr('value')) != selected) && (($(this).parent().attr('value')) != selected)) {
 				$(this).attr('hidden', true);
 			}
