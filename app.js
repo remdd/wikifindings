@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 var findingDB = [
 	{	
 		title: "Evidence of perchlorate bleaching on Mars suggests greater longevity of liquid surface water in the recent geological past.", 
+		category: "Natural sciences",
 		subject: "Planetary physics",
 		background: "As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size of a marble, the most beautiful you can imagine. That beautiful, warm, living object looked so fragile, so delicate, that if you touched it with a finger it would crumble and fall apart. Seeing this has to change a man.", 
 		findings: "I don't know what you could say about a day in which you have seen four beautiful sunsets.", 
@@ -29,6 +30,7 @@ var findingDB = [
 	},
 	{	
 		title: "Detailed study of atmospheric methane distribution suggests stronger link with dairy agriculture than that previously accepted the by International Climatologist Forum.", 
+		category: "Natural sciences",
 		subject: "Climatology",
 		background: "That's not soon enough! You guys go on without me! I'm going to go… look for more stuff to steal! Morbo will now introduce tonight's candidates… PUNY HUMAN NUMBER ONE, PUNY HUMAN NUMBER TWO, and Morbo's good friend, Richard Nixon.", 
 		findings: "Goodbye, friends. I never thought I'd die like this. But I always really hoped. Good news, everyone! There's a report on TV with some very bad news! Bender! Ship! Stop bickering or I'm going to come back there and change your opinions manually!", 
@@ -40,6 +42,7 @@ var findingDB = [
 	},
 	{	
 		title: "Cotton Ray chromatology reveals unique lattice structure of potassium hydroxide.", 
+		category: "Natural sciences",
 		subject: "Chemistry",
 		background: "That's not soon enough! You guys go on without me! I'm going to go… look for more stuff to steal! Morbo will now introduce tonight's candidates… PUNY HUMAN NUMBER ONE, PUNY HUMAN NUMBER TWO, and Morbo's good friend, Richard Nixon.", 
 		findings: "Goodbye, friends. I never thought I'd die like this. But I always really hoped. Good news, everyone! There's a report on TV with some very bad news! Bender! Ship! Stop bickering or I'm going to come back there and change your opinions manually!", 
@@ -47,10 +50,19 @@ var findingDB = [
 		tags: ["cotton ray chromatology", "potassium hydroxide", "crystallography", "lattice"],
 		authors: ["Dr Tony Gubbins"],
 		datePosted: "2017-02-08",
-		datePublished: "2016-07-s27"
+		datePublished: "2016-07-27"
 	}
 ];
 
+var optgroups = {
+	astronomy: ["Astrometry", "Cosmology", "Extragalactic astronomy", "Galactic astronomy", "Planetary science", "Stellar astronomy"],
+	biology: ["Anatomy", "Astrobiology", "Biochemistry", "Bioengineering", "Bioethics", "Biogeography", "Bioinformatics"],
+	chemistry: ["Acid-base chemistry", "Analytical chemistry", "Astrochemistry", "Biochemistry", "Colloidal chemistry", "Crystallography"],
+	earth_sciences: ["Atmospheric sciences", "Ecology", "Environmental science", "Geodesy", "Geography"],
+	physics: ["Applied and interdisciplinary physics", "Atomic physics", "Computational physics", "Condensed matter physics", "Experimental physics", "Mechanics"]
+}
+
+var optgroups_natural_sciences = ["Astronomy", "Biology", "Chemistry", "Earth sciences", "Physics"];
 
 //	Home route
 app.get('/', function(req, res) {
@@ -72,7 +84,7 @@ app.get('/findings', function(req, res) {
 // });
 
 app.get('/findings/new', function(req, res) {
-	res.render('new');
+	res.render('new', {optgroups_natural_sciences: optgroups_natural_sciences, optgroups: optgroups});
 });
 
 

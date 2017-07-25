@@ -1,12 +1,89 @@
 <% include partials/header %>
 
+<script type="text/javascript" src="/js/Countable.js"></script>
+<script type="text/javascript" src="/js/newFinding.js"></script>
+
 <h3>Post a new Finding</h3>
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
 	<input class="newFindingTextField" type="text" name="title" placeholder="title">
-	<input class="newFindingTextField" type="text" name="subject" placeholder="subject">
+
+	<label for="category"><h4>Category: </h4></label>
+	<select name="category" id="categoryList" placeholder="Select from list">
+		<option value="" disabled selected>Select from list</option>
+		<option value="natural_sciences">Natural sciences</option>
+		<option value="social_sciences">Social sciences</option>
+		<option value="behavioural_sciences">Behavioural sciences</option>
+		<option value="applied_sciences">Applied sciences</option>
+	</select>
+
+	<label for="subject"><h4>Subject: </h4></label>
+	<select name="subject" id="subjectList">
+		<option value="" disabled selected>Select from list</option>
+		<optgroup value="natural_sciences">
+			<optgroup value="natural_sciences" label="Astronomy">
+				<option value="astronautics">Astronautics</option>
+				<option value="planetary_science">Planetary science</option>
+				<option value="cosmology">Cosmology</option>
+			</optgroup>
+			<optgroup value="natural_sciences" label="Biology">
+				<option value="anatomy">Anatomy</option>
+				<option value="biochemistry">Biochemistry</option>
+				<option value="botany">Botany</option>
+				<option value="ecology">Ecology</option>
+				<option value="genetics">Genetics</option>
+			</optgroup>
+			<optgroup value="natural_sciences" label="Chemistry">
+				<option value="acid_base_chemistry">Acid base chemistry</option>
+				<option value="biochemistry">Biochemistry</option>
+				<option value="crystallography">Crystallography</option>
+				<option value="chemical_engineering">Chemical engineering</option>
+			</optgroup>
+		</optgroup>
+
+		<optgroup value="social_sciences">
+			<optgroup value="social_sciences" label="Social sciences">
+				<option value="psychology">Psychology</option>
+				<option value="archaeology">Archaeology</option>
+				<option value="economics">Economics</option>
+			</optgroup>
+		</optgroup>
+
+		<optgroup value="behavioural_sciences">
+			<optgroup value="behavioural_sciences" label="Behavioural sciences">
+				<option value="ethology">Ethology</option>
+				<option value="psychology">Psychology</option>
+				<option value="sociobiology">Sociobiology</option>
+			</optgroup>
+		</optgroup>
+
+		<optgroup value="applied_sciences">
+			<optgroup value="applied_sciences" label="Applied sciences">
+				<option value="acoustics">Acoustics</option>
+				<option value="agriculture">Agriculture</option>
+				<option value="computer_science">Computer science</option>
+			</optgroup>
+			<optgroup value="applied_sciences" label="Health sciences">
+				<option value="bioengineering">Bioengineering</option>				
+				<option value="dentistry">Dentistry</option>
+				<option value="epidemiology">Epidemiology</option>
+				<option value="medicine">Medicine</option>
+				<option value="nursing">Nursing</option>
+			</optgroup>
+
+		</optgroup>
+
+	</select>
+
+	<span><a href="#">Subject missing? Report it here</a></span>
+
+	<br>
+	<label for="tagField"><h4>Content tags: </h4></label>
+	<input data-role="tagsinput" name="tagField" class="newFindingTextField tagField">
+
 </form>
+
 
 <h4>Background
 	<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
@@ -26,10 +103,6 @@
 <br>
 <a class="btn btn-primary" form="newFindingForm">Submit</button>
 <a class="btn btn-primary" href="/findings">Go back</a>
-
-
-<script type="text/javascript" src="/js/Countable.js"></script>
-<script type="text/javascript" src="/js/newFinding.js"></script>
 
 <% include partials/footer %>
 

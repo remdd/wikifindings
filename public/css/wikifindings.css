@@ -1,7 +1,7 @@
 body {
 	font-family: 'Pridi', serif;
 }
-.jumbotron {
+#headertron {
 	background: white;
 	padding: 20px 0px;
 	margin: 20px 0;
@@ -35,7 +35,11 @@ body {
 	float: right;
 	font-size: 0.75em;
 }
+.overWordCount {
+	color: red;
+}
 
+/*	Findings thumbnails	*/
 .fThumbDiv {
 	width: 100%;
 	padding: 20px 20px 5px 20px;
@@ -80,4 +84,7 @@ body {
 	text-align: right;
 	position: absolute;
 	right: 20px;
+}
+form select {
+	margin-right: 30px;
 }
