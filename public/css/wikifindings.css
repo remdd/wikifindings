@@ -4,8 +4,16 @@ body {
 hr {
 	border-color: lightgrey;
 }
+.mutedLink {
+	color: inherit;
+	text-decoration: inherit;
+} .mutedLink:hover, .mutedLink:focus {
+	color: inherit;
+	text-decoration: inherit;
+}
 #headertron {
 /*	background: url(../img/wf_placeholder_banner.jpg); */
+	background: white;
 	padding: 0;
 	margin: 20px 0;
 }
@@ -119,3 +127,38 @@ form select {
 	margin-right: 30px;
 	float: left;
 }
+
+
+/* Show page fomatting */
+.shownBox {
+	border: 1px solid lightgrey;
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+	border-radius: 10px;
+}
+.shownTitle {
+	padding: 50px;
+	margin: 0;
+	line-height: 120%;
+}
+.shownImage {
+	max-width: 100%;
+	padding: 20px;
+}
+.shownP {
+	padding: 25px 50px;
+	font-size: 1.4em;
+	background: lightgrey;
+}
+.shownHeader {
+	margin-top: 30px;
+}
+.infoPane {
+	padding: 50px 20px;
+} .infoPaneLabel {
+	margin-top: 0;
+} .infoPaneInfo {
+	margin-left: 20px;
+	color: darkblue;
+}}
+.showCitationInfo {
+	margin-left: 20px;

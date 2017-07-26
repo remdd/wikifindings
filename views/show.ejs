@@ -1,5 +1,50 @@
 <% include partials/header %>
 
-<h3>This is the show page!</h3>
+<div class="row">
+	<div class="col col-sm-9 col-xs-12">
+		<h3 class="shownTitle shownBox"><%= finding.title %></h3>
+		<h4 class="shownHeader">Background</h4>
+		<p class="shownP shownBox"><%= finding.background %></p>
+		<h4 class="shownHeader">Findings</h4>
+		<p class="shownP shownBox"><%= finding.findings %></p>
+		<h4 class="shownHeader">Implications</h4>
+		<p class="shownP shownBox"><%= finding.implications %></p>
+	</div>
+	<div class="col col-sm-3 col-xs-12 infoPane shownBox">
+		<h4 class="infoPaneLabel">Subject:</h4>
+		<h4 class="infoPaneInfo"><%= finding.subject %></h4>
+		<br />
+		<h4 class="infoPaneLabel">Keywords:</h4>
+			<% if(finding.keywords) {
+				for(var i = 0; i < finding.keywords.length; i++) { %>
+					<h4 class="infoPaneInfo"><%= finding.keywords[i] %></h4>
+			<% } } %>
+		<br />
+		<h4 class="infoPaneLabel">Posted by:</h4>
+		<h4 class="infoPaneInfo"><%= finding.postAuthor %></h4>
+		<br />
+		<h4 class="infoPaneLabel">Posted on</h4>
+		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
+	</div>
+</div>
+
+<br />
+
+<img class="shownImage shownBox" src="<%= finding.image %>">
+
+<hr />
+
+<h4>Details of original research article:</h4>
+<span class="showCitationInfo"><%= finding.citation %></span>
+
+<% if(finding.citationLink) { %>
+	<h4>Link to original research publication</h4>
+	<span class="showCitationInfo"><a href="<%= finding.citationLink %>"><%= finding.citationLink %></a></span>
+<% } %>
+
+<% if(finding.citationDOI) { %>
+	<h4>DOI (Digital Object Identifier) of original research publication</h4>
+	<span class="showCitationInfo"><%= finding.citationDOI %></span>
+<% } %>
 
 <% include partials/footer %>
