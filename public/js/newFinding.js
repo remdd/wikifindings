@@ -42,15 +42,20 @@ $(document).ready(function() {
 	});
 
 	//	Hide invalid 'subjects' when category is changed
-	$('#categoryList').change(function() {
-		var selected = $('#categoryList').val();
-		$('#subjectList').find('*').each(function() {
+	$('#newCategoryList').change(function() {
+		var selected = $('#newCategoryList').val();
+		$('#newSubjectList').find('*').each(function() {
 			$(this).attr('hidden', false);
 			if((($(this).attr('value')) != selected) && (($(this).parent().attr('value')) != selected)) {
 				$(this).attr('hidden', true);
 			}
 		})
-		$('#subjectList').val('');
+		$('#newSubjectList').val('');
+	});
+
+	//	Suppress form submission on enter keypress in tag / text fields
+	$(document).on("keypress", ":input:not(textarea)", function(event) {
+	    return event.keyCode != 13;
 	});
 
 });

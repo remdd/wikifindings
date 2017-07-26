@@ -24,17 +24,8 @@
 			<% } %>
 		</div>
 		<h4><%= finding.title %></h4>
-		<p>Authors:
-			<span class="fThumbAuthors">
-				<% if(finding.keywords) {
-					for(var i = 0; i < 5; i ++) {
-						if(finding.authors[i]) { %>
-							<%= finding.authors[i]; %>
-							<% if(i < finding.authors.length - 1 && i < 4) {%>, <% } %> 
-					<% }} %>
-					<% if(finding.authors.length > 5) { %>...<%}%>
-				<% } %>
-			</span>
+		<p>Posted by:
+			<span class="fThumbPostedBy"><%= finding.postAuthor %></span>
 			<span class="fThumbDate">Posted <%= finding.datePosted %></span>
 		</p>
 	</div>

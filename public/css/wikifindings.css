@@ -1,6 +1,9 @@
 body {
 	font-family: 'Pridi', serif;
 }
+hr {
+	border-color: lightgrey;
+}
 #headertron {
 	background: white;
 	padding: 20px 0px;
@@ -78,7 +81,7 @@ body {
 	background: white;
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
 }
-.fThumbAuthors {
+.fThumbPostedBy {
 	color: darkblue;
 }
 .fThumbDate {
@@ -89,5 +92,25 @@ body {
 form select {
 	margin-right: 30px;
 }
-#tagFieldLabel {
+#newPublicationDate {
+	display: inline-block;
+}
+.twoLineLabel {
+	clear: both;
+	width: 100%;
+	margin-bottom: 0;
+}
+.twoLineLabel h5 {
+	margin-bottom: 0;
+}
+.labelInfo {
+	font-size: 1em;
+	display: inline-block;
+	font-weight: normal;
+	float: right;
+}
+.labelInline {
+	display: inline-block;
+	margin-right: 30px;
+	float: left;
 }

@@ -6,42 +6,36 @@
 <h3>Post a new Finding</h3>
 <hr />
 
-
-
-
-
-
-
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="title" placeholder="A single sentence stating the main finding of the work, to give the lay reader an idea of the background and implications of the finding">
+	<input class="newFindingTextField" type="text" name="newTitle" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
-	<label for="category"><h4>Category: </h4></label>
-	<select name="category" id="categoryList" placeholder="Select from list">
+	<label for="newCategory"><h4>Category: </h4></label>
+	<select name="newCategory" id="newCategoryList" placeholder="Select from list">
 		<option value="" disabled selected>Select from list</option>
-		<option value="natural_sciences">Natural sciences</option>
-		<option value="social_sciences">Social sciences</option>
-		<option value="behavioural_sciences">Behavioural sciences</option>
-		<option value="applied_sciences">Applied sciences</option>
+		<option value="Natural sciences">Natural sciences</option>
+		<option value="Social sciences">Social sciences</option>
+		<option value="Behavioural sciences">Behavioural sciences</option>
+		<option value="Applied sciences">Applied sciences</option>
 	</select>
 
-	<label for="subject"><h4>Subject: </h4></label>
-	<select name="subject" id="subjectList">
+	<label for="newSubject"><h4>Subject: </h4></label>
+	<select name="newSubject" id="newSubjectList">
 		<option value="" disabled selected>Select from list</option>
-		<optgroup value="natural_sciences">
-			<optgroup value="natural_sciences" label="Astronomy">
+		<optgroup value="Natural sciences">
+			<optgroup value="Natural sciences" label="Astronomy">
 				<option value="Astronautics">Astronautics</option>
 				<option value="Planetary science">Planetary science</option>
 				<option value="Cosmology">Cosmology</option>
 			</optgroup>
-			<optgroup value="natural_sciences" label="Biology">
+			<optgroup value="Natural sciences" label="Biology">
 				<option value="Anatomy">Anatomy</option>
 				<option value="Biochemistry">Biochemistry</option>
 				<option value="Botany">Botany</option>
 				<option value="Ecology">Ecology</option>
 				<option value="Genetics">Genetics</option>
 			</optgroup>
-			<optgroup value="natural_sciences" label="Chemistry">
+			<optgroup value="Natural sciences" label="Chemistry">
 				<option value="Acid base chemistry">Acid base chemistry</option>
 				<option value="Biochemistry">Biochemistry</option>
 				<option value="Crystallography">Crystallography</option>
@@ -49,29 +43,29 @@
 			</optgroup>
 		</optgroup>
 
-		<optgroup value="social_sciences">
-			<optgroup value="social_sciences" label="Social sciences">
+		<optgroup value="Social sciences">
+			<optgroup value="Social sciences" label="Social sciences">
 				<option value="Psychology">Psychology</option>
 				<option value="Archaeology">Archaeology</option>
 				<option value="Economics">Economics</option>
 			</optgroup>
 		</optgroup>
 
-		<optgroup value="behavioural_sciences">
-			<optgroup value="behavioural_sciences" label="Behavioural sciences">
+		<optgroup value="Behavioural sciences">
+			<optgroup value="Behavioural sciences" label="Behavioural sciences">
 				<option value="Ethology">Ethology</option>
 				<option value="Psychology">Psychology</option>
 				<option value="Sociobiology">Sociobiology</option>
 			</optgroup>
 		</optgroup>
 
-		<optgroup value="applied_sciences">
-			<optgroup value="applied_sciences" label="Applied sciences">
+		<optgroup value="Applied sciences">
+			<optgroup value="Applied sciences" label="Applied sciences">
 				<option value="Acoustics">Acoustics</option>
 				<option value="Agriculture">Agriculture</option>
 				<option value="Computer science">Computer science</option>
 			</optgroup>
-			<optgroup value="applied_sciences" label="Health sciences">
+			<optgroup value="Applied sciences" label="Health sciences">
 				<option value="Bioengineering">Bioengineering</option>				
 				<option value="Dentistry">Dentistry</option>
 				<option value="Epidemiology">Epidemiology</option>
@@ -85,9 +79,9 @@
 	<span><a href="#">Missing your subject? Report it here</a></span>
 
 	<br />
-<!--	<label for="keywords" id="keywordsLabel"><h4>Keywords: </h4></label>
-	<input name="keywords" data-role="tagsinput">
--->
+	<label for="newKeywords"><h4>Keywords: </h4></label>
+	<input name="newKeywords" data-role="tagsinput" placeholder="Enter keyword(s)">
+
 	<hr />
 
 	<h4>Background
@@ -104,11 +98,39 @@
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
 	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="implications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
+
+	<h4>Accompanying image</h4>
+	<input type="url" class="newFindingTextField" name="newImageURL" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
 	<hr />
 
-	<h4>Authors</h4>
-	
+	<h4>Details of original research article</h4>
+	<label for="newOriginalCitation" class="twoLineLabel">
+		<h5 class="labelInline">Publication details</h5>
+		<h5 class="labelInfo">format: Surname AB (Year), Title, Full Journal Name, Volume : First Page - Last Page</h5>
+	</label>
+	<input type="text" name="newOriginalCitation" placeholder="Publication details of original research article" class="newFindingTextField">
+	<br>
+	<label for="newOriginalCitationLink" class="twoLineLabel">
+		<h5 class="labelInline">Link</h5>
+		<h5 class="labelInfo">please be mindful of any copyright limitations that may apply to your link</h5>
+	</label>
+	<input type="url" name="newOriginalCitationLink" placeholder="URL of original article" class="newFindingTextField">
+	<br>
+
+	<label for="newOriginalCitationDOI" class="twoLineLabel">
+		<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
+		<h5 class="labelInfo"></h5>
+	</label>
+	<input type="text" name="newOriginalCitationDOI" placeholder="DOI of original article" class="newFindingTextField">
+	<br>
+
 	<hr />
+
+	<label for="newPrecededBy"><h4>Preceded by: </h4></label>
+	<input name="newPrecededBy" data-role="tagsinput" placeholder="Article title">
+	<hr />
+
+
 	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
 	<a class="btn btn-primary" href="/findings">Go back</a>
 
