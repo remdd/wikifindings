@@ -5,13 +5,14 @@ hr {
 	border-color: lightgrey;
 }
 #headertron {
-	background: white;
-	padding: 20px 0px;
+/*	background: url(../img/wf_placeholder_banner.jpg); */
+	padding: 0;
 	margin: 20px 0;
 }
 .headerText {
 	font-family: 'Alegreya SC', serif;
 	text-shadow: 10px 10px 10px rgba(0,0,0,0.1), 3px 3px 3px rgba(0,0,0,0.2);
+	display: inline-block;
 }
 .headerLogo {
 	margin-top: 15px;
@@ -19,6 +20,10 @@ hr {
 	float: left;
 	-webkit-filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
 	filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
+}
+.bannerImg {
+	float: right;
+	width: 400px;
 }
 
 .newFindingTextField {
