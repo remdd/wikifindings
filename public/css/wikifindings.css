@@ -136,7 +136,7 @@ form select {
 /* Show page fomatting */
 .shownBox {
 	border: 1px solid lightgrey;
-	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.15), 10px 10px 15px rgba(0,0,0,0.05);
 	border-radius: 10px;
 }
 .shownTitle {
@@ -166,4 +166,7 @@ form select {
 }
 .showCitationInfo {
 	margin-left: 20px;
+}
+.inlineForm {
+	display: inline-block;
 }

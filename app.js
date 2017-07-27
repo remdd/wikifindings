@@ -2,30 +2,14 @@ var express 		= require('express'),
 	bodyParser 		= require('body-parser'),
 	mongoose 		= require('mongoose'),
 	methodOverride	= require('method-override'),
+	Finding 		= require('./models/finding'),
+	seedDB			= require('./seeds'),
 	app 			= express();
 
+
+seedDB();
 //	Connects mongoose to db
 mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
-
-//	Mongoose schema
-var findingSchema = new mongoose.Schema({
-	title: String,
-	category: String,
-	subject: String,
-	keywords: Array,
-	background: String,
-	findings: String,
-	implications: String,
-	image: String,
-	postAuthor: String,
-	datePosted: Date,
-	citation: String,
-	citationLink: String,
-	citationDOI: String
-})
-
-//	Compile 'finding' mongoose model from schema
-var Finding = mongoose.model("Finding", findingSchema);
 
 //	Instructs Express to serve contents of public directory
 app.use(express.static('public'));
@@ -136,6 +120,18 @@ app.put('/findings/:id', function(req, res) {
 			res.redirect('/findings/' + req.params.id);
 		}
 	});
+});
+
+//	DELETE a finding
+app.delete('/findings/:id', function(req, res) {
+	Finding.findByIdAndRemove(req.params.id, function(err) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.redirect('/findings');
+		}
+	})
 });
 
 //	Fallback route
