@@ -41,11 +41,12 @@ hr {
 
 .newFindingTextArea {
 	width: 100%;
-	height: 100px;
+	height: 200px;
 }
 
 .btn {
 	margin-right: 20px;
+	margin-bottom: 20px;
 }
 
 .wordCountSpan {
@@ -127,6 +128,9 @@ form select {
 	margin-right: 30px;
 	float: left;
 }
+.greyedOut {
+	color: lightgrey;
+}
 
 
 /* Show page fomatting */
@@ -159,6 +163,7 @@ form select {
 } .infoPaneInfo {
 	margin-left: 20px;
 	color: darkblue;
-}}
+}
 .showCitationInfo {
 	margin-left: 20px;
+}

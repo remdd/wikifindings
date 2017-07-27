@@ -1,8 +1,8 @@
-var express 		= require ('express'),
-	app 			= express(),
+var express 		= require('express'),
 	bodyParser 		= require('body-parser'),
-	mongoose 		= require('mongoose');
-
+	mongoose 		= require('mongoose'),
+	methodOverride	= require('method-override'),
+	app 			= express();
 
 //	Connects mongoose to db
 mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
@@ -33,6 +33,9 @@ app.use(express.static('public'));
 //	Default use of body parser
 app.use(bodyParser.urlencoded({extended: true}));
 
+//	Use method-override to look for _method in URL to convert to specified request (PUT or DELETE)
+app.use(methodOverride("_method"));
+
 //	Sets default render to ejs (no need for ejs file extensions)
 app.set('view engine', 'ejs');
 
@@ -41,6 +44,7 @@ app.get('/', function(req, res) {
 	res.render('home');
 });
 
+//	REST routes for 'findings'
 //	INDEX route
 app.get('/findings', function(req, res) {
 	Finding.find({}, function(err, allFindings) {
@@ -53,16 +57,6 @@ app.get('/findings', function(req, res) {
 	// res.render('findings', {findings: findingDB});
 });
 
-//	'Subject' page
-//	app.get('/f/:subjectName', function(req, res) {
-//	var subjectName = req.params.subjectName;
-//	res.send('Welcome to the ' + subjectName + ' wikifindings page.');
-//	});
-
-// app.get('/f/:finding/comments/:id/:title', function(req, res) {
-// 	res.send('Comments page!')
-// });
-
 //	NEW - show form to create new campground
 app.get('/findings/new', function(req, res) {
 	res.render('new');
@@ -73,7 +67,7 @@ app.post('/findings', function(req, res) {
 	var title = req.body.newTitle;
 	var category = req.body.newCategory;
 	var subject = req.body.newSubject;
-	var keywords = req.body.keywords;
+	var keywords = req.body.newKeywords;
 	var background = req.body.newBackground;
 	var findings = req.body.newFindings;
 	var implications = req.body.newImplications;
@@ -113,8 +107,33 @@ app.get('/findings/:id', function(req, res) {
 	Finding.findById(req.params.id, function(err, shownFinding) {
 		if(err) {
 			console.log(err);
+			res.redirect('/findings');
 		} else {
 			res.render('show', {finding: shownFinding});
+		}
+	});
+});
+
+//	EDIT a finding
+app.get('/findings/:id/edit', function(req, res) {
+	Finding.findById(req.params.id, function(err, shownFinding) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.render('edit', {finding: shownFinding});
+		}
+	});
+});
+
+//	UPDATE a finding
+app.put('/findings/:id', function(req, res) {
+	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.redirect('/findings/' + req.params.id);
 		}
 	});
 });

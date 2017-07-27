@@ -8,6 +8,7 @@
     "countable": "^3.0.0",
     "ejs": "^2.5.6",
     "express": "^4.15.3",
+    "method-override": "^2.3.9",
     "mongodb": "^2.2.30",
     "mongoose": "^4.11.4"
   },

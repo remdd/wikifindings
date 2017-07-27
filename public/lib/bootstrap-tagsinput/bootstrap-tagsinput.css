@@ -42,6 +42,7 @@
 }
 .bootstrap-tagsinput .tag {
   margin-right: 2px;
+  line-height: 250%;
   color: black;
   background: lightgrey;
   font-size: 1em;

@@ -43,6 +43,8 @@ $(document).ready(function() {
 
 	//	Hide invalid 'subjects' when category is changed
 	$('#newCategoryList').change(function() {
+		$('#newSubjectList').removeClass('greyedOut');
+		$('#newSubjectList').attr('disabled', false);
 		var selected = $('#newCategoryList').val();
 		$('#newSubjectList').find('*').each(function() {
 			$(this).attr('hidden', false);
@@ -57,5 +59,10 @@ $(document).ready(function() {
 	$(document).on("keypress", ":input:not(textarea)", function(event) {
 	    return event.keyCode != 13;
 	});
+
+	//	Functions to run on document ready
+	$('#newCategoryList').trigger('change');
+	$('#newSubjectList').addClass('greyedOut');
+	$('#newSubjectList').attr('disabled', true);
 
 });

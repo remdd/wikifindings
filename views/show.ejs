@@ -1,5 +1,7 @@
 <% include partials/header %>
 
+<a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit Finding</a>
+
 <div class="row">
 	<div class="col col-sm-9 col-xs-12">
 		<h3 class="shownTitle shownBox"><%= finding.title %></h3>
@@ -18,7 +20,7 @@
 			<% if(finding.keywords) {
 				for(var i = 0; i < finding.keywords.length; i++) { %>
 					<h4 class="infoPaneInfo"><%= finding.keywords[i] %></h4>
-			<% } } %>
+			<% }} %>
 		<br />
 		<h4 class="infoPaneLabel">Posted by:</h4>
 		<h4 class="infoPaneInfo"><%= finding.postAuthor %></h4>
