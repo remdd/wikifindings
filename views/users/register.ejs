@@ -1,0 +1,34 @@
+<% include ../partials/header %>
+
+<div class="row">
+	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
+	<div class="col col-xs-12 col-sm-8 col-md-6">
+		<h3>Sign up for a WikiFindings account</h3>
+		<form action="/register" method="POST">
+			<div class="registerFormDiv">
+				<h5 class="registerLabel">Username: </h5>
+				<input type="text" name="username" placeholder="Username">
+			</div>
+			<div class="registerFormDiv">
+				<h5 class="registerLabel">Password: </h5>
+				<input type="password" name="password" placeholder="Password">
+			</div>
+			<h5>Type of account</h5><span>
+
+			<div class="radio">
+				<label><input type="radio" name="optradio" checked="checked">Regular user</label>
+			</div>
+			<div class="radio">
+				<label><input type="radio" name="optradio">Scientist</label>
+			</div>
+			<a href="#">What's the difference between account types?</a></span>
+
+			<hr />
+
+			<button class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
+</div>
+
+<% include ../partials/footer %>

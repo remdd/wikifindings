@@ -22,59 +22,7 @@
 	<label for="newSubject"><h4>Subject: </h4></label>
 	<select name="newSubject" id="newSubjectList" disabled="true">
 		<option value="" disabled selected>Select from list</option>
-		<optgroup value="Natural sciences">
-			<optgroup value="Natural sciences" label="Astronomy">
-				<option value="Astronautics">Astronautics</option>
-				<option value="Planetary science">Planetary science</option>
-				<option value="Cosmology">Cosmology</option>
-			</optgroup>
-			<optgroup value="Natural sciences" label="Biology">
-				<option value="Anatomy">Anatomy</option>
-				<option value="Behavioural ecology">Behavioural ecology</option>
-				<option value="Biochemistry">Biochemistry</option>
-				<option value="Botany">Botany</option>
-				<option value="Ecology">Ecology</option>
-				<option value="Genetics">Genetics</option>
-			</optgroup>
-			<optgroup value="Natural sciences" label="Chemistry">
-				<option value="Acid base chemistry">Acid base chemistry</option>
-				<option value="Biochemistry">Biochemistry</option>
-				<option value="Crystallography">Crystallography</option>
-				<option value="Chemical engineering">Chemical engineering</option>
-			</optgroup>
-		</optgroup>
-
-		<optgroup value="Social sciences">
-			<optgroup value="Social sciences" label="Social sciences">
-				<option value="Psychology">Psychology</option>
-				<option value="Archaeology">Archaeology</option>
-				<option value="Economics">Economics</option>
-			</optgroup>
-		</optgroup>
-
-		<optgroup value="Behavioural sciences">
-			<optgroup value="Behavioural sciences" label="Behavioural sciences">
-				<option value="Ethology">Ethology</option>
-				<option value="Psychology">Psychology</option>
-				<option value="Sociobiology">Sociobiology</option>
-			</optgroup>
-		</optgroup>
-
-		<optgroup value="Applied sciences">
-			<optgroup value="Applied sciences" label="Applied sciences">
-				<option value="Acoustics">Acoustics</option>
-				<option value="Agriculture">Agriculture</option>
-				<option value="Computer science">Computer science</option>
-			</optgroup>
-			<optgroup value="Applied sciences" label="Health sciences">
-				<option value="Bioengineering">Bioengineering</option>				
-				<option value="Dentistry">Dentistry</option>
-				<option value="Epidemiology">Epidemiology</option>
-				<option value="Medicine">Medicine</option>
-				<option value="Nursing">Nursing</option>
-			</optgroup>
-
-		</optgroup>
+		<% include ../partials/subjectlist %>
 	</select>
 
 	<span><a href="#">Missing your subject? Report it here</a></span>
