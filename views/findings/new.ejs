@@ -1,18 +1,18 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <script type="text/javascript" src="/js/Countable.js"></script>
 <script type="text/javascript" src="/js/newFinding.js"></script>
 
-<h3>Edit a Finding</h3>
+<h3>Post a new Finding</h3>
 <hr />
 
-<form action="/findings/<%= finding._id %>?_method=PUT" method="POST" id="editFindingForm">
+<form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding" value="<%= finding.title %>">
+	<input class="newFindingTextField" type="text" name="newTitle" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
 	<label for="newCategory"><h4>Category: </h4></label>
-	<select name="finding[category]" id="newCategoryList">
-		<option value="" disabled>Select from list</option>
+	<select name="newCategory" id="newCategoryList" placeholder="Select from list">
+		<option value="" disabled selected>Select from list</option>
 		<option value="Natural sciences">Natural sciences</option>
 		<option value="Social sciences">Social sciences</option>
 		<option value="Behavioural sciences">Behavioural sciences</option>
@@ -20,8 +20,8 @@
 	</select>
 
 	<label for="newSubject"><h4>Subject: </h4></label>
-	<select name="finding[subject]" id="newSubjectList">
-		<option value="" disabled>Select from list</option>
+	<select name="newSubject" id="newSubjectList" disabled="true">
+		<option value="" disabled selected>Select from list</option>
 		<optgroup value="Natural sciences">
 			<optgroup value="Natural sciences" label="Astronomy">
 				<option value="Astronautics">Astronautics</option>
@@ -81,54 +81,27 @@
 
 	<br />
 	<label for="newKeywords"><h4>Keywords: </h4></label>
-	<select id="editKeywords" multiple name="finding[keywords]" data-role="tagsinput" placeholder="Enter keyword(s)">
-	</select>
-
-	<!-- Assigns the existing keywords array to keywords tag field on document ready -->
-	<script>
-		$(document).ready(function() {
-			var keywords = [];
-			<% finding.keywords.forEach(function(result) { %>
-				keywords.push("<%= result %>");
-			<% }); %>
-			keywords.forEach(function(result) {	
-				$('#editKeywords').tagsinput('add', result);
-			});
-
-			$('#newCategoryList').children().each(function() {
-				if($(this).attr('value') == "<%= finding.category %>") {
-					$(this).attr('selected', 'selected');
-				}
-			});
-			$('#newCategoryList').trigger('change');
-			$('#newSubjectList').children().children().each(function() {
-				if($(this).attr('value') == "<%= finding.subject %>") {
-					$(this).attr('selected', 'selected');
-				}
-			});
-		});
-	</script>
-
+	<select multiple name="newKeywords" data-role="tagsinput" placeholder="Enter keyword(s)"></select>
 
 	<hr />
 
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="editFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"><%= finding.background %></textarea>
+	<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="newBackground" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
 
 	<h4>Findings
 		<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newFindingsTextArea" class="newFindingTextArea" name="finding[findings]" form="editFindingForm" placeholder="Enter a summary of the article's findings in plain English"><%= finding.findings %></textarea>
+	<textarea id="newFindingsTextArea" class="newFindingTextArea" name="newFindings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
 
 	<h4>Implications
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.findings %></textarea>
+	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="newImplications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
 
 	<h4>Accompanying image</h4>
-	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings" value="<%= finding.image %>">
+	<input type="url" class="newFindingTextField" name="newImageURL" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
 	<hr />
 
 	<h4>Details of original research article</h4>
@@ -136,20 +109,20 @@
 		<h5 class="labelInline">Publication details</h5>
 		<h5 class="labelInfo">format: Surname AB (Year), Title, Full Journal Name, Volume : First Page - Last Page</h5>
 	</label>
-	<input type="text" name="finding[citation]" placeholder="Publication details of original research article" class="newFindingTextField" value="<%= finding.citation %>">
+	<input type="text" name="newOriginalCitation" placeholder="Publication details of original research article" class="newFindingTextField">
 	<br>
 	<label for="newOriginalCitationLink" class="twoLineLabel">
 		<h5 class="labelInline">Link</h5>
 		<h5 class="labelInfo">please be mindful of any copyright limitations that may apply to your link</h5>
 	</label>
-	<input type="url" name="finding[citationLink]" placeholder="URL of original article" class="newFindingTextField" value="<%= finding.citationLink %>">
+	<input type="url" name="newOriginalCitationLink" placeholder="URL of original article" class="newFindingTextField">
 	<br>
 
 	<label for="newOriginalCitationDOI" class="twoLineLabel">
 		<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
 		<h5 class="labelInfo"></h5>
 	</label>
-	<input type="text" name="finding[citationDOI]" placeholder="DOI of original article" class="newFindingTextField" value="<%= finding.citationDOI %>">
+	<input type="text" name="newOriginalCitationDOI" placeholder="DOI of original article" class="newFindingTextField">
 	<br>
 
 	<hr />
@@ -159,10 +132,12 @@
 	<hr />
 
 
-	<button class="btn btn-primary" form="editFindingForm" value="submit">Submit</button>
-	<a class="btn btn-danger" href="/findings">Cancel</a>
+	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
+	<a class="btn btn-danger" href="/findings">Go back</a>
 
 </form>
 
 
-<% include partials/footer %>
+<% include ../partials/footer %>
+
+

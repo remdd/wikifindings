@@ -1,0 +1,15 @@
+<% include ../partials/header %>
+
+<h4>Add your comment to:</h4>
+<h3>"<%= finding.title %>"</h3>
+<hr />
+
+<form action="/findings/<%= finding._id %>/comments" method="POST" id="newCommentForm">
+	<textarea placeholder="Your comment" class="newCommentText" name="comment[text]"></textarea>
+	<label for="comment[author]"><h4>Your name: </h4></label>
+	<input type="text" name="comment[author]" placeholder="Your name" class="newFindingTextField">
+	<button class="btn btn-primary" form="newCommentForm" value="submit">Submit</button>
+</form>
+
+
+<% include ../partials/footer %>

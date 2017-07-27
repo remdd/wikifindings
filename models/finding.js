@@ -14,7 +14,14 @@ var findingSchema = new mongoose.Schema({
 	datePosted: Date,
 	citation: String,
 	citationLink: String,
-	citationDOI: String
+	citationDOI: String,
+	comments: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			//	ref = name of the Comment model
+			ref: "Comment"
+		}
+	]
 });
 
 //	Compile 'finding' mongoose model from schema & return model

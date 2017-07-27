@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit</a>
 <form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
@@ -52,4 +52,15 @@
 	<span class="showCitationInfo"><%= finding.citationDOI %></span>
 <% } %>
 
-<% include partials/footer %>
+<hr />
+
+<h4>Comments</h4>
+<a class="btn btn-primary" href="/findings/<%= finding._id %>/comments/new">Add new comment</a>
+<% finding.comments.forEach(function(comment){ %>
+	<div class="shownComment">
+		<div class="shownCommentText"><%= comment.text %></div>
+		<div class="shownCommentInfo"><%= comment.author %><span class="shownCommentPostedDate">Posted <%= comment.datePosted.toDateString() %></span></div>
+	</div>
+<% }); %>
+
+<% include ../partials/footer %>

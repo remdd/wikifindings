@@ -1,5 +1,17 @@
 var mongoose = require("mongoose");
 var Finding = require("./models/finding");
+var Comment = require("./models/comment");
+
+var commentData = [
+	{
+		text: "This is really interesting, I'm impressed...",
+		author: "Eleanor Higginson"
+	},
+	{
+		text: "Woof",
+		author: "Bryher Higginson"
+	}
+]
 
 var data = [
 	{
@@ -45,7 +57,190 @@ var data = [
 		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
 		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
 		citationDOI: "2347234v 23423 43m 234 1234"
+	},
+	{
+		title: "I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "Science has not yet mastered prophecy. We predict too much for the next year and yet far too little for the next 10.",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
+	},	
+	{
+		title: "We want to explore. We’re curious people. Look back over history, people have put their lives at stake to go out and explore … We believe in what we’re doing. Now it’s time to go.",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest.",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
+	},
+	{
+		title: "Where ignorance lurks, so too do the frontiers of discovery and imagination.",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "Dinosaurs are extinct today because they lacked opposable thumbs and the brainpower to build a space program.",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
 	}
+
+	/*,
+	{
+		title: "I don't know what you could say about a day in which you have seen four beautiful sunsets.",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "Astronomy compels the soul to look upward, and leads us from this world to another.",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
+	},
+	{
+		title: "The sky is the limit only for those who aren't afraid to fly!",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "It suddenly struck me that that tiny pea, pretty and blue, was the Earth. I put up my thumb and shut one eye, and my thumb blotted out the planet Earth. I didn't feel like a giant. I felt very, very small.",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
+	},
+	{
+		title: "To go places and do things that have never been done before – that’s what living is all about.",
+		category: "Natural sciences",
+		subject: "Planetary science",
+		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
+		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
+		findings: "cosmic ocean how far away from which we spring explorations trillion with pretty stories for which there's little good evidence, Flatland paroxysm of global death? Dream of the mind's eye, venture great turbulent clouds corpus callosum! Emerged into consciousness, take root and flourish.",
+		implications: "Rogue courage of our questions. Shores of the cosmic ocean great turbulent clouds network of wormholes brain is the seed of intelligence, from which we spring, Vangelis, extraplanetary finite but unbounded billions upon billions cosmic fugue Orion's sword, white dwarf sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam dispassionate extraterrestrial observer kindling the energy hidden in matter.",
+		image: "http://media-channel.nationalgeographic.com/media/uploads/photos/content/video/2016/10/04/778945603828_Mars_BigThinker_Mars101.mov.00_01_00_21.Still001.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2016-12-08",
+		citation: "Sagan C (2003) Mars Express perchlorate distribution study. Planetary science 17: 12-36",
+		citationLink: "http://saganipsum.com/?p=10&latin=1",
+		citationDOI: "2349793845729387457298345"
+	},
+	{
+		title: "Encyclopaedia galactica realm of the galaxies explorations finite but unbounded, worldlets trillion stirred by starlight two ghostly white figures in coveralls",
+		category: "Natural sciences",
+		subject: "Cosmology",
+		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "http://www.youwall.com/wallpapers/201307/cosmos-wallpaper.jpg",
+		postAuthor: "Carl Sagan",
+		datePosted: "2015-08-01",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234"
+	} */
+
 ];
 
 function seedDB() {
@@ -56,11 +251,24 @@ function seedDB() {
 		} else {
 			console.log("Removed all findings");
 			data.forEach(function(seed) {
-				Finding.create(seed, function(err, data) {
+				Finding.create(seed, function(err, finding) {
 					if(err) {
 						console.log(err);
 					} else {
 						console.log("Added a seed finding");
+						Comment.create(
+						{
+							text: "This is great! Really interesting",
+							author: "Ellie Higginson",
+							datePosted: "2017-07-26"
+						}, function(err, comment) {
+							if(err) {
+								console.log(err);
+							} else {
+								finding.comments.push(comment);
+								finding.save();
+							}
+						});
 					}
 				});
 			});

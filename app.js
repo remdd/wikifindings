@@ -3,7 +3,9 @@ var express 		= require('express'),
 	mongoose 		= require('mongoose'),
 	methodOverride	= require('method-override'),
 	Finding 		= require('./models/finding'),
+	Comment 		= require('./models/comment'),
 	seedDB			= require('./seeds'),
+	passport		= require('passport'),
 	app 			= express();
 
 
@@ -35,7 +37,7 @@ app.get('/findings', function(req, res) {
 		if(err) {
 			console.log(err);
 		} else {
-			res.render("index", {findings: allFindings})
+			res.render("findings/index", {findings: allFindings})
 		}
 	});
 	// res.render('findings', {findings: findingDB});
@@ -43,7 +45,7 @@ app.get('/findings', function(req, res) {
 
 //	NEW - show form to create new campground
 app.get('/findings/new', function(req, res) {
-	res.render('new');
+	res.render('findings/new');
 });
 
 //	CREATE new finding route
@@ -88,12 +90,12 @@ app.post('/findings', function(req, res) {
 
 //	SHOW info about a finding
 app.get('/findings/:id', function(req, res) {
-	Finding.findById(req.params.id, function(err, shownFinding) {
+	Finding.findById(req.params.id).populate("comments").exec(function(err, shownFinding) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
 		} else {
-			res.render('show', {finding: shownFinding});
+			res.render('findings/show', {finding: shownFinding});
 		}
 	});
 });
@@ -105,7 +107,7 @@ app.get('/findings/:id/edit', function(req, res) {
 			console.log(err);
 			res.redirect('/findings');
 		} else {
-			res.render('edit', {finding: shownFinding});
+			res.render('findings/edit', {finding: shownFinding});
 		}
 	});
 });
@@ -133,6 +135,47 @@ app.delete('/findings/:id', function(req, res) {
 		}
 	})
 });
+
+//	*******************************************	//
+
+//	CREATE comment on finding
+app.get('/findings/:id/comments/new', function(req, res) {
+	Finding.findById(req.params.id, function(err, finding) {
+		if(err) {
+			console.log(err);
+		} else {
+			res.render("comments/new", {finding: finding});
+		}
+	});
+});
+
+app.post('/findings/:id/comments', function(req, res) {
+	Finding.findById(req.params.id, function(err, finding) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings/' + finding._id);
+		} else {
+			req.body.comment.datePosted = Date.now();
+			Comment.create(req.body.comment, function(err, comment) {
+				if(err) {
+					console.log(err);
+				} else {
+					finding.comments.push(comment);
+					finding.save();
+					res.redirect('/findings/' + finding._id);
+				}
+			})
+		}
+	});
+});
+
+
+
+
+
+
+
+
 
 //	Fallback route
 app.get('*', function(req, res) {
