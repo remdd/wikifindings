@@ -71,7 +71,7 @@ router.post('/', isLoggedIn, function(req, res) {
 	var findings = req.body.newFindings;
 	var implications = req.body.newImplications;
 	var image = req.body.newImageURL;
-	var postAuthor = "John Doe";						// Placeholder
+	var postAuthor = req.body.newPostAuthor;
 	var datePosted = Date.now();
 	var citation = req.body.newOriginalCitation;
 	var citationLink = req.body.newOriginalCitationLink;

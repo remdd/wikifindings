@@ -6,8 +6,8 @@
 
 <form action="/findings/<%= finding._id %>/comments" method="POST" id="newCommentForm">
 	<textarea placeholder="Your comment" class="newCommentText" name="comment[text]"></textarea>
-	<label for="comment[author]"><h4>Your name: </h4></label>
-	<input type="text" name="comment[author]" placeholder="Your name" class="newFindingTextField">
+	<h4>Commenting as <a href="#"><%= currentUser.username %></a></h4>
+	<input hidden type="text" name="comment[author]	" value="<%= currentUser.username %>">
 	<button class="btn btn-primary" form="newCommentForm" value="submit">Submit</button>
 </form>
 

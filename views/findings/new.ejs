@@ -79,6 +79,8 @@
 	<input name="newPrecededBy" data-role="tagsinput" placeholder="Article title">
 	<hr />
 
+	<h4>Posting as <a href="#"><%= currentUser.username %></a></h4>
+	<input hidden type="text" name="newPostAuthor" value="<%= currentUser.username %>">
 
 	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
 	<a class="btn btn-danger" href="/findings">Go back</a>

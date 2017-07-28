@@ -19,7 +19,7 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', function(req, res) {
-	var newUser = new User({username: req.body.username});
+	var newUser = new User({username: req.body.username, isScientist: req.body.isScientist});
 	User.register(newUser, req.body.password, function(err, user) {
 		if(err) {
 			console.log(err);
@@ -51,7 +51,7 @@ router.get('/logout', function(req, res) {
 
 
 //	DEV todo list //
-router.get('/todo', function(req, res) {
+router.get('/todo', isLoggedIn, isScientist, function(req, res) {
 	res.render('todo');
 });
 
@@ -66,6 +66,13 @@ function isLoggedIn(req, res, next) {
 		return next();
 	}
 	res.redirect('/login');
+}
+
+function isScientist(req, res, next) {
+	if(req.user.isScientist === true) {
+		return next();
+	}
+	res.redirect('/');
 }
 
 module.exports = router;

@@ -25,6 +25,7 @@ router.post('/findings/:id/comments', isLoggedIn, function(req, res) {
 				if(err) {
 					console.log(err);
 				} else {
+					console.log(comment.author);
 					finding.comments.push(comment);
 					finding.save();
 					res.redirect('/findings/' + finding._id);

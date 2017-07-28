@@ -1,9 +1,11 @@
 <% include ../partials/header %>
 
-<a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit</a>
-<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
-	<button class="btn btn-danger">Delete</button>
-</form>
+<% if(currentUser && currentUser.isScientist === true ) { %>
+	<a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit</a>
+	<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
+		<button class="btn btn-danger">Delete</button>
+	</form>
+<% } %>
 
 <div class="row">
 	<div class="col col-sm-9 col-xs-12">

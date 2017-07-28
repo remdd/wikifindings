@@ -52,6 +52,9 @@ hr {
   position: fixed;
   width: 100%;
 }
+.navbar-right {
+	margin-right: 20px;
+}
 
 .newFindingTextField {
 	width: 100%;
@@ -67,7 +70,7 @@ hr {
 	margin-right: 20px;
 	margin-bottom: 20px;
 } .btn-nav {
-	margin-bottom: 0;
+	margin: 0;
 }
 
 .wordCountSpan {
