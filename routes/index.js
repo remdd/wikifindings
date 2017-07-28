@@ -42,6 +42,14 @@ router.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
+
+
+
+//	DEV todo list //
+router.get('/todo', function(req, res) {
+	res.render('todo');
+});
+
 // //	Fallback route
 // router.get('*', function(req, res) {
 // 	res.send('404 page not found...')

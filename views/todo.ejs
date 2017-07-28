@@ -1,0 +1,79 @@
+<% include partials/header %>
+
+<h4>Dev to-do list</h4>
+
+<!-- <form>
+	<input type="text" name="toDoList" id="newInput" placeholder="New to-do">
+	<button id="addBtn">Add</button>
+</form>
+ -->
+<ul id="toDoList">
+	<li>Routing / views
+		<ul>
+			<li>Error handling</li>
+			<li>Invalid route handling</li>
+			<li>'empty subject' & 'unused keyword' pages</li>
+			<li>404 page</li>
+			<li>User types & route validation (user, scientist, admin, +?)</li>
+			<li>Styling in general!</li>
+			<li>Dynamic subject list</li>
+			<li>'About' page</li>
+			<li>Confirmation step for delete requests</li>
+			<li>'notify missing subject' link needs to do something</li>
+			<li>Contact page / methods / social media link (twitter?)</li>
+			<li>Intelligent routing from login page (eg when adding a comment, should be returned to that 'finding' once logged in)</li>
+		</ul>
+	</li>
+	<li>Core functionality
+		<ul>
+			<li>'New Finding' form validation</li>
+			<li>Preceded by / followed by</li>
+			<li>Limit results per page, results-per-page logic etc</li>			
+			<li>Validation of Scientist registration</li>
+			<li>Sort out text case handling on keywords</li>
+			<li class="done">Keyword linking</li>
+			<li class="done">Author linking</li>
+		</ul>
+	</li>
+	<li>User experience enhancements
+		<ul>
+			<li>Paragraph formatting in textinput fields (background, finding, implications)</li>
+			<li>Navbar collapse & display fixes</li>
+			<li>Comment replies</li>
+			<li>Dynamic comment loading (react.js)</li>
+			<li>Sort comments by date</li>
+			<li>Subject / category based styling</li>
+			<li>User profile (particularly relevant to Scientist users)</li>
+			<li>Navbar keyword search</li>
+			<li>Audit history & permissions for 'finding' edits</li>
+			<li>Image uploading & hosting (Amazon web bucket?)</li>
+			<li>Homepage prettification</li>
+			<li>Complex query building (eg show results BY author WITH keyword etc)</li>
+			<li>'Subject' pages each headed by a short lay introduction to the subject</li>
+			<li>Sort & filter results</li>
+			<li>Display image thumnails in 'findings list'</li>
+			<li>Auto link of DOI (+ is it mandatory to provide this?)</li>
+			<li>Display info relating to edits on 'show' & 'index' pages</li>
+			<li>Auto fill 'posted by' on new Findings, 'comment author' on new comments (from user profile)</li>
+			<li>Intelligently hide invalid buttons / routes for users lacking relevant permissions</li>
+		</ul>
+	</li>
+	<li>Back end
+		<ul>
+			<li>Refactor 'new finding' route & mongoose schema</li>
+			<li>Refactor css</li>
+			<li>Minimize libraries, bootstrap</li>
+			<li>Expand & improve seed database</li>
+		</ul>
+	</li>
+</ul>
+
+<!-- <script type="text/javascript">
+	$('#addBtn').click(function() {
+		$('#toDoList').append("<li>" + $('#newInput').val() + "</li>");
+		$('#newInput').val("");
+	})
+</script> -->
+
+
+<% include partials/footer %>

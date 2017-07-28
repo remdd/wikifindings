@@ -205,3 +205,13 @@ form select {
 
 
 
+
+
+
+
+
+/* Todo list only - remove for production */
+.done {
+	color: darkgrey;
+	text-decoration: line-through;
+}

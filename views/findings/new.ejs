@@ -8,10 +8,10 @@
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="newTitle" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
+	<input required class="newFindingTextField" type="text" name="newTitle" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
 	<label for="newCategory"><h4>Category: </h4></label>
-	<select name="newCategory" id="newCategoryList" placeholder="Select from list">
+	<select required name="newCategory" id="newCategoryList" placeholder="Select from list">
 		<option value="" disabled selected>Select from list</option>
 		<option value="Natural sciences">Natural sciences</option>
 		<option value="Social sciences">Social sciences</option>
@@ -20,7 +20,7 @@
 	</select>
 
 	<label for="newSubject"><h4>Subject: </h4></label>
-	<select name="newSubject" id="newSubjectList" disabled="true">
+	<select required name="newSubject" id="newSubjectList" disabled="true">
 		<option value="" disabled selected>Select from list</option>
 		<% include ../partials/subjectlist %>
 	</select>
@@ -36,17 +36,17 @@
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="newBackground" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
+	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="newBackground" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
 
 	<h4>Findings
 		<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newFindingsTextArea" class="newFindingTextArea" name="newFindings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
+	<textarea required id="newFindingsTextArea" class="newFindingTextArea" name="newFindings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
 
 	<h4>Implications
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="newImplications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
+	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="newImplications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
 
 	<h4>Accompanying image</h4>
 	<input type="url" class="newFindingTextField" name="newImageURL" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
@@ -57,7 +57,7 @@
 		<h5 class="labelInline">Publication details</h5>
 		<h5 class="labelInfo">format: Surname AB (Year), Title, Full Journal Name, Volume : First Page - Last Page</h5>
 	</label>
-	<input type="text" name="newOriginalCitation" placeholder="Publication details of original research article" class="newFindingTextField">
+	<input required type="text" name="newOriginalCitation" placeholder="Publication details of original research article" class="newFindingTextField">
 	<br>
 	<label for="newOriginalCitationLink" class="twoLineLabel">
 		<h5 class="labelInline">Link</h5>

@@ -17,16 +17,16 @@
 	</div>
 	<div class="col col-sm-3 col-xs-12 infoPane shownBox">
 		<h4 class="infoPaneLabel">Subject</h4>
-		<h4 class="infoPaneInfo"><%= finding.subject %></h4>
+		<h4 class="infoPaneInfo"><a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Keywords</h4>
 			<% if(finding.keywords) {
 				for(var i = 0; i < finding.keywords.length; i++) { %>
-					<h4 class="infoPaneInfo"><%= finding.keywords[i] %></h4>
+					<h4 class="infoPaneInfo"><a href="/findings/k?keyword=<%= finding.keywords[i] %>"><%= finding.keywords[i] %></a></h4>
 			<% }} %>
 		<br />
 		<h4 class="infoPaneLabel">Posted by</h4>
-		<h4 class="infoPaneInfo"><%= finding.postAuthor %></h4>
+		<h4 class="infoPaneInfo"><a href="/findings/p?postAuthor=<%= finding.postAuthor %>"><%= finding.postAuthor %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Posted on</h4>
 		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>

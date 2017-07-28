@@ -35,6 +35,12 @@
 			      <ul class="nav navbar-nav navbar-left">
 				      <li><a href="/">Home</a></li>
 				      <li><a href="/">About</a></li>
+				      <li><a href="/findings">Latest Findings</a></li>
+					  <li>
+					  	<form class="navbar-form navbar-right" action="/findings/new">
+					  		<button type="submit" class="btn btn-default btn-nav" >Post new Finding</button>
+					  	</form>
+					  </li>
 			      </ul>
 			    </div>
 
@@ -54,9 +60,9 @@
 			          </ul>
 			        </li>
 			      </ul>
-					<form class="navbar-form navbar-left" role="search">
+					<form class="navbar-form navbar-left" role="keyword" action="/findings/k?">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Search for keywords">
+							<input type="text" name="keyword" class="form-control" placeholder="Search for keywords">
 						</div>
 						<button type="submit" class="btn btn-default btn-nav">Search</button>
 					</form>

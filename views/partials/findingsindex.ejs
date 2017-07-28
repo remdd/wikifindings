@@ -1,0 +1,22 @@
+<% findings.forEach(function(finding){ %>
+	<div class="fThumbDiv">
+		<div class="fThumbSubject"><a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a></div>
+		<div class="fThumbTags">keywords: 
+			<% if(finding.keywords) {
+				for(var i = 0; i < 5; i ++) {
+					if(finding.keywords[i]) { %>
+						<a href="/findings/k?keyword=<%= finding.keywords[i] %>"><%= finding.keywords[i]; %></a>
+						<% if(i < finding.keywords.length - 1 && i < 4) {%>, <% } %> 
+				<% }} %>
+				<% if(finding.keywords.length > 5) { %>...<%}%>
+			<% } %>
+		</div>
+		<a class="mutedLink" href="/findings/<%= finding._id %>">
+			<h4><%= finding.title %></h4>
+		</a>
+		<p>Posted by:
+			<span class="fThumbPostedBy"><a href="/findings/p?postAuthor=<%= finding.postAuthor %>"><%= finding.postAuthor %></a></span>
+			<span class="fThumbDate">Posted <%= finding.datePosted.toDateString() %></span>
+		</p>
+	</div>
+<% }); %>

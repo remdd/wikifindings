@@ -11,7 +11,48 @@ router.get('/', function(req, res) {
 		} else {
 			res.render("findings/index", {findings: allFindings})
 		}
-	});
+	}).sort({datePosted: -1});
+});
+
+//	INDEX BY SUBJECT route
+router.get('/s', function(req, res) {
+	var subjectName = req.query.subject;
+	Finding.find({subject: subjectName}, function(err, filteredFindings) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.render('findings/subject', {findings: filteredFindings, subject: subjectName});
+		}
+	}).sort({datePosted: -1});
+	// res.render('findings', {findings: findingDB});
+});
+
+//	INDEX BY KEYWORD route
+router.get('/k', function(req, res) {
+	var keyword = req.query.keyword;
+	Finding.find({keywords: { $all: [keyword] }}, function(err, filteredFindings) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.render('findings/keyword', {findings: filteredFindings, keyword: keyword});
+		}
+	}).sort({datePosted: -1});
+	// res.render('findings', {findings: findingDB});
+});
+
+//	INDEX BY POSTEDBY route
+router.get('/p', function(req, res) {
+	var postAuthor = req.query.postAuthor;
+	Finding.find({postAuthor: postAuthor}, function(err, filteredFindings) {
+		if(err) {
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			res.render('findings/postAuthor', {findings: filteredFindings, postAuthor: postAuthor});
+		}
+	}).sort({datePosted: -1});
 	// res.render('findings', {findings: findingDB});
 });
 
