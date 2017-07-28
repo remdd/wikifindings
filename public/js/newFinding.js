@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	console.log("wikifindings.js connected");
+	console.log("newFinding.js connected");
 
 	var newBackgroundWordCount = 0;
 	var newFindingsWordCount = 0;

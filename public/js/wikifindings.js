@@ -1,8 +1,15 @@
 $(document).ready(function() {
 	console.log("wikifindings.js connected");
 
-	const area = document.getElementById('newBackgroundTextArea')
-	const callback = counter => console.log(counter)
+	$(window).scroll(function () { 
+		console.log($(window).scrollTop());
 
-	Countable.on(area, callback)
+		if ($(window).scrollTop() > 174) {
+			$('#nav_bar').addClass('navbar-sticky');
+		}
+		if ($(window).scrollTop() < 175) {
+			$('#nav_bar').removeClass('navbar-sticky');
+		}
+	});
+
 });

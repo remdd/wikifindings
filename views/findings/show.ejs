@@ -48,8 +48,8 @@
 <% } %>
 
 <% if(finding.citationDOI) { %>
-	<h4>DOI (Digital Object Identifier) of original research publication</h4>
-	<span class="showCitationInfo"><%= finding.citationDOI %></span>
+	<h4>Digital Object Identifier (DOI) of original research publication</h4>
+	<a href="https://dx.doi.org/<%= finding.citationDOI %>"><span class="showCitationInfo"><%= finding.citationDOI %></span></a>
 <% } %>
 
 <hr />

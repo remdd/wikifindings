@@ -8,6 +8,11 @@ router.get('/', function(req, res) {
 	res.render('home');
 });
 
+//	About route
+router.get('/about', function(req, res) {
+	res.render('about');
+});
+
 //	AUTHENTICATION ROUTES
 router.get('/register', function(req, res) {
 	res.render('users/register');
