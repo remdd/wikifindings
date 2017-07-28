@@ -138,7 +138,7 @@ var data = [
 		citationDOI: "2347234v 23423 43m 234 1234"
 	}
 
-	/*,
+	,
 	{
 		title: "I don't know what you could say about a day in which you have seen four beautiful sunsets.",
 		category: "Natural sciences",
@@ -228,7 +228,7 @@ var data = [
 		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
 		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
 		citationDOI: "2347234v 23423 43m 234 1234"
-	} */
+	}
 
 ];
 

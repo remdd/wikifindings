@@ -149,6 +149,9 @@ router.delete('/:id', function(req, res) {
 	})
 });
 
+
+
+
 //	Middleware function definition
 function isLoggedIn(req, res, next) {
 	if(req.isAuthenticated()) {

@@ -174,7 +174,7 @@ form select {
 }
 .shownP {
 	padding: 25px 50px;
-	font-size: 1.4em;
+	font-size: 1.2em;
 	background: #e8e8e8;
 	white-space: pre-wrap;		/* Preserves paragraph formatting, but wraps within element */
 }

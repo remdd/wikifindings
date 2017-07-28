@@ -47,18 +47,11 @@ router.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
-
-
-
 //	DEV todo list //
 router.get('/todo', isLoggedIn, isScientist, function(req, res) {
 	res.render('todo');
 });
 
-// //	Fallback route
-// router.get('*', function(req, res) {
-// 	res.send('404 page not found...')
-// });
 
 //	Middleware function definition
 function isLoggedIn(req, res, next) {
