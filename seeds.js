@@ -6,6 +6,7 @@ var data = [
 	{
 		title: "Honeybees that get damaged wings become less choosy about the flowers that they visit.",
 		category: "Natural sciences",
+		subjectGroup: "Biology",
 		subject: "Behavioural ecology",
 		keywords: ["Pollination"],
 		background: "The wings of insects get worn as they get older, but the effects on their behaviour of this is largely unstudied.\n \nThe reason it might be important is that it might affect both how well workers do at collecting nectar and pollen for the colony, and how well plants are pollinated. It might therefore affect the survival of populations of both bees and plants. \n \nPrevious studies have shown that having worn wings forces bees to flap their wings faster to fly. Therefore there could be increased costs of flight that mean behaviour should change.",
@@ -20,6 +21,7 @@ var data = [
 	{
 		title: "New measurements of perchlorate distribution on Mars from Mars Express Orbiter suggest lower chance of stability of liquid surface water in the recent geological past.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Planetary science",
 		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -35,6 +37,7 @@ var data = [
 	{
 		title: "New photon mass measurements suggest that time is in fact flowing backwards and we are all our grand-daughters' grandmothers",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Cosmology",
 		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
@@ -50,6 +53,7 @@ var data = [
 	{
 		title: "Reactionless sublight engine theory advancements raise exciting possibilities for outer solar system exploration.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Astronautics",
 		keywords: ["Engine", "Saturn", "Jupiter", "Uranus", "Neptune", "Pluto", "Kuiper Belt", "Oort Cloud", "Solar System", "Spacecraft"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -65,6 +69,7 @@ var data = [
 	{
 		title: "Solar sail developments dramatically reduce travel time to inner solar system.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Astronautics",
 		keywords: ["Engine", "Solar System", "Spacecraft", "Mars", "Venus", "Moon", "Mercury", "Asteroids"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
@@ -80,6 +85,7 @@ var data = [
 	{
 		title: "Canine teeth of minors found to grow ten times faster at night than in the day.",
 		category: "Applied sciences",
+		subjectGroup: "Health sciences",
 		subject: "Dentistry",
 		keywords: ["Teeth", "Night", "Canines"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -95,6 +101,7 @@ var data = [
 	{
 		title: "Some dragonflies fly clockwise, others anticlockwise.",
 		category: "Natural sciences",
+		subjectGroup: "Biology",
 		subject: "Behavioural ecology",
 		keywords: ["Grasshopper", "Pollination", "Grasses"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
@@ -110,6 +117,7 @@ var data = [
 	{
 		title: "Developments in Acid base chemistry lead to suprising new applications for Potassium Dihydroxide",
 		category: "Natural sciences",
+		subjectGroup: "Chemistry",
 		subject: "Acid base chemistry",
 		keywords: ["Alkali", "Acid", "pH", "Water", "Potassium Dihydroxide"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -125,6 +133,7 @@ var data = [
 	{
 		title: "Regeneration of premolar enamel found to be accelerated by daily application of hydrochloric acid toothpaste.",
 		category: "Applied sciences",
+		subjectGroup: "Health sciences",
 		subject: "Dentistry",
 		keywords: ["Teeth", "Acid", "pH", "Water", "Toothpaste", "Hydrochloric acid"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
@@ -142,6 +151,7 @@ var data = [
 	{
 		title: "I don't know what you could say about a day in which you have seen four beautiful sunsets.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Planetary science",
 		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -157,6 +167,7 @@ var data = [
 	{
 		title: "Astronomy compels the soul to look upward, and leads us from this world to another.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Cosmology",
 		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
@@ -172,6 +183,7 @@ var data = [
 	{
 		title: "The sky is the limit only for those who aren't afraid to fly!",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Planetary science",
 		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -188,6 +200,7 @@ var data = [
 		title: "It suddenly struck me that that tiny pea, pretty and blue, was the Earth. I put up my thumb and shut one eye, and my thumb blotted out the planet Earth. I didn't feel like a giant. I felt very, very small.",
 		category: "Natural sciences",
 		subject: "Cosmology",
+		subjectGroup: "Astronomy",
 		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
 		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
@@ -202,6 +215,7 @@ var data = [
 	{
 		title: "To go places and do things that have never been done before – that’s what living is all about.",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Planetary science",
 		keywords: ["Mars", "perchlorates", "Mars Express", "water", "life on Mars", "exobiology"],
 		background: "Emerged into consciousness prime number inconspicuous motes of rock and gas, Drake Equation dream of the mind's eye globular star cluster another world tesseract, extraordinary claims require extraordinary evidence astonishment. Worldlets Flatland rich in mystery, trillion, as a patch of light, dream of the mind's eye, a billion trillion white dwarf rogue, Apollonius of Perga, a billion trillion, light years Drake Equation",
@@ -217,6 +231,7 @@ var data = [
 	{
 		title: "Encyclopaedia galactica realm of the galaxies explorations finite but unbounded, worldlets trillion stirred by starlight two ghostly white figures in coveralls",
 		category: "Natural sciences",
+		subjectGroup: "Astronomy",
 		subject: "Cosmology",
 		keywords: ["Time", "Mindfuck", "Cosmic", "Mars", "photon"],
 		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",

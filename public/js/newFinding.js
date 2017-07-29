@@ -41,27 +41,45 @@ $(document).ready(function() {
 	 	}
 	});
 
-	//	Hide invalid 'subjects' when category is changed
-	$('#newCategoryList').change(function() {
-		$('#newSubjectList').removeClass('greyedOut');
-		$('#newSubjectList').attr('disabled', false);
-		var selected = $('#newCategoryList').val();
-		$('#newSubjectList').find('*').each(function() {
-			$(this).attr('hidden', false);
-			if((($(this).attr('value')) != selected) && (($(this).parent().attr('value')) != selected)) {
-				$(this).attr('hidden', true);
-			}
-		})
-		$('#newSubjectList').val('');
-	});
-
 	//	Suppress form submission on enter keypress in tag / text fields
 	$(document).on("keypress", ":input:not(textarea)", function(event) {
 	    return event.keyCode != 13;
 	});
 
+	//	Show available Subject Groups when Category is changed
+	$('#newCategoryList').change(function() {
+		$('#newSubjectList').addClass('greyedOut');
+		$('#newSubjectList').attr('disabled', true);
+	 	$('#newSubjectGroupList').val('');
+	 	$('#newSubjectGroupList').removeClass('greyedOut');
+	 	$('#newSubjectGroupList').attr('disabled', false);
+	 	var selectedCategory = $('#newCategoryList').find(":selected").text();
+	 	$('#newSubjectGroupList').find('*').each(function() {
+	 		$(this).attr('hidden', false);
+	 		if($(this).attr('data-category') != selectedCategory) {
+	 			$(this).attr('hidden', true);
+	 		}
+	 	});
+	});
+
+	//	Show available Subjects when Subject Group is changed
+	$('#newSubjectGroupList').change(function() {
+	 	$('#newSubjectList').val('');
+	 	$('#newSubjectList').removeClass('greyedOut');
+	 	$('#newSubjectList').attr('disabled', false);
+	 	var selectedGroup = $('#newSubjectGroupList').val();
+	 	$('#newSubjectList').find('*').each(function() {
+	 		$(this).attr('hidden', false);
+	 		if($(this).attr('data-group') != selectedGroup) {
+	 			$(this).attr('hidden', true);
+	 		}
+	 	});
+	});
+
 	//	Functions to run on document ready
 	$('#newCategoryList').trigger('change');
+	$('#newSubjectGroupList').addClass('greyedOut');
+	$('#newSubjectGroupList').attr('disabled', true);
 	$('#newSubjectList').addClass('greyedOut');
 	$('#newSubjectList').attr('disabled', true);
 

@@ -1,11 +1,8 @@
 		<% allSubjects.forEach(function(category) { %>
-			<optgroup value="<%= category.categoryName %>"><%= category.categoryName %>
 			<% category.subjectGroups.forEach(function(subjectGroup) { %>
-				<optgroup value="<%= category.categoryName %>" label="<%= subjectGroup.subjectGroupName %>">
+				<% var group = subjectGroup.subjectGroupName; %>
 				<% for(var i = 0; i < subjectGroup.subjects.length; i++) { %>
-					<option value="<%= subjectGroup.subjects[i] %>"><%= subjectGroup.subjects[i] %></option>
+					<option data-group="<%= group %>" value="<%= subjectGroup.subjects[i] %>" label="<%= subjectGroup.subjects[i] %>"><%= subjectGroup.subjects[i] %></option>
 				<% } %>
-				</optgroup>
 			<% }) %>
-			</optgroup>
 		<% }) %>

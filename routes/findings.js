@@ -63,36 +63,8 @@ router.get('/new', isLoggedIn, function(req, res) {
 
 //	CREATE new finding route
 router.post('/', isLoggedIn, function(req, res) {
-	var title = req.body.newTitle;
-	var category = req.body.newCategory;
-	var subject = req.body.newSubject;
-	var keywords = req.body.newKeywords;
-	var background = req.body.newBackground;
-	var findings = req.body.newFindings;
-	var implications = req.body.newImplications;
-	var image = req.body.newImageURL;
-	var postAuthor = req.body.newPostAuthor;
-	var datePosted = Date.now();
-	var citation = req.body.newOriginalCitation;
-	var citationLink = req.body.newOriginalCitationLink;
-	var citationDOI = req.body.newOriginalCitationDOI;
-
-	var newFinding = {
-		title: title, 
-		category: category, 
-		subject: subject, 
-		keywords: keywords, 
-		background: background, 
-		findings: findings, 
-		implications: implications, 
-		image: image,
-		postAuthor: postAuthor, 
-		datePosted: datePosted,
-		citation: citation,
-		citationLink: citationLink,
-		citationDOI: citationDOI
-	};
-	Finding.create(newFinding, function(err) {
+	req.body.finding.datePosted = Date.now();
+	Finding.create(req.body.finding, function(err) {
 		if(err) {
 			console.log(err);
 		} else {

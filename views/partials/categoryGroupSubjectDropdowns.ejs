@@ -1,0 +1,21 @@
+	<label for="finding[category]"><h4>Category: </h4></label>
+	<select required name="finding[category]" id="newCategoryList">
+		<option value="" disabled selected>Select from list</option>
+		<% allSubjects.forEach(function(category) { %>
+			<option value="<%= category.categoryName %>"><%= category.categoryName %></option>
+		<% }); %>
+	</select>
+
+	<label for="finding[subjectGroup]"><h4>Group: </h4></label>
+	<select required name="finding[subjectGroup]" id="newSubjectGroupList">
+		<option value="" disabled selected>Select from list</option>
+		<% include ../partials/subjectGroupList %>
+	</select>
+
+	<label for="finding[subject]"><h4>Subject: </h4></label>
+	<select required name="finding[subject]" id="newSubjectList">
+		<option value="" disabled selected>Select from list</option>
+		<% include ../partials/subjectlist %>
+	</select>
+
+	<span><a href="#">Missing your subject? Report it here</a></span>

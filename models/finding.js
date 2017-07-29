@@ -4,6 +4,7 @@ var mongoose = require("mongoose");
 var findingSchema = new mongoose.Schema({
 	title: String,
 	category: String,
+	subjectGroup: String,
 	subject: String,
 	keywords: Array,
 	background: String,
@@ -15,6 +16,7 @@ var findingSchema = new mongoose.Schema({
 	citation: String,
 	citationLink: String,
 	citationDOI: String,
+	precededBy: Array,
 	comments: [
 		{
 			type: mongoose.Schema.Types.ObjectId,

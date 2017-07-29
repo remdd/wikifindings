@@ -8,78 +8,64 @@
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input required class="newFindingTextField" type="text" name="newTitle" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
+	<input required class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
-	<label for="newCategory"><h4>Category: </h4></label>
-	<select required name="newCategory" id="newCategoryList" placeholder="Select from list">
-		<option value="" disabled selected>Select from list</option>
-		<% allSubjects.forEach(function(category) { %>
-			<option value="<%= category.categoryName %>"><%= category.categoryName %></option>
-		<% }); %>
-	</select>
-
-	<label for="newSubject"><h4>Subject: </h4></label>
-	<select required name="newSubject" id="newSubjectList">
-		<option value="" disabled selected>Select from list</option>
-		<% include ../partials/subjectlist %>
-	</select>
-
-	<span><a href="#">Missing your subject? Report it here</a></span>
+	<% include ../partials/categoryGroupSubjectDropdowns %>
 
 	<br />
-	<label for="newKeywords"><h4>Keywords: </h4></label>
-	<select multiple name="newKeywords" data-role="tagsinput" placeholder="Enter keyword(s)"></select>
+	<label for="finding[keywords]"><h4>Keywords: </h4></label>
+	<select multiple name="finding[keywords]" data-role="tagsinput" placeholder="Enter keyword(s)"></select>
 
 	<hr />
 
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="newBackground" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
+	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
 
 	<h4>Findings
 		<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea required id="newFindingsTextArea" class="newFindingTextArea" name="newFindings" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
+	<textarea required id="newFindingsTextArea" class="newFindingTextArea" name="finding[findings]" form="newFindingForm" placeholder="Enter a summary of the article's findings in plain English"></textarea>
 
 	<h4>Implications
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="newImplications" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
+	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
 
 	<h4>Accompanying image</h4>
-	<input type="url" class="newFindingTextField" name="newImageURL" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
+	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
 	<hr />
 
 	<h4>Details of original research article</h4>
-	<label for="newOriginalCitation" class="twoLineLabel">
+	<label for="finding[citation]" class="twoLineLabel">
 		<h5 class="labelInline">Publication details</h5>
 		<h5 class="labelInfo">format: Surname AB (Year), Title, Full Journal Name, Volume : First Page - Last Page</h5>
 	</label>
-	<input required type="text" name="newOriginalCitation" placeholder="Publication details of original research article" class="newFindingTextField">
+	<input required type="text" name="finding[citation]" placeholder="Publication details of original research article" class="newFindingTextField">
 	<br>
-	<label for="newOriginalCitationLink" class="twoLineLabel">
+	<label for="finding[citationLink]" class="twoLineLabel">
 		<h5 class="labelInline">Link</h5>
 		<h5 class="labelInfo">please be mindful of any copyright limitations that may apply to your link</h5>
 	</label>
-	<input type="url" name="newOriginalCitationLink" placeholder="URL of original article" class="newFindingTextField">
+	<input type="url" name="finding[citationLink]" placeholder="URL of original article" class="newFindingTextField">
 	<br>
 
-	<label for="newOriginalCitationDOI" class="twoLineLabel">
+	<label for="finding[citationDOI]" class="twoLineLabel">
 		<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
 		<h5 class="labelInfo"></h5>
 	</label>
-	<input type="text" name="newOriginalCitationDOI" placeholder="DOI of original article" class="newFindingTextField">
+	<input type="text" name="finding[citationDOI]" placeholder="DOI of original article" class="newFindingTextField">
 	<br>
 
 	<hr />
 
-	<label for="newPrecededBy"><h4>Preceded by: </h4></label>
-	<input name="newPrecededBy" data-role="tagsinput" placeholder="Article title">
+	<label for="finding[precededBy]"><h4>Preceded by: </h4></label>
+	<input name="finding[precededBy]" data-role="tagsinput" placeholder="Article title">
 	<hr />
 
 	<h4>Posting as <a href="#"><%= currentUser.username %></a></h4>
-	<input hidden type="text" name="newPostAuthor" value="<%= currentUser.username %>">
+	<input hidden type="text" name="finding[postAuthor]" value="<%= currentUser.username %>">
 
 	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
 	<a class="btn btn-danger" href="/findings">Go back</a>

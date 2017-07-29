@@ -10,22 +10,7 @@
 	<h4>Title</h4>
 	<input class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding" value="<%= finding.title %>">
 
-	<label for="newCategory"><h4>Category: </h4></label>
-	<select name="finding[category]" id="newCategoryList">
-		<option value="" disabled>Select from list</option>
-		<option value="Natural sciences">Natural sciences</option>
-		<option value="Social sciences">Social sciences</option>
-		<option value="Behavioural sciences">Behavioural sciences</option>
-		<option value="Applied sciences">Applied sciences</option>
-	</select>
-
-	<label for="newSubject"><h4>Subject: </h4></label>
-	<select name="finding[subject]" id="newSubjectList">
-		<option value="" disabled>Select from list</option>
-		<% include ../partials/subjectlist %>
-	</select>
-
-	<span><a href="#">Missing your subject? Report it here</a></span>
+	<% include ../partials/categoryGroupSubjectDropdowns %>
 
 	<br />
 	<label for="newKeywords"><h4>Keywords: </h4></label>
@@ -49,7 +34,13 @@
 				}
 			});
 			$('#newCategoryList').trigger('change');
-			$('#newSubjectList').children().children().each(function() {
+			$('#newSubjectGroupList').children().each(function() {
+				if($(this).attr('value') == "<%= finding.subjectGroup %>") {
+					$(this).attr('selected', 'selected');
+				}
+			});
+			$('#newSubjectGroupList').trigger('change');
+			$('#newSubjectList').children().each(function() {
 				if($(this).attr('value') == "<%= finding.subject %>") {
 					$(this).attr('selected', 'selected');
 				}

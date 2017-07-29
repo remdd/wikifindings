@@ -1,0 +1,6 @@
+		<% allSubjects.forEach(function(category) { %>
+			<% var cat = category.categoryName; %>
+			<% category.subjectGroups.forEach(function(subjectGroup) { %>
+				<option data-category="<%= cat %>" value="<%= subjectGroup.subjectGroupName %>" label="<%= subjectGroup.subjectGroupName %>"></option>
+			<% }); %>
+		<% }); %>

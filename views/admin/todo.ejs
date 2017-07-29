@@ -1,4 +1,4 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <h4>Dev to-do list</h4>
 
@@ -13,13 +13,13 @@
 			<li>Error handling</li>
 			<li>Invalid route handling</li>
 			<li>'empty subject' & 'unused keyword' pages</li>
-			<li>404 page</li>
 			<li>Styling in general!</li>
-			<li>Dynamic subject list</li>
 			<li>Confirmation step for delete requests</li>
 			<li>'notify missing subject' link needs to do something</li>
 			<li>Contact page / methods / social media link (twitter?)</li>
 			<li>Intelligent routing from login page (eg when adding a comment, should be returned to that 'finding' once logged in)</li>
+			<li class="done">404 page</li>
+			<li class="done">Dynamic subject list</li>
 			<li class="done">Basic user types & route validation (user, scientist, admin, +?)</li>
 			<li class="done">'About' page</li>
 		</ul>
@@ -40,10 +40,8 @@
 		<ul>
 			<li>Comment replies</li>
 			<li>Dynamic comment loading (react.js)</li>
-			<li>Keep TextArea paragraph formatting</li>
 			<li>Sort comments by date</li>
 			<li>Expansion of Finding schema citation to multiple fields</li>
-			<li>Subject / category based styling</li>
 			<li>User profile (particularly relevant to Scientist users)</li>
 			<li>Audit history & permissions for 'finding' edits</li>
 			<li>Image uploading & hosting (Amazon web bucket?)</li>
@@ -56,6 +54,7 @@
 			<li>Display info relating to edits on 'show' & 'index' pages</li>
 			<li>Link to user profile from comment author</li>
 			<li>Ability to delete own comments</li>
+			<li class="done">Keep TextArea paragraph formatting</li>
 			<li class="done">Auto fill 'posted by' on new Findings, 'comment author' on new comments (from user profile)</li>
 			<li class="done">Intelligently hide invalid buttons / routes for users lacking relevant permissions</li>
 			<li class="done">Navbar subject list placeholder logic</li>
@@ -68,7 +67,6 @@
 	</li>
 	<li>Back end / admin
 		<ul>
-			<li>Refactor 'new finding' route & mongoose schema</li>
 			<li>Refactor css</li>
 			<li>Add 'short ID' for posts, visible to Scientists (for use with prec by / followed by)</li>
 			<li>Add 'short ID' for users?</li>
@@ -76,12 +74,13 @@
 			<li>Expand & improve seed database</li>
 			<li>Cross-platform testing</li>
 			<li>SASS css</li>
+			<li class="done">Refactor 'new finding' route & mongoose schema</li>
 		</ul>
 	</li>
 	<li>Things to clarify / discuss with Andy
 		<ul>
 			<li>Should the DOI be mandatory?</li>
-			<li>Subject & Category structure</li>
+			<li>Subject & Category tree structure = Category -> Subject group -> Subject</li>
 			<li>Links from text of a 'finding' - talk further about what this might involve</li>
 		</ul>
 	</li>
@@ -95,4 +94,4 @@
 </script> -->
 
 
-<% include partials/footer %>
+<% include ../partials/footer %>

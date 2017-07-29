@@ -1,6 +1,8 @@
 <% findings.forEach(function(finding){ %>
 	<div class="fThumbDiv">
-		<div class="fThumbSubject"><a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a></div>
+		<div class="fThumbSubject"><div class="fThumbSubjectGroupColorDiv"></div>
+			<a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a>
+		</div>
 		<div class="fThumbTags">keywords: 
 			<% if(finding.keywords) {
 				for(var i = 0; i < 5; i ++) {
