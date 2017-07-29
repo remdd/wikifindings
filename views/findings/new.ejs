@@ -13,14 +13,13 @@
 	<label for="newCategory"><h4>Category: </h4></label>
 	<select required name="newCategory" id="newCategoryList" placeholder="Select from list">
 		<option value="" disabled selected>Select from list</option>
-		<option value="Natural sciences">Natural sciences</option>
-		<option value="Social sciences">Social sciences</option>
-		<option value="Behavioural sciences">Behavioural sciences</option>
-		<option value="Applied sciences">Applied sciences</option>
+		<% allSubjects.forEach(function(category) { %>
+			<option value="<%= category.categoryName %>"><%= category.categoryName %></option>
+		<% }); %>
 	</select>
 
 	<label for="newSubject"><h4>Subject: </h4></label>
-	<select required name="newSubject" id="newSubjectList" disabled="true">
+	<select required name="newSubject" id="newSubjectList">
 		<option value="" disabled selected>Select from list</option>
 		<% include ../partials/subjectlist %>
 	</select>

@@ -2,10 +2,9 @@ var express 				= require('express'),
 	bodyParser 				= require('body-parser'),
 	mongoose 				= require('mongoose'),
 	methodOverride			= require('method-override'),
-	Finding 				= require('./models/finding'),
-	Comment 				= require('./models/comment'),
 	User					= require('./models/user'),
 	seedDB					= require('./seeds'),
+	allSubjects				= require('./subjectList'),
 	passport				= require('passport'),
 	LocalStrategy			= require('passport-local'),
 	passportLocalMongoose	= require('passport-local-mongoose'),
@@ -25,6 +24,7 @@ mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
 //	Instructs Express to serve contents of public directory
 app.use(express.static('public'));
 
+//	Express-session and Passport usage
 app.use(require("express-session")({
 	secret: "Bryher Higgs-Boson",
 	resave: false,
@@ -49,6 +49,7 @@ app.set('view engine', 'ejs');
 //	Middleware to make req.user available to all routes
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
+	res.locals.allSubjects = allSubjects;
 	next();
 });
 

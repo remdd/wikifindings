@@ -222,6 +222,30 @@ form select {
 	display: inline-block;
 }
 
+.nav-dropdown {
+	padding-left: 10px;
+}
+.searchSubjectCategoryName {
+	margin-top: 16px;
+}
+.searchSubjectGroupName {
+	margin-top: 8px;
+	margin-left: 8px;
+	font-style: italic;
+} .searchSubjectGroupName::before {
+	content: "-";
+}
+.searchSubjectSubjectName {
+	margin-left: 16px;
+}
+.nav-dropdown {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+
+
+
 
 
 

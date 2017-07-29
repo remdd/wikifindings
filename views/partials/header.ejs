@@ -53,9 +53,27 @@
 								</form>
 							</li>
 							<% } %>
+
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Subjects <span class="caret"></span></a>
-								<ul class="dropdown-menu">
+								<ul class="dropdown-menu nav-dropdown">
+
+									<% allSubjects.forEach(function(category) { %>
+									<li class="searchSubjectCategoryName"><strong><%= category.categoryName %></strong></li>
+										<% category.subjectGroups.forEach(function(subjectGroup) { %>
+											<li class="searchSubjectGroupName"><%= subjectGroup.subjectGroupName %></li>
+											<% for(var i = 0; i < subjectGroup.subjects.length; i++) { %>
+												<li class="searchSubjectSubjectName"><a href="/findings/s?subject=<%= subjectGroup.subjects[i] %>"><%= subjectGroup.subjects[i] %></a></li>
+											<% } %>
+										<% }); %>
+									<% }); %>
+
+
+
+
+<!-- 	  								<li><a href="#"><%= allSubjects[0].categoryName %></a></li>
+	  								<li><a href="#"><%= allSubjects[0].subjectGroups[0].subjectGroupName %></a></li>
+	  								<li><a href="#"><%= allSubjects[0].subjectGroups[0].subjects[0] %></a></li>
 									<li><a href="#"><strong>Natural sciences</strong></a></li>
 									<li><a href="/findings/s?subject=Behavioural%20ecology">Behavioural ecology</a></li>
 									<li><a href="/findings/s?subject=Cosmology">Cosmology</a></li>
@@ -63,8 +81,10 @@
 									<li role="separator" class="divider"></li>
 									<li><a href="#"><strong>Applied sciences</strong></a></li>
 									<li><a href="/findings/s?subject=Dentistry">Dentistry</a></li>
+ -->
 								</ul>
 							</li>
+
 							<li>
 								<form class="navbar-form form-inline" role="keyword" action="/findings/k?">
 									<div class="form-group">
