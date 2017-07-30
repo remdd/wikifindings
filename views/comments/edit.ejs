@@ -1,0 +1,14 @@
+<% include ../partials/header %>
+
+<h4>Edit your comment:</h4>
+<hr />
+
+<form action="/findings/<%= finding_id %>/comments/<%= comment._id %>?_method=PUT" method="POST" id="newCommentForm">
+	<textarea class="newCommentText" name="comment[text]"><%= comment.text %></textarea>
+	<h4>Commenting as <a href="#"><%= currentUser.username %></a></h4>
+	<input hidden type="text" name="comment[author]	" value="<%= currentUser.username %>">
+	<button class="btn btn-primary" form="newCommentForm" value="submit">Submit</button>
+</form>
+
+
+<% include ../partials/footer %>

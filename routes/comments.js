@@ -38,6 +38,27 @@ router.post('/findings/:id/comments', isLoggedIn, function(req, res) {
 	});
 });
 
+//	EDIT comment route
+router.get('/findings/:id/comments/:comment_id/edit', function(req, res) {
+	Comment.findById(req.params.comment_id, function(err, foundComment) {
+		if(err) {
+			res.redirect("back");
+		} else {
+			res.render("comments/edit", { finding_id: req.params.id, comment: foundComment });
+		}
+	})
+});
+
+//	UPDATE comment route
+router.put('/findings/:id/comments/:comment_id/', function(req, res) {
+	Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment) {
+		if(err) {
+			res.redirect("back");
+		} else {
+			res.redirect("/findings/" + req.params.id);
+		}
+	});
+});
 
 
 //	Middleware function definition

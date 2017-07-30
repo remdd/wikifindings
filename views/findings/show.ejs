@@ -65,6 +65,7 @@
 <% finding.comments.forEach(function(comment){ %>
 	<div class="shownComment">
 		<div class="shownCommentText"><%= comment.text %></div>
+		<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
 		<div class="shownCommentInfo"><%= comment.author.username %><span class="shownCommentPostedDate">Posted <%= comment.datePosted.toDateString() %></span></div>
 	</div>
 <% }); %>
