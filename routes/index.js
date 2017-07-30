@@ -26,15 +26,20 @@ router.get('/register', function(req, res) {
 //	Register new user route
 router.post('/register', function(req, res) {
 	var newUser = new User({username: req.body.username, email: req.body.email, isScientist: req.body.isScientist});
-	User.register(newUser, req.body.password, function(err, user) {
-		if(err) {
-			console.log(err);
-			return res.render('users/register');
-		}
-		passport.authenticate('local')(req, res, function() {
-			res.redirect('/findings');
+	if(req.body.password === req.body.confirm) {
+		User.register(newUser, req.body.password, function(err, user) {
+			if(err) {
+				console.log(err);
+				return res.render('users/register');
+			}
+			passport.authenticate('local')(req, res, function() {
+				res.redirect('/findings');
+			});
 		});
-	});
+	} else {
+		console.log("Passwords do not match...");
+		res.render('users/register');
+	}
 });
 
 //	Render login form
