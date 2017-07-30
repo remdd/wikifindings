@@ -11,16 +11,21 @@ var findingSchema = new mongoose.Schema({
 	findings: String,
 	implications: String,
 	image: String,
-	postAuthor: String,
 	datePosted: Date,
 	citation: String,
 	citationLink: String,
 	citationDOI: String,
 	precededBy: Array,
+	postAuthor: {
+		id: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User"			//	ref: name of the mongoose schema model
+		},
+		username: String
+	},
 	comments: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			//	ref = name of the Comment model
 			ref: "Comment"
 		}
 	]

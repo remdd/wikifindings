@@ -25,7 +25,6 @@ router.get('/s', function(req, res) {
 			res.render('findings/subject', {findings: filteredFindings, subject: subjectName});
 		}
 	}).sort({datePosted: -1});
-	// res.render('findings', {findings: findingDB});
 });
 
 //	INDEX BY KEYWORD route
@@ -39,13 +38,12 @@ router.get('/k', function(req, res) {
 			res.render('findings/keyword', {findings: filteredFindings, keyword: keyword});
 		}
 	}).sort({datePosted: -1});
-	// res.render('findings', {findings: findingDB});
 });
 
 //	INDEX BY POSTEDBY route
 router.get('/p', function(req, res) {
 	var postAuthor = req.query.postAuthor;
-	Finding.find({postAuthor: postAuthor}, function(err, filteredFindings) {
+	Finding.find({'postAuthor.username': postAuthor}, function(err, filteredFindings) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
@@ -53,7 +51,6 @@ router.get('/p', function(req, res) {
 			res.render('findings/postAuthor', {findings: filteredFindings, postAuthor: postAuthor});
 		}
 	}).sort({datePosted: -1});
-	// res.render('findings', {findings: findingDB});
 });
 
 //	NEW - show form to create new campground
@@ -64,13 +61,19 @@ router.get('/new', isLoggedIn, function(req, res) {
 //	CREATE new finding route
 router.post('/', isLoggedIn, function(req, res) {
 	req.body.finding.datePosted = Date.now();
-	Finding.create(req.body.finding, function(err) {
+	req.body.finding.postAuthor = {
+		id: req.user._id,
+		username: req.user.username
+	}
+	console.log(req.body.finding);
+	Finding.create(req.body.finding, function(err, finding) {
+		console.log(finding);
 		if(err) {
 			console.log(err);
 		} else {
 			res.redirect('/findings');
 		}
-	})
+	});
 });
 
 //	SHOW info about a finding
@@ -86,7 +89,7 @@ router.get('/:id', function(req, res) {
 });
 
 //	EDIT a finding
-router.get('/:id/edit', function(req, res) {
+router.get('/:id/edit', isLoggedIn, function(req, res) {
 	Finding.findById(req.params.id, function(err, shownFinding) {
 		if(err) {
 			console.log(err);
@@ -98,7 +101,7 @@ router.get('/:id/edit', function(req, res) {
 });
 
 //	UPDATE a finding
-router.put('/:id', function(req, res) {
+router.put('/:id', isLoggedIn, function(req, res) {
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			console.log(err);
@@ -110,7 +113,7 @@ router.put('/:id', function(req, res) {
 });
 
 //	DELETE a finding
-router.delete('/:id', function(req, res) {
+router.delete('/:id', isLoggedIn, function(req, res) {
 	Finding.findByIdAndRemove(req.params.id, function(err) {
 		if(err) {
 			console.log(err);

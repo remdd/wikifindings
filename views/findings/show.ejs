@@ -28,7 +28,7 @@
 			<% }} %>
 		<br />
 		<h4 class="infoPaneLabel">Posted by</h4>
-		<h4 class="infoPaneInfo"><a href="/findings/p?postAuthor=<%= finding.postAuthor %>"><%= finding.postAuthor %></a></h4>
+		<h4 class="infoPaneInfo"><a href="/findings/p?postAuthor=<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Posted on</h4>
 		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
@@ -61,7 +61,7 @@
 <% finding.comments.forEach(function(comment){ %>
 	<div class="shownComment">
 		<div class="shownCommentText"><%= comment.text %></div>
-		<div class="shownCommentInfo"><%= comment.author %><span class="shownCommentPostedDate">Posted <%= comment.datePosted.toDateString() %></span></div>
+		<div class="shownCommentInfo"><%= comment.author.username %><span class="shownCommentPostedDate">Posted <%= comment.datePosted.toDateString() %></span></div>
 	</div>
 <% }); %>
 
