@@ -5,16 +5,19 @@ var allSubjects =
 			subjectGroups: [
 				{
 					subjectGroupName: "Astronomy",
+					subjectGroupColor: "#808B96",
 					subjects:
 						["Astronautics", "Planetary science", "Cosmology"]
 				},
 				{
 					subjectGroupName: "Biology",
+					subjectGroupColor: "#58D68D",
 					subjects:
-						["Anatomy", "Behavioural ecolology", "Biochemistry", "Botany", "Ecology", "Genetics"]
+						["Anatomy", "Behavioural ecology", "Biochemistry", "Botany", "Ecology", "Genetics"]
 				},
 				{
 					subjectGroupName: "Chemistry",
+					subjectGroupColor: "#F8C471",
 					subjects:
 						["Acid base chemistry", "Biochemistry", "Crystallography", "Chemical engineering"]
 				}
@@ -25,6 +28,7 @@ var allSubjects =
 			subjectGroups: [
 				{
 					subjectGroupName: "Social sciences",
+					subjectGroupColor: "#F9E79F",
 					subjects:
 						["Archaeology", "Economics", "Psychology"]
 				}
@@ -35,6 +39,7 @@ var allSubjects =
 			subjectGroups: [
 				{
 					subjectGroupName: "Behavioural sciences",
+					subjectGroupColor: "#AED6F1",
 					subjects:
 						["Ethology", "Psychology", "Sociobiology"]
 				}
@@ -45,11 +50,13 @@ var allSubjects =
 			subjectGroups: [
 				{
 					subjectGroupName: "Applied sciences",
+					subjectGroupColor: "#D7BDE2",
 					subjects:
 						["Acoustics", "Agriculture", "Computer science"]
 				},
 				{
 					subjectGroupName: "Health sciences",
+					subjectGroupColor: "#F5B7B1",
 					subjects:
 						["Bioengineering", "Dentistry", "Epidemiology", "Medicine", "Nursing"]
 				}

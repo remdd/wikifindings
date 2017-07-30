@@ -9,6 +9,10 @@ var express 				= require('express'),
 	LocalStrategy			= require('passport-local'),
 	passportLocalMongoose	= require('passport-local-mongoose'),
 	expressSession			= require('express-session'),
+	bcrypt					= require('bcrypt-nodejs'),				//	
+	logger					= require('morgan'),					//	http request logger
+	cookieParser			= require('cookie-parser'),				//	?
+	dotenv					= require('dotenv'),					//	environment variable manager
 	app 					= express();
 
 var commentRoutes			= require('./routes/comments'),
@@ -18,14 +22,24 @@ var commentRoutes			= require('./routes/comments'),
 //	Clears database & re-seeds with data from seed file
 seedDB();
 
+//	Configure DEV environment variables
+dotenv.config({path: 'EVS.env'});				//	Loads environment variables file
+console.log(process.env.SG_USER);
+
 //	Connects mongoose to db
 mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
 app.use(express.static('public'));
 
+//	Morgan logger - send detail of http requests to console
+app.use(logger('dev'));
+
+//	Default use - need to read more!
+app.use(cookieParser());
+
 //	Express-session and Passport usage
-app.use(require("express-session")({
+app.use(expressSession({
 	secret: "Bryher Higgs-Boson",
 	resave: false,
 	saveUninitialized: false
@@ -46,7 +60,7 @@ app.use(methodOverride("_method"));
 //	Sets default render to ejs (no need for ejs file extensions)
 app.set('view engine', 'ejs');
 
-//	Middleware to make req.user available to all routes
+//	Middleware to make req.user etc available to all routes
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
 	res.locals.allSubjects = allSubjects;
