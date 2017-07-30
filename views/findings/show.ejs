@@ -1,6 +1,10 @@
 <% include ../partials/header %>
 
-<% if(currentUser && currentUser.isScientist === true ) { %>
+<% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.username) 
+		|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id)) )
+{ %>
+
+
 	<a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit</a>
 	<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
 		<button class="btn btn-danger">Delete</button>

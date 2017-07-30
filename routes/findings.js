@@ -65,13 +65,11 @@ router.post('/', isLoggedIn, function(req, res) {
 		id: req.user._id,
 		username: req.user.username
 	}
-	console.log(req.body.finding);
 	Finding.create(req.body.finding, function(err, finding) {
-		console.log(finding);
 		if(err) {
 			console.log(err);
 		} else {
-			res.redirect('/findings');
+			res.redirect('/findings/' + finding.id);
 		}
 	});
 });
@@ -89,11 +87,10 @@ router.get('/:id', function(req, res) {
 });
 
 //	EDIT a finding
-router.get('/:id/edit', isLoggedIn, function(req, res) {
+router.get('/:id/edit', isUsersFinding, function(req, res) {
 	Finding.findById(req.params.id, function(err, shownFinding) {
 		if(err) {
 			console.log(err);
-			res.redirect('/findings');
 		} else {
 			res.render('findings/edit', {finding: shownFinding});
 		}
@@ -101,7 +98,7 @@ router.get('/:id/edit', isLoggedIn, function(req, res) {
 });
 
 //	UPDATE a finding
-router.put('/:id', isLoggedIn, function(req, res) {
+router.put('/:id', isUsersFinding, function(req, res) {
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			console.log(err);
@@ -113,7 +110,7 @@ router.put('/:id', isLoggedIn, function(req, res) {
 });
 
 //	DELETE a finding
-router.delete('/:id', isLoggedIn, function(req, res) {
+router.delete('/:id', isUsersFinding, function(req, res) {
 	Finding.findByIdAndRemove(req.params.id, function(err) {
 		if(err) {
 			console.log(err);
@@ -134,5 +131,28 @@ function isLoggedIn(req, res, next) {
 	}
 	res.redirect('/login');
 }
+
+function isUsersFinding(req, res, next) {
+	if(req.isAuthenticated()){
+		Finding.findById(req.params.id, function(err, shownFinding) {
+			if(err) {
+				res.redirect('back');
+			} else {
+				if(!shownFinding.postAuthor.id) {
+					console.log("Seed finding, has no postAuthor.id...");
+					next();
+				} else if(shownFinding.postAuthor.id.equals(req.user._id)) {	// need to use .equals method as xxx.id is a mongoose model, req.user.id is a string - not equiv!
+					next();
+				} else {
+					console.log("Not your finding!");
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("back");
+	}
+}
+
 
 module.exports = router;
