@@ -267,3 +267,9 @@ form select {
 	color: darkgrey;
 	text-decoration: line-through;
 }
+.styleSq {
+	position: relative;
+	display: inline-block;
+	top: 5px;
+	margin-right: 5px;
+}

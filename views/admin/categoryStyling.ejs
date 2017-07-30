@@ -2,4 +2,27 @@
 
 <h4>Category / Subject group styling</h4>
 
+<ul>
+	<% allSubjects.forEach(function(category) { %>
+		<% var cat = category.categoryName; %>
+		<li><strong><%= cat %></strong></li>
+		<ul>
+			<% category.subjectGroups.forEach(function(subjectGroup) { %>
+				<% var group = subjectGroup.subjectGroupName; %>
+				<% var color = subjectGroup.subjectGroupColor; %>
+				<li class="styleli"><div class="fThumbSubjectGroupColorDiv styleSq" style="background: <%= color %>; border: 1px solid darkgrey"></div><%= group %></li>
+				<ul>
+					<% for(var i = 0; i < subjectGroup.subjects.length; i++) { %>
+						<li><%= subjectGroup.subjects[i] %></li>
+					<% } %>
+				</ul>
+			<% }) %>
+		</ul>
+	<% }) %>
+</ul>
+
+<br>
+<br>
+<br>
+
 <% include ../partials/footer %>
