@@ -5,7 +5,7 @@ var User = require('../models/user');
 var	async = require('async');
 var	crypto = require('crypto');
 var nodemailer = require('nodemailer');
-
+var middleware 	= require('../middleware');
 
 //	Home route
 router.get('/', function(req, res) {
@@ -185,30 +185,19 @@ router.post('/reset/:token', function(req, res) {
 	});
 });
 
+
+
 //	ADMIN routes ********************
 //	DEV todo list //
-router.get('/todo', isLoggedIn, isScientist, function(req, res) {
+router.get('/todo', middleware.isLoggedIn, middleware.isScientist, function(req, res) {
 	res.render('admin/todo');
 });
 
 //	Category styling //
-router.get('/styles', isLoggedIn, isScientist, function(req, res) {
+router.get('/styles', middleware.isLoggedIn, middleware.isScientist, function(req, res) {
 	res.render('admin/categoryStyling');
 });
 
-//	Middleware function definition
-function isLoggedIn(req, res, next) {
-	if(req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect('/login');
-}
 
-function isScientist(req, res, next) {
-	if(req.user.isScientist === true) {
-		return next();
-	}
-	res.redirect('/');
-}
 
 module.exports = router;

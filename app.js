@@ -13,6 +13,7 @@ var express 				= require('express'),
 	logger					= require('morgan'),					//	http request logger
 	cookieParser			= require('cookie-parser'),				//	?
 	dotenv					= require('dotenv'),					//	environment variable manager
+	flash					= require('connect-flash'),				//	flash messages
 	app 					= express();
 
 var commentRoutes			= require('./routes/comments'),
@@ -37,6 +38,9 @@ app.use(logger('dev'));
 
 //	Default use - need to read more!
 app.use(cookieParser());
+
+//	Flash message use
+app.use(flash());
 
 //	Express-session and Passport usage
 app.use(expressSession({

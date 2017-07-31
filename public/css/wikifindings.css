@@ -69,7 +69,14 @@ hr {
 .btn {
 	margin-right: 20px;
 	margin-bottom: 20px;
-} .btn-nav {
+} 
+.shownComment .btn {
+	margin: 0;
+	display: inline-block;
+	float: right;
+}
+
+.btn-nav {
 	margin: 0;
 }
 
@@ -219,8 +226,7 @@ form select {
 	width: 100%;
 	height: 150px;
 } .shownCommentPostedDate {
-	text-align: right;
-	float: right;
+
 }
 
 .registerFormDiv {

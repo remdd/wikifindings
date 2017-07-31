@@ -64,9 +64,11 @@
 <a class="btn btn-primary" href="/findings/<%= finding._id %>/comments/new">Add new comment</a>
 <% finding.comments.forEach(function(comment){ %>
 	<div class="shownComment">
-		<div class="shownCommentText"><%= comment.text %></div>
-		<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
-		<div class="shownCommentInfo"><%= comment.author.username %><span class="shownCommentPostedDate">Posted <%= comment.datePosted.toDateString() %></span></div>
+		<div class="shownCommentText">
+			<%= comment.text %>
+			<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
+		</div>
+		<div class="shownCommentInfo"><%= comment.author.username %> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span></div>
 	</div>
 <% }); %>
 

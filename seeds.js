@@ -3,13 +3,6 @@ var Finding = require("./models/finding");
 var Comment = require("./models/comment");
 var User = require("./models/user");
 
-var seeds_users = [
-	{
-		username: "Dr Andrew Higginson",
-		email: "test@test.com"
-	}
-];
-
 var seeds_findings = [
 	{
 		title: "Honeybees that get damaged wings become less choosy about the flowers that they visit.",
@@ -24,7 +17,25 @@ var seeds_findings = [
 		postAuthor: { username: "Dr Andrew Higginson" },
 		datePosted: "2017-06-14",
 		citation: "Higginson AD, Barnard CJ (2004) Accumulating wing damage affects foraging decisions in honeybees (Apis mellifera L.). Ecological Entomology 29:52-59",
-		citationDOI: "10.1111/j.0307-6946.2004.00573.x"
+		citationDOI: "10.1111/j.0307-6946.2004.00573.x",
+		comments: [ "597ef2488aaf287974b07cf4" ]
+	},
+	{
+		title: "Regeneration of premolar enamel found to be accelerated by daily application of hydrochloric acid toothpaste.",
+		category: "Applied sciences",
+		subjectGroup: "Health sciences",
+		subject: "Dentistry",
+		keywords: ["Teeth", "Acid", "pH", "Water", "Toothpaste", "Hydrochloric acid"],
+		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
+		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
+		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
+		image: "https://www.plaksmacker.com/UserFiles/Images/Products/10203.jpg",
+		postAuthor: { username: "Fran Pickle" },
+		datePosted: "2017-03-17",
+		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
+		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
+		citationDOI: "2347234v 23423 43m 234 1234",
+		comments: [ "597eef77324dfb137c020487" ]
 	},
 	{
 		title: "New measurements of perchlorate distribution on Mars from Mars Express Orbiter suggest lower chance of stability of liquid surface water in the recent geological past.",
@@ -139,22 +150,6 @@ var seeds_findings = [
 		citationDOI: "2349793845729387457298345"
 	},
 	{
-		title: "Regeneration of premolar enamel found to be accelerated by daily application of hydrochloric acid toothpaste.",
-		category: "Applied sciences",
-		subjectGroup: "Health sciences",
-		subject: "Dentistry",
-		keywords: ["Teeth", "Acid", "pH", "Water", "Toothpaste", "Hydrochloric acid"],
-		background: "We are all connected; To each other, biologically. To the earth, chemically. To the rest of the universe atomically. Problems look mighty small from 150 miles up. A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could not help but love and cherish her.",
-		findings: "As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental truth to our nature, Man must explore . . . and this is exploration at its greatest. Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a historical process which mankind is carrying out in accordance with the natural laws of human development.",
-		implications: "The Earth was small, light blue, and so touchingly alone, our home that must be defended like a holy relic. The Earth was absolutely round. I believe I never knew what the word round meant until I saw Earth from space. What was most significant about the lunar voyage was not that man set foot on the Moon but that they set eye on the earth.",
-		image: "https://www.plaksmacker.com/UserFiles/Images/Products/10203.jpg",
-		postAuthor: { username: "Fran Pickle" },
-		datePosted: "2017-03-17",
-		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
-		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
-		citationDOI: "2347234v 23423 43m 234 1234"
-	},
-	{
 		title: "I don't know what you could say about a day in which you have seen four beautiful sunsets.",
 		category: "Natural sciences",
 		subjectGroup: "Astronomy",
@@ -255,12 +250,20 @@ var seeds_findings = [
 
 function seedDB() {
 
+	//	Remove all comments
+	// Comment.remove({}, function(err) {
+	// 	if(err) {
+	// 		console.log(err);
+	// 	} else {
+	// 		console.log("Removed all comments");
+	// 	}
+	// });
+
 	//	Remove all findings
 	Finding.remove({}, function(err) {
 		if(err) {
 			console.log(err);
-		} 
-		else {
+		} else {
 			console.log("Removed all findings");
 			seeds_findings.forEach(function(seed) {
 				Finding.create(seed, function(err, finding) {

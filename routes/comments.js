@@ -2,9 +2,11 @@ var express = require('express');
 var router 	= express.Router();
 var Finding = require('../models/finding');
 var Comment = require('../models/comment');
+var middleware 	= require('../middleware');
+
 
 //	CREATE comment form
-router.get('/findings/:id/comments/new', isLoggedIn, function(req, res) {
+router.get('/findings/:id/comments/new', middleware.isLoggedIn, function(req, res) {
 	Finding.findById(req.params.id, function(err, finding) {
 		if(err) {
 			console.log(err);
@@ -15,7 +17,7 @@ router.get('/findings/:id/comments/new', isLoggedIn, function(req, res) {
 });
 
 //	POST comment form
-router.post('/findings/:id/comments', isLoggedIn, function(req, res) {
+router.post('/findings/:id/comments', middleware.isLoggedIn, function(req, res) {
 	Finding.findById(req.params.id, function(err, finding) {
 		if(err) {
 			console.log(err);
@@ -61,12 +63,5 @@ router.put('/findings/:id/comments/:comment_id/', function(req, res) {
 });
 
 
-//	Middleware function definition
-function isLoggedIn(req, res, next) {
-	if(req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect('/login');
-}
 
 module.exports = router;

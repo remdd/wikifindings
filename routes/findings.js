@@ -1,7 +1,8 @@
-var express = require('express');
-var router 	= express.Router();
-var Finding = require('../models/finding');
-var Comment = require('../models/comment');
+var express 	= require('express');
+var router 		= express.Router();
+var Finding 	= require('../models/finding');
+var Comment 	= require('../models/comment');
+var middleware 	= require('../middleware');
 
 //	INDEX route
 router.get('/', function(req, res) {
@@ -54,12 +55,12 @@ router.get('/p', function(req, res) {
 });
 
 //	NEW - show form to create new campground
-router.get('/new', isLoggedIn, function(req, res) {
+router.get('/new', middleware.isLoggedIn, function(req, res) {
 	res.render('findings/new');
 });
 
 //	CREATE new finding route
-router.post('/', isLoggedIn, function(req, res) {
+router.post('/', middleware.isLoggedIn, function(req, res) {
 	req.body.finding.datePosted = Date.now();
 	req.body.finding.postAuthor = {
 		id: req.user._id,
@@ -87,7 +88,7 @@ router.get('/:id', function(req, res) {
 });
 
 //	EDIT a finding
-router.get('/:id/edit', isUsersFinding, function(req, res) {
+router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 	Finding.findById(req.params.id, function(err, shownFinding) {
 		if(err) {
 			console.log(err);
@@ -98,7 +99,7 @@ router.get('/:id/edit', isUsersFinding, function(req, res) {
 });
 
 //	UPDATE a finding
-router.put('/:id', isUsersFinding, function(req, res) {
+router.put('/:id', middleware.isUsersFinding, function(req, res) {
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			console.log(err);
@@ -110,7 +111,7 @@ router.put('/:id', isUsersFinding, function(req, res) {
 });
 
 //	DELETE a finding
-router.delete('/:id', isUsersFinding, function(req, res) {
+router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 	Finding.findByIdAndRemove(req.params.id, function(err) {
 		if(err) {
 			console.log(err);
@@ -120,39 +121,6 @@ router.delete('/:id', isUsersFinding, function(req, res) {
 		}
 	})
 });
-
-
-
-
-//	Middleware function definition
-function isLoggedIn(req, res, next) {
-	if(req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect('/login');
-}
-
-function isUsersFinding(req, res, next) {
-	if(req.isAuthenticated()){
-		Finding.findById(req.params.id, function(err, shownFinding) {
-			if(err) {
-				res.redirect('back');
-			} else {
-				if(!shownFinding.postAuthor.id) {
-					console.log("Seed finding, has no postAuthor.id...");
-					next();
-				} else if(shownFinding.postAuthor.id.equals(req.user._id)) {	// need to use .equals method as xxx.id is a mongoose model, req.user.id is a string - not equiv!
-					next();
-				} else {
-					console.log("Not your finding!");
-					res.redirect("back");
-				}
-			}
-		});
-	} else {
-		res.redirect("back");
-	}
-}
 
 
 module.exports = router;
