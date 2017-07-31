@@ -68,20 +68,6 @@
 										<% }); %>
 									<% }); %>
 
-
-
-
-<!-- 	  								<li><a href="#"><%= allSubjects[0].categoryName %></a></li>
-	  								<li><a href="#"><%= allSubjects[0].subjectGroups[0].subjectGroupName %></a></li>
-	  								<li><a href="#"><%= allSubjects[0].subjectGroups[0].subjects[0] %></a></li>
-									<li><a href="#"><strong>Natural sciences</strong></a></li>
-									<li><a href="/findings/s?subject=Behavioural%20ecology">Behavioural ecology</a></li>
-									<li><a href="/findings/s?subject=Cosmology">Cosmology</a></li>
-									<li><a href="/findings/s?subject=Planetary%20science">Planetary science</a></li>
-									<li role="separator" class="divider"></li>
-									<li><a href="#"><strong>Applied sciences</strong></a></li>
-									<li><a href="/findings/s?subject=Dentistry">Dentistry</a></li>
- -->
 								</ul>
 							</li>
 
@@ -106,4 +92,14 @@
 					</div><!-- /.navbar-collapse -->
 				</div><!-- /.container-fluid -->
 			</nav>
+
+			<div class="container">
+				<% if(success && success.length > 0) { %>
+					<div class="alert alert-success" role="alert"><%= success %></div>
+				<% } %>
+				<% if(error && error.length > 0) { %>
+					<div class="alert alert-danger" role="alert"><%= error %></div>
+				<% } %>
+			</div>
+
 

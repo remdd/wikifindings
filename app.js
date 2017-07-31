@@ -68,6 +68,8 @@ app.set('view engine', 'ejs');
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
 	res.locals.allSubjects = allSubjects;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
 	next();
 });
 

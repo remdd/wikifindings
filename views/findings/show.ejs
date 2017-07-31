@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 
-<% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.username) 
+<% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.id) 
 		|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id)) )
 { %>
 
@@ -66,6 +66,9 @@
 	<div class="shownComment">
 		<div class="shownCommentText">
 			<%= comment.text %>
+			<form action="/findings/<%= finding._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="inlineForm">
+				<button class="btn btn-xs btn-danger">Delete</button>
+			</form>
 			<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
 		</div>
 		<div class="shownCommentInfo"><%= comment.author.username %> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span></div>

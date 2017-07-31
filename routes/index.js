@@ -29,23 +29,30 @@ router.post('/register', function(req, res) {
 	if(req.body.password === req.body.confirm) {
 		User.register(newUser, req.body.password, function(err, user) {
 			if(err) {
-				console.log(err);
-				return res.render('users/register');
+				if(err.code === 11000) {
+					req.flash("error", "Error: Email address already exists in the database");
+					res.redirect('/register');
+				} else {
+					req.flash("error", "Error: " + err.message);
+					console.log(err);							// Need to test validations & handle different user errors here
+					res.redirect('/register');
+				}
+			} else {
+				passport.authenticate('local')(req, res, function() {
+					res.redirect('/findings');
+				});
 			}
-			passport.authenticate('local')(req, res, function() {
-				res.redirect('/findings');
-			});
 		});
 	} else {
-		console.log("Passwords do not match...");
-		res.render('users/register');
+		req.flash("error", "Error: Passwords do not match");
+		res.redirect('/register');
 	}
 });
 
 //	Render login form
 router.get('/login', function(req, res) {
 	res.render('users/login');
-})
+});
 
 //	Login route
 router.post('/login', passport.authenticate('local', {
@@ -58,6 +65,7 @@ router.post('/login', passport.authenticate('local', {
 //	Logout route
 router.get('/logout', function(req, res) {
 	req.logout();			// all that passport requires to end session
+	req.flash("success", "You have successfully logged out.");
 	res.redirect('/');
 });
 
@@ -79,7 +87,7 @@ router.post('/forgot', function(req, res, next) {
 		function(token, done) {
 			User.findOne({ email: req.body.email }, function(err, user) {
 				if (!user) {
-					console.log(req.body.email + " ...not found!");			/// Need to handle properly!
+					req.flash("error", "Error: No account exists with that email address.");
 					return res.redirect('/forgot');
 				}
 				user.resetPasswordToken = token;
@@ -108,7 +116,7 @@ router.post('/forgot', function(req, res, next) {
 				'If you did not request this, please ignore this email and your password will remain unchanged.\n'
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
-				console.log('An e-mail has been sent to ' + user.email + ' with further instructions.');
+				req.flash("success", "An email with a reset link has been sent to " + user.email + ".");
 				done(err, 'done');
 			});
 		}
@@ -122,7 +130,7 @@ router.post('/forgot', function(req, res, next) {
 router.get('/reset/:token', function(req, res) {
 	User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
 		if (!user) {
-			console.log('error', 'Password reset token is invalid or has expired.');				//	Handle properly
+			req.flash("error", "Error: your reset token is invalid or has expired.");
 			return res.redirect('/forgot');
 		}
 		res.render('users/reset', {
@@ -133,12 +141,11 @@ router.get('/reset/:token', function(req, res) {
 
 //	Token password reset route
 router.post('/reset/:token', function(req, res) {
-	console.log("Posting new pw...");
 	async.waterfall([
 		function(done) {
 			User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
 				if (!user) {
-					console.log('Password reset token is invalid or has expired.');
+					req.flash("error", "Error: your reset token is invalid or has expired.");
 					return res.redirect('back');
 				}
 				if(req.body.password === req.body.confirm) {
@@ -153,7 +160,7 @@ router.post('/reset/:token', function(req, res) {
 						});
 					});
 				} else {
-					console.log("Passwords don't match!");
+					req.flash("error", "Error: Passwords do not match");
 					return res.redirect('back');
 				}
 			});
@@ -175,13 +182,14 @@ router.post('/reset/:token', function(req, res) {
 				'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
-				console.log('Success! Your password has been changed.');
+				req.flash("success", "You have successfully reset your password.");
 				done(err);
 			});
 		}
 	], function(err) {
+		req.flash("Error: " + err.message)
 		console.log(err);
-		res.redirect('/about');
+		res.redirect('/');
 	});
 });
 
