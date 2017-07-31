@@ -1,14 +1,14 @@
 <% include ../partials/header %>
 
 <% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.id) 
-		|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id)) )
+	|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id)) )
 { %>
-
-
-	<a href="/findings/<%= finding._id %>/edit" class="btn btn-primary">Edit</a>
-	<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
-		<button class="btn btn-danger">Delete</button>
-	</form>
+	<div class="shownFindingBtns">
+		<a href="/findings/<%= finding._id %>/edit" class="btn btn-warning">Edit</a>
+		<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
+			<button class="btn btn-danger">Delete</button>
+		</form>
+	</div>
 <% } %>
 
 <div class="row">
@@ -35,7 +35,7 @@
 		<h4 class="infoPaneInfo"><a href="/findings/p?postAuthor=<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Posted on</h4>
-		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
+		<h4 class="infoPaneInfo"><a href="#"><%= finding.datePosted.toDateString() %></a></h4>
 	</div>
 </div>
 
@@ -64,14 +64,23 @@
 <a class="btn btn-primary" href="/findings/<%= finding._id %>/comments/new">Add new comment</a>
 <% finding.comments.forEach(function(comment){ %>
 	<div class="shownComment">
-		<div class="shownCommentText">
-			<%= comment.text %>
-			<form action="/findings/<%= finding._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="inlineForm">
-				<button class="btn btn-xs btn-danger">Delete</button>
-			</form>
-			<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
+		<div class="shownCommentText"><%= comment.text %></div>
+		<div class="shownCommentInfo">
+			<div class="shownCommentAuthorDateDiv">
+				<%= comment.author.username %> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span>
+			</div>
+			<div class="shownCommentButtonsDiv">
+				<% if( (currentUser && !comment.author.id) 
+					|| (currentUser && comment.author.id.equals(currentUser._id)) )
+				{ %>
+				<form action="/findings/<%= finding._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="inlineForm">
+					<button class="btn btn-xs btn-danger">Delete</button>
+				</form>
+				<a class="btn btn-xs btn-warning" href="/findings/<%= finding._id %>/comments/<%= comment._id %>/edit">Edit</a>
+				<% } %>
+			</div>
+
 		</div>
-		<div class="shownCommentInfo"><%= comment.author.username %> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span></div>
 	</div>
 <% }); %>
 

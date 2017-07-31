@@ -66,12 +66,6 @@ hr {
 	height: 200px;
 }
 
-.btn {
-	margin-right: 20px;
-	margin-bottom: 20px;
-} 
-
-
 .btn-nav {
 	margin: 0;
 }
@@ -193,6 +187,9 @@ form select {
 .shownHeader {
 	margin-top: 30px;
 }
+.shownFindingBtns {
+	margin: 10px;
+}
 .infoPane {
 	padding: 50px 20px;
 } .infoPaneLabel {
@@ -208,17 +205,22 @@ form select {
 	display: inline-block;
 }
 .shownComment {
-	background: #e8e8e8;
+	background: lightgrey;
 	border-radius: 10px;
 	padding: 10px 25px;
 	margin: 10px 25px;
-} .shownCommentText form {
-	float: right;
-} .shownCommentText a {
-	float: right;
+	display: flex;
+	flex-direction: column;
+} .shownCommentText {
+	white-space: pre-wrap;		/* Preserves paragraph formatting, but wraps within element */
+	margin-bottom: 10px;
 } .shownCommentInfo {
 	color: blue;
 	width: 100%;
+} .shownCommentAuthorDateDiv {
+	float: left;
+} .shownCommentButtonsDiv {
+	float: right;
 }
 .newCommentText {
 	width: 100%;

@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var	mongoosePaginate = require('mongoose-paginate');
 
 //	Mongoose schema
 var findingSchema = new mongoose.Schema({
@@ -30,6 +31,8 @@ var findingSchema = new mongoose.Schema({
 		}
 	]
 });
+
+findingSchema.plugin(mongoosePaginate);
 
 //	Compile 'finding' mongoose model from schema & return model
 module.exports = mongoose.model("Finding", findingSchema);

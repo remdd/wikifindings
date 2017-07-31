@@ -14,6 +14,7 @@ var express 				= require('express'),
 	cookieParser			= require('cookie-parser'),				//	?
 	dotenv					= require('dotenv'),					//	environment variable manager
 	flash					= require('connect-flash'),				//	flash messages
+	mongoosePaginate 		= require('mongoose-paginate'),
 	app 					= express();
 
 var commentRoutes			= require('./routes/comments'),

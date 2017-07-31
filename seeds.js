@@ -3,8 +3,21 @@ var Finding = require("./models/finding");
 var Comment = require("./models/comment");
 var User = require("./models/user");
 
-var seeds_findings = [
+var seed_comments = [
 	{
+		_id: "507f1f77bcf86cd799439012",
+		text: "This is great!  Really interesting.",
+		author: {
+			id: "597e2b2c73edab2348f49be5",
+			username: "Robin"
+		},
+		datePosted: "2017-06-15"
+	}
+]
+
+var seed_findings = [
+	{
+		_id: "507f1f77bcf86cd799439011",
 		title: "Honeybees that get damaged wings become less choosy about the flowers that they visit.",
 		category: "Natural sciences",
 		subjectGroup: "Biology",
@@ -18,7 +31,7 @@ var seeds_findings = [
 		datePosted: "2017-06-14",
 		citation: "Higginson AD, Barnard CJ (2004) Accumulating wing damage affects foraging decisions in honeybees (Apis mellifera L.). Ecological Entomology 29:52-59",
 		citationDOI: "10.1111/j.0307-6946.2004.00573.x",
-		comments: [ "597ef2488aaf287974b07cf4" ]
+		comments: [ "507f1f77bcf86cd799439012" ]
 	},
 	{
 		title: "Regeneration of premolar enamel found to be accelerated by daily application of hydrochloric acid toothpaste.",
@@ -34,8 +47,7 @@ var seeds_findings = [
 		datePosted: "2017-03-17",
 		citation: "Sagan C (2003) Cosmic photon time reversal headfuck voodoo study. Cosmology 12:68-69",
 		citationLink: "https://en.wikipedia.org/wiki/Carl_Sagan",
-		citationDOI: "2347234v 23423 43m 234 1234",
-		comments: [ "597eef77324dfb137c020487" ]
+		citationDOI: "2347234v 23423 43m 234 1234"
 	},
 	{
 		title: "New measurements of perchlorate distribution on Mars from Mars Express Orbiter suggest lower chance of stability of liquid surface water in the recent geological past.",
@@ -251,13 +263,22 @@ var seeds_findings = [
 function seedDB() {
 
 	//	Remove all comments
-	// Comment.remove({}, function(err) {
-	// 	if(err) {
-	// 		console.log(err);
-	// 	} else {
-	// 		console.log("Removed all comments");
-	// 	}
-	// });
+	Comment.remove({}, function(err) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("Removed all comments");
+			seed_comments.forEach(function(seed) {
+				Comment.create(seed, function(err, finding) {
+					if(err) {
+						console.log(err);
+					} else {
+						console.log("Added a seed comment");
+					}
+				});
+			});
+		}
+	});
 
 	//	Remove all findings
 	Finding.remove({}, function(err) {
@@ -265,7 +286,7 @@ function seedDB() {
 			console.log(err);
 		} else {
 			console.log("Removed all findings");
-			seeds_findings.forEach(function(seed) {
+			seed_findings.forEach(function(seed) {
 				Finding.create(seed, function(err, finding) {
 					if(err) {
 						console.log(err);

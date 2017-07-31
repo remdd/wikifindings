@@ -1,4 +1,9 @@
-<% findings.forEach(function(finding){ %>
+<div class="paginationDiv">
+	<span>Showing maximum of <%= findings.limit %> results per page - page <%= findings.page %> of <%= findings.pages %> (<%= findings.total %> pages total)</span>
+</div>
+
+
+<% findings.docs.forEach(function(finding){ %>
 	<div class="fThumbDiv">
 		<div class="fThumbSubject"><div class="fThumbSubjectGroupColorDiv"></div>
 			<a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a>
