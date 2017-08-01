@@ -2,11 +2,25 @@
 	<span>Showing maximum of <%= findings.limit %> results per page - page <%= findings.page %> of <%= findings.pages %> (<%= findings.total %> pages total)</span>
 </div>
 
-
 <% findings.docs.forEach(function(finding){ %>
 	<div class="fThumbDiv">
-		<div class="fThumbSubject"><div class="fThumbSubjectGroupColorDiv"></div>
+		<div class="fThumbSubject">
+			<div class="fThumbSubjectGroupColorDiv" style="background: 
+				<% for(var i = 0; i < allSubjects.length; i ++) { 
+					if(allSubjects[i].categoryName === finding.category) {
+						for(var j = 0; j < allSubjects[i].subjectGroups.length; j ++) {
+							if(allSubjects[i].subjectGroups[j].subjectGroupName === finding.subjectGroup) { %>
+								<%= allSubjects[i].subjectGroups[j].subjectGroupColor %>;
+							<% }
+						}
+					}
+				} %>
+			">
+			</div>
 			<a href="/findings/s?subject=<%= finding.subject %>"><%= finding.subject %></a>
+
+
+
 		</div>
 		<div class="fThumbTags">keywords: 
 			<% if(finding.keywords) {
