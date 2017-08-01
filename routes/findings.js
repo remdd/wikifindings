@@ -9,7 +9,10 @@ var resultsToShow = 10;
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
-	Finding.paginate({}, { limit: resultsToShow, sort: {datePosted: -1} }, function(err, allFindings) {
+	if(!(req.query.page)) {
+		req.query.page = 1;
+	}
+	Finding.paginate( {}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, allFindings) {
 		if(err) {
 			console.log(err);
 		} else {
@@ -21,7 +24,10 @@ router.get('/', function(req, res) {
 //	INDEX BY SUBJECT route
 router.get('/s', function(req, res) {
 	var subjectName = req.query.subject;
-	Finding.paginate( {subject: subjectName}, { limit: resultsToShow, sort: {datePosted: -1} }, function(err, filteredFindings) {
+	if(!(req.query.page)) {
+		req.query.page = 1;
+	}
+	Finding.paginate( {subject: subjectName}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
@@ -34,7 +40,10 @@ router.get('/s', function(req, res) {
 //	INDEX BY KEYWORD route
 router.get('/k', function(req, res) {
 	var keyword = req.query.keyword;
-	Finding.paginate({keywords: { $all: [keyword] } }, { limit: resultsToShow, sort: {datePosted: -1} }, function(err, filteredFindings) {
+	if(!(req.query.page)) {
+		req.query.page = 1;
+	}
+	Finding.paginate({keywords: { $all: [keyword] } }, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
@@ -47,7 +56,10 @@ router.get('/k', function(req, res) {
 //	INDEX BY POSTEDBY route 			-- NEED TO CHANGE postAuthor.username to postAuthor.id for production! Below is a fudge for quick use of seed data
 router.get('/p', function(req, res) {
 	var postAuthor = req.query.postAuthor;
-	Finding.paginate({'postAuthor.username': postAuthor}, { limit: resultsToShow, sort: {datePosted: -1} }, function(err, filteredFindings) {
+	if(!(req.query.page)) {
+		req.query.page = 1;
+	}
+	Finding.paginate({'postAuthor.username': postAuthor}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
