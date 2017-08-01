@@ -1,0 +1,33 @@
+html {
+	font-family: 'Alegreya SC', serif;
+	background: url("/img/wf_placeholder_homepage.jpg");
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	background-attachment: fixed;
+	background-position: right bottom;
+}
+body {
+	background: none;
+}
+.homepageDiv {
+	text-align: center;
+}
+.homepageContents {
+	margin: 100px auto;
+	padding: 50px;
+	border-radius: 10px;
+	display: inline-block;
+	background: white;
+	-webkit-filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
+	filter: drop-shadow(10px 10px 10px rgba(0,0,0,0.3));
+    outline: 3px solid lightgrey;
+    outline-offset: -20px;
+}
+.homepageContentContainer {
+	display: inline-block;
+}
+h1 {
+	font-size: 63px;
+}

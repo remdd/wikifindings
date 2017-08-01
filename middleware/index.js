@@ -1,6 +1,5 @@
 //	Note that other objects need only to require('pathto/middleware'), not 'index.js', as index is automatically assumed from a dirname by express
 
-
 var Finding 	= require('../models/finding');
 var Comment 	= require('../models/comment');
 
@@ -15,7 +14,7 @@ var middlewareObj = {
 	},
 
 	isScientist: function(req, res, next) {
-		if(req.user.isScientist === true) {
+		if(req.user.isScientist === true || req.user.isAdministrator === true) {
 			return next();
 		}
 		req.flash("error", "You don't have permission to do that!")
@@ -29,7 +28,10 @@ var middlewareObj = {
 					req.flash("error", "Something went wrong...");
 					res.redirect('back');
 				} else {
-					if(!shownFinding.postAuthor.id) {
+					if (req.user.isAdministrator === true) {
+						req.flash("success", "Administrator permission");
+						next();
+					} else if(!shownFinding.postAuthor.id) {
 						req.flash("error", "You don't have permission to do that!");
 						res.redirect("back");
 					} else if(shownFinding.postAuthor.id.equals(req.user._id)) {	// need to use .equals method as xxx.id is a mongoose model, req.user.id is a string - not equiv!
@@ -53,8 +55,11 @@ var middlewareObj = {
 					req.flash("error", "Something went wrong...");
 					res.redirect('back');
 				} else {
-					if(!foundComment.author.id) {
-						req.flash("error", "You don't have permission to do that!");
+					if(req.user.isAdministrator === true) {
+						req.flash("success", "Administrator permission");
+						next();
+					} else if(!foundComment.author.id) {
+						req.flash("Error", "Something went wrong...");
 						res.redirect("back");
 					} else if(foundComment.author.id.equals(req.user._id)) {
 						next();

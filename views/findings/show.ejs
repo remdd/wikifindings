@@ -1,7 +1,8 @@
 <% include ../partials/header %>
 
 <% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.id) 
-	|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id)) )
+	|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id))
+	|| (finding.postAuthor.id && currentUser.isAdministrator) )
 { %>
 	<div class="shownFindingBtns">
 		<a href="/findings/<%= finding._id %>/edit" class="btn btn-warning">Edit</a>
@@ -35,7 +36,7 @@
 		<h4 class="infoPaneInfo"><a href="/findings/p?postAuthor=<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Posted on</h4>
-		<h4 class="infoPaneInfo"><a href="#"><%= finding.datePosted.toDateString() %></a></h4>
+		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
 	</div>
 </div>
 
@@ -71,7 +72,8 @@
 			</div>
 			<div class="shownCommentButtonsDiv">
 				<% if( (currentUser && !comment.author.id) 
-					|| (currentUser && comment.author.id.equals(currentUser._id)) )
+					|| (currentUser && comment.author.id.equals(currentUser._id)) 
+					|| (currentUser && currentUser.isAdministrator))
 				{ %>
 				<form action="/findings/<%= finding._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="inlineForm">
 					<button class="btn btn-xs btn-danger">Delete</button>
