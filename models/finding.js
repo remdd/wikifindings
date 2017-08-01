@@ -8,6 +8,7 @@ var findingSchema = new mongoose.Schema({
 	subjectGroup: String,
 	subject: String,
 	keywords: Array,
+	keywords_lower: Array,
 	background: String,
 	findings: String,
 	implications: String,

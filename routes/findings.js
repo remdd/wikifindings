@@ -43,7 +43,7 @@ router.get('/k', function(req, res) {
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
-	Finding.paginate({keywords: { $all: [keyword] } }, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
+	Finding.paginate({keywords_lower: { $all: [keyword.toLowerCase()] } }, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
 		if(err) {
 			console.log(err);
 			res.redirect('/findings');
@@ -81,6 +81,11 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		id: req.user._id,
 		username: req.user.username
 	}
+	var keywords_lower = [];
+	for(var i = 0; i < req.body.finding.keywords.length; i ++) {
+		keywords_lower[i] = req.body.finding.keywords[i].toLowerCase();
+	}
+	req.body.finding.keywords_lower = keywords_lower;
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			console.log(err);
@@ -115,6 +120,11 @@ router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 
 //	UPDATE a finding
 router.put('/:id', middleware.isUsersFinding, function(req, res) {
+	var keywords_lower = [];
+	for(var i = 0; i < req.body.finding.keywords.length; i ++) {
+		keywords_lower[i] = req.body.finding.keywords[i].toLowerCase();
+	}
+	req.body.finding.keywords_lower = keywords_lower;
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			console.log(err);
