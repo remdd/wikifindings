@@ -97,18 +97,23 @@ hr {
 	left: -5px;
 	border: 1px solid darkgrey;
 	border-radius: 2px;
-	padding: 0 10px 0 30px;
+	padding: 0 10px 0 70px;
 	background: lightgrey;
 	box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
 }
-.fThumbSubjectGroupColorDiv {
+.fThumbColorDiv {
 	width: 20px;
 	height: 20px;
-	display: inline-block;
 	background: lightgrey;
 	position: absolute;
 	border-right: 1px solid darkgrey;
+}
+.fThumbCategoryColorDiv {
 	left: 0;
+} .fThumbSubjectGroupColorDiv {
+	left: 21px;
+} .fThumbSubjectColorDiv {
+	left: 42px;
 }
 .fThumbTags {
 	position: absolute;

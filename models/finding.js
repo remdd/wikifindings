@@ -4,9 +4,18 @@ var	mongoosePaginate = require('mongoose-paginate');
 //	Mongoose schema
 var findingSchema = new mongoose.Schema({
 	title: String,
-	category: String,
-	subjectGroup: String,
-	subject: String,
+	category: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Category"
+	},
+	subjectGroup: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "SubjectGroup"
+	},
+	subject: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Subject"
+	},
 	keywords: Array,
 	keywords_lower: Array,
 	background: String,

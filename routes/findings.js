@@ -1,39 +1,57 @@
-var express 	= require('express');
-var router 		= express.Router();
-var Finding 	= require('../models/finding');
-var Comment 	= require('../models/comment');
-var middleware 	= require('../middleware');
+var express 		= require('express');
+var router 			= express.Router();
+var Finding 		= require('../models/finding');
+var Comment 		= require('../models/comment');
+var Subject 		= require('../models/subject');
+var SubjectGroup 	= require('../models/subjectgroup');
+var Category 		= require('../models/category');
+var middleware 		= require('../middleware');
 var	mongoosePaginate = require('mongoose-paginate');
 
 var resultsToShow = 10;
+
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
-	Finding.paginate( {}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, allFindings) {
+	Finding.paginate( {}, { 
+		limit: resultsToShow, 
+		populate: 'subject subjectGroup category',
+		sort: {datePosted: -1}, 
+		page: req.query.page 
+	}, function(err, allFindings) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
 		} else {
- 			res.render("findings/index", {findings: allFindings})
+			res.render("findings/index", {findings: allFindings});
 		}
 	});
 });
 
+
 //	INDEX BY SUBJECT route
 router.get('/s', function(req, res) {
 	var subjectName = req.query.subject;
-	if(!(req.query.page)) {
-		req.query.page = 1;
-	}
-	Finding.paginate( {subject: subjectName}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
-		if(err) {
-			console.log(err);
-			res.redirect('/findings');
-		} else {
-			res.render('findings/subject', {findings: filteredFindings, subject: subjectName});
+	Subject.findOne({"subjectName": subjectName}, function(err, subject) {
+		if(!(req.query.page)) {
+			req.query.page = 1;
 		}
+		Finding.paginate( {subject: subject._id}, { 
+			limit: resultsToShow, 
+			populate: 'subject subjectGroup category',
+			sort: {datePosted: -1}, 
+			page: req.query.page 
+		}, function(err, filteredFindings) {
+			if(err) {
+				req.flash("error", "Something went wrong...");
+				res.redirect('/findings');
+			} else {
+				res.render('findings/subject', {findings: filteredFindings, subject: subjectName});
+			}
+		});
 	});
 });
 
@@ -43,9 +61,14 @@ router.get('/k', function(req, res) {
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
-	Finding.paginate({keywords_lower: { $all: [keyword.toLowerCase()] } }, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
+	Finding.paginate({keywords_lower: { $all: [keyword.toLowerCase()] } }, { 
+		limit: resultsToShow, 
+		populate: 'subject subjectGroup category',
+		sort: {datePosted: -1}, 
+		page: req.query.page 
+	}, function(err, filteredFindings) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
 			res.render('findings/keyword', {findings: filteredFindings, keyword: keyword});
@@ -59,9 +82,14 @@ router.get('/p', function(req, res) {
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
-	Finding.paginate({'postAuthor.username': postAuthor}, { limit: resultsToShow, sort: {datePosted: -1}, page: req.query.page }, function(err, filteredFindings) {
+	Finding.paginate({'postAuthor.username': postAuthor}, { 
+		limit: resultsToShow, 
+		populate: 'subject subjectGroup category',
+		sort: {datePosted: -1}, 
+		page: req.query.page 
+	}, function(err, filteredFindings) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
 			res.render('findings/postAuthor', {findings: filteredFindings, postAuthor: postAuthor});
@@ -88,7 +116,8 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 	req.body.finding.keywords_lower = keywords_lower;
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
 		} else {
 			res.redirect('/findings/' + finding.id);
 		}
@@ -98,12 +127,20 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 //	SHOW info about a finding
 router.get('/:id', function(req, res) {
 	Finding.findById(req.params.id).populate("comments").exec(function(err, shownFinding) {
-		if(err) {
-			console.log(err);
-			res.redirect('/findings');
-		} else {
-			res.render('findings/show', {finding: shownFinding});
-		}
+		Subject.findById(shownFinding.subject, function(err, subject) {
+			if(err) {
+				req.flash("error", "Something went wrong...");
+				res.redirect('/findings');
+			} else {
+				var subj = subject.subjectName;
+				if(err) {
+					req.flash("error", "Something went wrong...");
+					res.redirect('/findings');
+				} else {
+					res.render('findings/show', {finding: shownFinding, subj: subj});
+				}
+			}
+		});
 	});
 });
 
@@ -111,7 +148,8 @@ router.get('/:id', function(req, res) {
 router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 	Finding.findById(req.params.id, function(err, shownFinding) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
 		} else {
 			res.render('findings/edit', {finding: shownFinding});
 		}
@@ -127,7 +165,7 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 	req.body.finding.keywords_lower = keywords_lower;
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
 			res.redirect('/findings/' + req.params.id);
@@ -139,7 +177,7 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 	Finding.findByIdAndRemove(req.params.id, function(err) {
 		if(err) {
-			console.log(err);
+			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
 			res.redirect('/findings');
