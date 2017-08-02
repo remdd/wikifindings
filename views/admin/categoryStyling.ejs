@@ -1,25 +1,38 @@
 <% include ../partials/header %>
 
-<h4>Category / Subject group styling</h4>
+<h3>Subject tree in database:</h3>
+
+<form>
+	
+</form>
 
 <ul>
-	<% allSubjects.forEach(function(category) { %>
-		<% var cat = category.categoryName; %>
-		<li><strong><%= cat %></strong></li>
-		<ul>
-			<% category.subjectGroups.forEach(function(subjectGroup) { %>
-				<% var group = subjectGroup.subjectGroupName; %>
-				<% var color = subjectGroup.subjectGroupColor; %>
-				<li class="styleli"><div class="fThumbSubjectGroupColorDiv styleSq" style="background: <%= color %>; border: 1px solid darkgrey"></div><%= group %></li>
-				<ul>
-					<% for(var i = 0; i < subjectGroup.subjects.length; i++) { %>
-						<li><%= subjectGroup.subjects[i] %></li>
-					<% } %>
-				</ul>
-			<% }) %>
-		</ul>
-	<% }) %>
+	<% categories.forEach(function(category) { %>
+		<li>
+			<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
+			<h3 class="subjListHeader"><%= category.categoryName %><h3>
+		</li>
+	<ul>
+		<% category.subjectGroups.forEach(function(subjectGroup) { %>
+			<li>
+				<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
+				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %></h4>
+			</li>
+			<ul>
+				<% subjectGroup.subjects.forEach(function(subject) { %>
+					<li>
+						<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
+						<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
+						<div class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
+						<h5 class="subjListHeader"><%= subject.subjectName %></h5>
+					</li>
+				<% }); %>
+			</ul>
+		<% }); %>
+	</ul>
+	<% }); %>
 </ul>
+
 
 <br>
 <br>

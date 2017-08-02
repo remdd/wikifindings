@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var SubjectGroupSchema = new mongoose.Schema({
 	subjectGroupName: String,
 	subjectGroupColor: String,
-	subjectGroups: [{
+	subjects: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Subject"
 	}]

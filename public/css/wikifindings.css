@@ -269,6 +269,21 @@ form select {
 
 
 
+/*	Subject list page */
+.subjListColorDiv {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	border: 1px solid darkgrey;
+	background: white;
+}
+.subjListHeader {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+
+
 /* Todo list only - remove for production */
 .done {
 	color: darkgrey;
@@ -280,3 +295,4 @@ form select {
 	top: 5px;
 	margin-right: 5px;
 }
+

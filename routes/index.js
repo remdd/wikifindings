@@ -66,7 +66,7 @@ router.post('/login', passport.authenticate('local', {
 router.get('/logout', function(req, res) {
 	req.logout();			// all that passport requires to end session
 	req.flash("success", "You have successfully logged out.");
-	res.redirect('/');
+	res.redirect('/findings');
 });
 
 //	NODEMAILER / SENDGRID PASSWORD RESET ROUTES
@@ -189,23 +189,9 @@ router.post('/reset/:token', function(req, res) {
 	], function(err) {
 		req.flash("Error: " + err.message)
 		console.log(err);
-		res.redirect('/');
+		res.redirect('/findings');
 	});
 });
-
-
-
-//	ADMIN routes ********************
-//	DEV todo list //
-router.get('/todo', middleware.isLoggedIn, middleware.isScientist, function(req, res) {
-	res.render('admin/todo');
-});
-
-//	Category styling //
-router.get('/styles', middleware.isLoggedIn, middleware.isScientist, function(req, res) {
-	res.render('admin/categoryStyling');
-});
-
 
 
 module.exports = router;

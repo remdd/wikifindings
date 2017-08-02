@@ -17,7 +17,7 @@ var middlewareObj = {
 		if(req.user.isScientist === true || req.user.isAdministrator === true) {
 			return next();
 		}
-		req.flash("error", "You don't have permission to do that!")
+		req.flash("error", "You don't have permission to do that!");
 		res.redirect("back");
 	},
 
@@ -73,7 +73,22 @@ var middlewareObj = {
 			req.flash("error", "You must be logged in to do that.");
 			res.redirect("/login");
 		}
+	},
+
+	isAdministrator: function(req, res, next) {
+		if(req.isAuthenticated()) {
+			if(req.user.isAdministrator === true) {
+				return next();
+			} else {
+				req.flash("error", "You don't have permission to do that!");
+				res.redirect("/findings");
+			}
+		} else {
+			req.flash("error", "You must be logged in to do that.");
+			res.redirect("/login");
+		}
 	}
+
 
 }
 

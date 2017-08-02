@@ -22,7 +22,8 @@ var express 				= require('express'),
 
 var commentRoutes			= require('./routes/comments'),
 	findingRoutes			= require('./routes/findings'),
-	indexRoutes				= require('./routes/index');
+	indexRoutes				= require('./routes/index'),
+	adminRoutes				= require('./routes/admin');
 
 //	Clears database & re-seeds with data from seed file
 seedDB();
@@ -81,6 +82,7 @@ app.use(function(req, res, next){
 app.use(indexRoutes);
 app.use(commentRoutes);
 app.use("/findings", findingRoutes);
+app.use(adminRoutes);
 
 //	404 route
 app.get('*', function(req, res) {
