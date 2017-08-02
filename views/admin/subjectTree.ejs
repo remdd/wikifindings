@@ -1,0 +1,79 @@
+<% include ../partials/header %>
+
+<div class="container">
+	<div class="row">
+		<div class="col col-md-4 col-sm-12">
+			<label for="updateCategory">Update Category: </label>
+			<form action="/tree/categories/" method="GET" id="category">
+				<select name="category">
+					<% categories.forEach(function(category) { %>
+						<option value="<%= category._id %>"><%= category.categoryName %></option>
+					<% }); %>
+				</select>
+				<input type="submit" value="Submit"></input>
+			</form>
+		</div>
+		<div class="col col-md-4 col-sm-12">
+			<label for="updateSubjectGroup">Update SubjectGroup: </label>
+			<form action="/tree/subjectGroups/" method="GET" id="subjectGroup">
+				<select name="subjectGroup">
+					<% subjectGroups.forEach(function(subjectGroup) { %>
+						<option value="<%= subjectGroup._id %>"><%= subjectGroup.subjectGroupName %></option>
+					<% }); %>
+				</select>
+				<input type="submit" value="Submit"></input>
+			</form>
+		</div>
+		<div class="col col-md-4 col-sm-12">
+			<label for="updateSubject">Update Subject: </label>
+			<form action="/tree/subjects/" method="GET" id="subject">
+				<select name="subject">
+					<% subjects.forEach(function(subject) { %>
+						<option value="<%= subject._id %>"><%= subject.subjectName %></option>
+					<% }); %>
+				</select>
+				<input type="submit" value="Submit"></input>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<h3>Subject tree in database:</h3>
+
+<hr>
+
+<ul>
+	<% categories.forEach(function(category) { %>
+		<li>
+			<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
+			<h3 class="subjListHeader"><%= category.categoryName %><h3>
+		</li>
+	<ul>
+		<% category.subjectGroups.forEach(function(subjectGroup) { %>
+			<li>
+				<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
+				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %></h4>
+			</li>
+			<ul>
+				<% subjectGroup.subjects.forEach(function(subject) { %>
+					<li>
+						<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
+						<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
+						<div class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
+						<h4 class="subjListHeader"><%= subject.subjectName %></h4>
+					</li>
+				<% }); %>
+			</ul>
+		<% }); %>
+	</ul>
+	<% }); %>
+</ul>
+
+
+<br>
+<br>
+<br>
+
+<% include ../partials/footer %>

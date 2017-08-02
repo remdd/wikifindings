@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+
+<h3>Update category - <%= category.categoryName %></h3>
+
+<hr>
+
+<form action="/tree/categories/<%= category._id %>?_method=PUT" method="POST" id="updateCategory">
+	<h4>Change name</h4>
+	<label><%= category.categoryName %></label>	
+	<input type="text" name="category[categoryName]" value="<%= category.categoryName %>">
+	<h4>Change colour</h4>
+	<label><%= category.categoryColor %></label>	
+	<input type="text" name="category[categoryColor]" value="<%= category.categoryColor %>">
+	<input type="submit" value="Submit"></input>
+</form>
+
+<% include ../partials/footer %>

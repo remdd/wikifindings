@@ -1,0 +1,17 @@
+<% include ../partials/header %>
+
+<h3>Update Subject Group - <%= subjectGroup.subjectGroupName %></h3>
+
+<hr>
+
+<form action="/tree/subjectGroups/<%= subjectGroup._id %>?_method=PUT" method="POST" id="updateSubjectGroup">
+	<h4>Change name</h4>
+	<label><%= subjectGroup.subjectGroupName %></label>	
+	<input type="text" name="subjectGroup[subjectGroupName]" value="<%= subjectGroup.subjectGroupName %>">
+	<h4>Change colour</h4>
+	<label><%= subjectGroup.subjectGroupColor %></label>	
+	<input type="text" name="subjectGroup[subjectGroupColor]" value="<%= subjectGroup.subjectGroupColor %>">
+	<input type="submit" value="Submit"></input>
+</form>
+
+<% include ../partials/footer %>
