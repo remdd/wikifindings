@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var SubjectSchema = new mongoose.Schema({
-	subjectName: String,
+	subjectName: { type: String, required: true, unique: true },
 	subjectColor: String
 });
 

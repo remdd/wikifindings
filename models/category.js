@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var CategorySchema = new mongoose.Schema({
-	categoryName: String,
+	categoryName: { type: String, required: true, unique: true },
 	categoryColor: String,
 	subjectGroups: [{
 		type: mongoose.Schema.Types.ObjectId,

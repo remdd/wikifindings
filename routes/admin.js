@@ -12,8 +12,8 @@ router.get('/todo', middleware.isAdministrator, function(req, res) {
 	res.render('admin/todo');
 });
 
-//	Category styling //
-router.get('/tree', function(req, res) {
+//	Subject tree //
+router.get('/tree', middleware.isAdministrator, function(req, res) {
 	Category.find({}, function(err, categories) {
 		if(err) {
 			console.log(err);
@@ -33,24 +33,30 @@ router.get('/tree', function(req, res) {
 						}
 					})
 				}
-			}).populate({path: 'subjects'});
+			}).populate({path: 'subjects', options: { sort: 'subjectName'}});
 		}
-	}).populate({path: 'subjectGroups', populate: {path: 'subjects'}});
+	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
 //	EDIT a Category
-router.get('/tree/categories', function(req, res) {
+router.get('/tree/categories', middleware.isAdministrator, function(req, res) {
 	Category.findById(req.query.category, function(err, shownCategory) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/tree');
 		} else {
-			res.render('admin/updatecategory', {category: shownCategory});
+			SubjectGroup.find({}, function(err, subjectGroups) {
+				if(err) {
+					console.log(err);
+				} else {
+					res.render('admin/updatecategory', {category: shownCategory, subjectGroups: subjectGroups});
+				}
+			});
 		}
-	});
+	}).populate({path: 'subjectGroups'});
 });
 //	UPDATE a Category
-router.put('/tree/categories/:id', function(req, res) {
+router.put('/tree/categories/:id', middleware.isAdministrator, function(req, res) {
 	Category.findByIdAndUpdate(req.params.id, req.body.category, function(err, updatedCategory) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -61,20 +67,39 @@ router.put('/tree/categories/:id', function(req, res) {
 		}
 	});
 });
+//	CREATE a Category
+router.post('/tree/categories', middleware.isAdministrator, function(req, res) {
+	Category.create(req.body.category, function(err, finding) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/tree');
+		} else {
+			req.flash("success", "Successfully added a new Category");
+			res.redirect('/tree');
+		}
+	});
+});
+
 
 //	EDIT a Subject Group
-router.get('/tree/subjectGroups', function(req, res) {
+router.get('/tree/subjectGroups', middleware.isAdministrator, function(req, res) {
 	SubjectGroup.findById(req.query.subjectGroup, function(err, shownSubjectGroup) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/tree');
 		} else {
-			res.render('admin/updatesubjectgroup', {subjectGroup: shownSubjectGroup});
+			Subject.find({}, function(err, subjects) {
+				if(err) {
+					console.log(err);
+				} else {
+					res.render('admin/updatesubjectgroup', {subjectGroup: shownSubjectGroup, subjects: subjects});
+				}
+			});
 		}
-	});
+	}).populate({path: 'subjects'});
 });
 //	UPDATE a Subject Group
-router.put('/tree/subjectGroups/:id', function(req, res) {
+router.put('/tree/subjectGroups/:id', middleware.isAdministrator, function(req, res) {
 	SubjectGroup.findByIdAndUpdate(req.params.id, req.body.subjectGroup, function(err, updatedSubjectGroup) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -85,9 +110,21 @@ router.put('/tree/subjectGroups/:id', function(req, res) {
 		}
 	});
 });
+//	CREATE a Subject Group
+router.post('/tree/subjectGroups', middleware.isAdministrator, function(req, res) {
+	SubjectGroup.create(req.body.subjectGroup, function(err, finding) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/tree');
+		} else {
+			req.flash("success", "Successfully added a new Subject Group");
+			res.redirect('/tree');
+		}
+	});
+});
 
 //	EDIT a Subject
-router.get('/tree/subjects', function(req, res) {
+router.get('/tree/subjects', middleware.isAdministrator, function(req, res) {
 	Subject.findById(req.query.subject, function(err, shownSubject) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -98,7 +135,7 @@ router.get('/tree/subjects', function(req, res) {
 	});
 });
 //	UPDATE a Subject
-router.put('/tree/subjects/:id', function(req, res) {
+router.put('/tree/subjects/:id', middleware.isAdministrator, function(req, res) {
 	console.log("Updating!");
 	Subject.findByIdAndUpdate(req.params.id, req.body.subject, function(err, updatedSubject) {
 		if(err) {
@@ -110,7 +147,18 @@ router.put('/tree/subjects/:id', function(req, res) {
 		}
 	});
 });
-
+//	CREATE a Subject
+router.post('/tree/subjects', middleware.isAdministrator, function(req, res) {
+	Subject.create(req.body.subject, function(err, finding) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/tree');
+		} else {
+			req.flash("success", "Successfully added a new Subject");
+			res.redirect('/tree');
+		}
+	});
+});
 
 
 module.exports = router;

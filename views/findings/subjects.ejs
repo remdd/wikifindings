@@ -1,0 +1,28 @@
+<% include ../partials/header %>
+
+<h3>Subjects index</h3>
+<div class="container">
+	<div class="row subjectThumbs">
+	
+		<% subjects.sort(function(a,b) {return (a.subjectName > b.subjectName) ? 1 : ((b.subjectName > a.subjectName) ? -1 : 0);} );
+		subjects.forEach(function(subject) { %>
+			<a href="/findings/s?subject=<%= subject.subjectName %>">
+				<div class="subjectThumbContainer col col-xs-12 col-sm-6 col-md-4">
+					<div class=subjectThumbDiv style="background: url('img/subjects/<%= subject.subjectName %>.jpg'); background-size: cover;">
+						<div class="subjectThumbOverlay">
+							<h3 class="subjectThumbTitle"><%= subject.subjectName %></h3>				
+						</div>
+					</div>
+				</div>
+			</a>
+		<% }) %>
+
+	</div>
+</div>
+
+<script>
+	$('.subjectThumbOverlay').mouseover(function() { $(this).addClass('transparent') });
+	$('.subjectThumbOverlay').mouseleave(function() { $(this).removeClass('transparent') });
+</script>
+
+<% include ../partials/footer %>

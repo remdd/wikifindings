@@ -7,7 +7,6 @@ var express 				= require('express'),
 	SubjectGroup			= require('./models/subjectgroup'),
 	Subject 				= require('./models/subject'),
 	seedDB					= require('./seeds'),
-	allSubjects				= require('./subjectList'),
 	passport				= require('passport'),
 	LocalStrategy			= require('passport-local'),
 	passportLocalMongoose	= require('passport-local-mongoose'),
@@ -24,6 +23,7 @@ var commentRoutes			= require('./routes/comments'),
 	findingRoutes			= require('./routes/findings'),
 	indexRoutes				= require('./routes/index'),
 	adminRoutes				= require('./routes/admin');
+	subjectRoutes			= require('./routes/subjects');
 
 //	Clears database & re-seeds with data from seed file
 seedDB();
@@ -72,7 +72,6 @@ app.set('view engine', 'ejs');
 //	Middleware to make req.user etc available to all routes
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
-	res.locals.allSubjects = allSubjects;
 	res.locals.error = req.flash("error");
 	res.locals.success = req.flash("success");
 	next();
@@ -83,6 +82,7 @@ app.use(indexRoutes);
 app.use(commentRoutes);
 app.use("/findings", findingRoutes);
 app.use(adminRoutes);
+app.use("/subjects", subjectRoutes);
 
 //	404 route
 app.get('*', function(req, res) {

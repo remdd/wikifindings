@@ -1,21 +1,33 @@
 	<label for="finding[category]"><h4>Category: </h4></label>
 	<select required name="finding[category]" id="newCategoryList">
 		<option value="" disabled selected>Select from list</option>
-		<% allSubjects.forEach(function(category) { %>
-			<option value="<%= category.categoryName %>"><%= category.categoryName %></option>
+		<% categories.forEach(function(category) { %>
+			<option value="<%= category._id %>"><%= category.categoryName %></option>
 		<% }); %>
 	</select>
 
 	<label for="finding[subjectGroup]"><h4>Group: </h4></label>
 	<select required name="finding[subjectGroup]" id="newSubjectGroupList">
 		<option value="" disabled selected>Select from list</option>
-		<% include ../partials/subjectGroupList %>
+		<% categories.forEach(function(category) { %>
+			<% var cat = category.categoryName; %>
+			<% category.subjectGroups.forEach(function(subjectGroup) { %>
+				<option data-category="<%= cat %>" value="<%= subjectGroup._id %>" label="<%= subjectGroup.subjectGroupName %>"><%= subjectGroup.subjectGroupName %></option>
+			<% }); %>
+		<% }); %>
 	</select>
 
 	<label for="finding[subject]"><h4>Subject: </h4></label>
 	<select required name="finding[subject]" id="newSubjectList">
 		<option value="" disabled selected>Select from list</option>
-		<% include ../partials/subjectlist %>
+		<% categories.forEach(function(category) { %>
+			<% category.subjectGroups.forEach(function(subjectGroup) { %>
+				<% var group = subjectGroup.subjectGroupName; %>
+				<% subjectGroup.subjects.forEach(function(subject) { %>
+					<option data-group="<%= group %>" value="<%= subject._id %>" label="<%= subject.subjectName %>"><%= subject.subjectName %></option>
+				<% }); %>
+			<% }); %>
+		<% }); %>
 	</select>
 
 	<span><a href="#">Missing your subject? Report it here</a></span>

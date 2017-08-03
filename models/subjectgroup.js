@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var SubjectGroupSchema = new mongoose.Schema({
-	subjectGroupName: String,
+	subjectGroupName: { type: String, required: true, unique: true },
 	subjectGroupColor: String,
 	subjects: [{
 		type: mongoose.Schema.Types.ObjectId,

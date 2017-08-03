@@ -1,5 +1,7 @@
 <% include ../partials/header %>
 
+<a href="/tree" class="btn">Back</a>
+
 <h3>Update Subject - <%= subject.subjectName %></h3>
 
 <hr>
@@ -10,8 +12,18 @@
 	<input type="text" name="subject[subjectName]" value="<%= subject.subjectName %>">
 	<h4>Change colour</h4>
 	<label><%= subject.subjectColor %></label>	
-	<input type="text" name="subject[subjectColor]" value="<%= subject.subjectColor %>">
+	<input type="text" name="subject[subjectColor]" value="<%= subject.subjectColor %>" pattern="^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$" id="colorString">
 	<input type="submit" value="Submit"></input>
 </form>
+
+<button onclick="
+	var newColor = randomColor();
+	$('#newColorDiv').css('background', newColor); 
+	$('#colorString').attr('value', newColor);
+		">Randomize colour </button><div id="newColorDiv" class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
+
+
 
 <% include ../partials/footer %>

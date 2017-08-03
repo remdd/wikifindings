@@ -6,55 +6,124 @@
 			<label for="updateCategory">Update Category: </label>
 			<form action="/tree/categories/" method="GET" id="category">
 				<select name="category">
+					<% categories.sort(function(a,b) {return (a.categoryName > b.categoryName) ? 1 : ((b.categoryName > a.categoryName) ? -1 : 0);} ); %>
 					<% categories.forEach(function(category) { %>
 						<option value="<%= category._id %>"><%= category.categoryName %></option>
 					<% }); %>
 				</select>
-				<input type="submit" value="Submit"></input>
+				<input type="submit" value="Update"></input>
 			</form>
 		</div>
 		<div class="col col-md-4 col-sm-12">
 			<label for="updateSubjectGroup">Update SubjectGroup: </label>
 			<form action="/tree/subjectGroups/" method="GET" id="subjectGroup">
 				<select name="subjectGroup">
+					<% subjectGroups.sort(function(a,b) {return (a.subjectGroupName > b.subjectGroupName) ? 1 : ((b.subjectGroupName > a.subjectGroupName) ? -1 : 0);} ); %>
 					<% subjectGroups.forEach(function(subjectGroup) { %>
 						<option value="<%= subjectGroup._id %>"><%= subjectGroup.subjectGroupName %></option>
 					<% }); %>
 				</select>
-				<input type="submit" value="Submit"></input>
+				<input type="submit" value="Update"></input>
 			</form>
 		</div>
 		<div class="col col-md-4 col-sm-12">
 			<label for="updateSubject">Update Subject: </label>
 			<form action="/tree/subjects/" method="GET" id="subject">
 				<select name="subject">
+					<% subjects.sort(function(a,b) {return (a.subjectName > b.subjectName) ? 1 : ((b.subjectName > a.subjectName) ? -1 : 0);} ); %>
 					<% subjects.forEach(function(subject) { %>
 						<option value="<%= subject._id %>"><%= subject.subjectName %></option>
 					<% }); %>
 				</select>
-				<input type="submit" value="Submit"></input>
+				<input type="submit" value="Update"></input>
+			</form>
+		</div>
+	</div>
+	<hr>
+<!-- 	<button onclick="$('#addNew').show()">Add new</button>
+ -->	
+
+	<div class="row" id="addToDb">
+		<div class="col col-xs-12 col-sm-4">
+			<button onclick="$('#newCategoryDiv').show(); $('#newSubjectGroupDiv').hide(); $('#newSubjectDiv').hide();">Add new Category</button>
+			<br>
+			<br>
+			<button onclick="$('#newCategoryDiv').hide(); $('#newSubjectGroupDiv').show(); $('#newSubjectDiv').hide();">Add new Subject Group</button>
+			<br>			
+			<br>
+			<button onclick="$('#newCategoryDiv').hide(); $('#newSubjectGroupDiv').hide(); $('#newSubjectDiv').show();">Add new Subject</button>			
+		</div>
+		<div class="col col-xs-12 col-sm-8" id="newCategoryDiv" hidden>
+			<label for="addCategory">Add Category: </label>
+			<form action="/tree/categories/" method="POST" id="category">
+				<label for="category[categoryName]">Name: </label>
+				<input type="text" name="category[categoryName]"></input>
+				<br>
+				<label for="category[categoryColor]">Hex colour: </label>
+				<input type="text" name="category[categoryColor]" id="newCategoryColorDiv" value="#555555"></input>
+				<button type="button" onclick="
+					var newColor = randomColor();
+					$('#categoryColorDiv').css('background', newColor); 
+					$('#newCategoryColorDiv').attr('value', newColor);
+						">Randomize colour </button><div id="categoryColorDiv" class="subjListColorDiv" style="background: #555555"></div>
+				<br>
+				<input type="submit" value="Add"></input>
+			</form>
+		</div>
+		<div class="col col-xs-12 col-sm-8" id="newSubjectGroupDiv" hidden>
+			<label for="addSubjectGroup">Add Subject Group: </label>
+			<form action="/tree/subjectGroups/" method="POST" id="subjectGroup">
+				<label for="subjectGroup[subjectGroupName]">Name: </label>
+				<input type="text" name="subjectGroup[subjectGroupName]"></input>
+				<br>
+				<label for="subjectGroup[subjectGroupColor]">Hex colour: </label>
+				<input type="text" name="subjectGroup[subjectGroupColor]" id="newSubjectGroupColorDiv" value="#555555"></input>
+				<button type="button" onclick="
+					var newColor = randomColor();
+					$('#subjectGroupColorDiv').css('background', newColor); 
+					$('#newSubjectGroupColorDiv').attr('value', newColor);
+						">Randomize colour </button><div id="subjectGroupColorDiv" class="subjListColorDiv" style="background: #555555"></div>
+				<br>
+				<input type="submit" value="Add"></input>
+			</form>
+		</div>
+		<div class="col col-xs-12 col-sm-8" id="newSubjectDiv" hidden>
+			<label for="addSubject">Add Subject: </label>
+			<form action="/tree/subjects/" method="POST" id="subject">
+				<label for="subject[subjectName]">Name: </label>
+				<input type="text" name="subject[subjectName]"></input>
+				<br>
+				<label for="subject[subjectColor]">Hex colour: </label>
+				<input type="text" name="subject[subjectColor]" id="newSubjectColorDiv" value="#555555"></input>
+				<button type="button" onclick="
+					var newColor = randomColor();
+					$('#subjectColorDiv').css('background', newColor); 
+					$('#newSubjectColorDiv').attr('value', newColor);
+						">Randomize colour </button><div id="subjectColorDiv" class="subjListColorDiv" style="background: #555555"></div>
+				<br>
+				<input type="submit" value="Add"></input>
 			</form>
 		</div>
 	</div>
 </div>
 
-
-
-<h3>Subject tree in database:</h3>
-
 <hr>
 
-<ul>
+<h3>Database Subject tree:</h3>
+
+<ul class="tree">
 	<% categories.forEach(function(category) { %>
+		<hr>
 		<li>
 			<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
-			<h3 class="subjListHeader"><%= category.categoryName %><h3>
+			<h3 class="subjListHeader"><%= category.categoryName %> - <%= category._id %><h3>
 		</li>
 	<ul>
 		<% category.subjectGroups.forEach(function(subjectGroup) { %>
 			<li>
+				<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
 				<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
-				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %></h4>
+				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %> - <%= subjectGroup._id %> </h4>
 			</li>
 			<ul>
 				<% subjectGroup.subjects.forEach(function(subject) { %>
@@ -62,7 +131,7 @@
 						<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
 						<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
 						<div class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
-						<h4 class="subjListHeader"><%= subject.subjectName %></h4>
+						<h4 class="subjListHeader"><%= subject.subjectName %> - <%= subject._id %></h4>
 					</li>
 				<% }); %>
 			</ul>
@@ -75,5 +144,8 @@
 <br>
 <br>
 <br>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
+
 
 <% include ../partials/footer %>

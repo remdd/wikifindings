@@ -97,9 +97,30 @@ router.get('/p', function(req, res) {
 	});
 });
 
-//	NEW - show form to create new campground
+//	NEW - show form to create new finding
 router.get('/new', middleware.isLoggedIn, function(req, res) {
-	res.render('findings/new');
+	Category.find({}, function(err, categories) {
+		if(err) {
+			console.log(err);
+			res.redirect('back');
+		} else {
+			SubjectGroup.find({}, function(err, subjectGroups) {
+				if(err) {
+					console.log(err);
+					res.redirect('back');
+				} else {
+					Subject.find({}, function(err, subjects) {
+						if(err) {
+							console.log(err);
+							res.redirect('back');
+						} else {
+							res.render('findings/new', {categories: categories, subjectGroups: subjectGroups, subjects: subjects});
+						}
+					})
+				}
+			}).populate({path: 'subjects', options: { sort: 'subjectName'}});
+		}
+	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
 //	CREATE new finding route
@@ -109,11 +130,9 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		id: req.user._id,
 		username: req.user.username
 	}
-	var keywords_lower = [];
-	for(var i = 0; i < req.body.finding.keywords.length; i ++) {
-		keywords_lower[i] = req.body.finding.keywords[i].toLowerCase();
+	if(req.body.finding.keywords) {
+		req.body.finding.keywords_lower = keywordsToLower(req.body.finding.keywords);
 	}
-	req.body.finding.keywords_lower = keywords_lower;
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -123,6 +142,13 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		}
 	});
 });
+
+
+function keywordsToLower(arr) {
+	for(var i = 0; i < arr.length; i ++) {
+		arr[i] = arr[i].toLowerCase();
+	}
+}
 
 //	SHOW info about a finding
 router.get('/:id', function(req, res) {
@@ -146,23 +172,42 @@ router.get('/:id', function(req, res) {
 
 //	EDIT a finding
 router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
-	Finding.findById(req.params.id, function(err, shownFinding) {
+	Category.find({}, function(err, categories) {
 		if(err) {
-			req.flash("error", "Something went wrong...");
-			res.redirect('/findings');
+			console.log(err);
+			res.redirect('back');
 		} else {
-			res.render('findings/edit', {finding: shownFinding});
+			SubjectGroup.find({}, function(err, subjectGroups) {
+				if(err) {
+					console.log(err);
+					res.redirect('back');
+				} else {
+					Subject.find({}, function(err, subjects) {
+						if(err) {
+							console.log(err);
+							res.redirect('back');
+						} else {
+							Finding.findById(req.params.id, function(err, shownFinding) {
+								if(err) {
+									req.flash("error", "Something went wrong...");
+									res.redirect('/findings');
+								} else {
+									res.render('findings/edit', {finding: shownFinding, categories: categories, subjectGroups: subjectGroups, subjects: subjects});
+								}
+							});
+						}
+					});
+				}
+			}).populate({path: 'subjects', options: { sort: 'subjectName'}});
 		}
-	});
+	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
 //	UPDATE a finding
 router.put('/:id', middleware.isUsersFinding, function(req, res) {
-	var keywords_lower = [];
-	for(var i = 0; i < req.body.finding.keywords.length; i ++) {
-		keywords_lower[i] = req.body.finding.keywords[i].toLowerCase();
+	if(req.body.finding.keywords) {
+		req.body.finding.keywords_lower = keywordsToLower(req.body.finding.keywords);
 	}
-	req.body.finding.keywords_lower = keywords_lower;
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");

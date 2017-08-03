@@ -67,7 +67,8 @@ $(document).ready(function() {
 	 	$('#newSubjectList').val('');
 	 	$('#newSubjectList').removeClass('greyedOut');
 	 	$('#newSubjectList').attr('disabled', false);
-	 	var selectedGroup = $('#newSubjectGroupList').val();
+	 	var selectedGroup = $('#newSubjectGroupList').find(":selected").text();
+	 	console.log(selectedGroup);
 	 	$('#newSubjectList').find('*').each(function() {
 	 		$(this).attr('hidden', false);
 	 		if($(this).attr('data-group') != selectedGroup) {

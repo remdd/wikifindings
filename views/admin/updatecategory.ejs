@@ -1,5 +1,7 @@
 <% include ../partials/header %>
 
+<a href="/tree" class="btn">Back</a>
+
 <h3>Update category - <%= category.categoryName %></h3>
 
 <hr>
@@ -10,8 +12,34 @@
 	<input type="text" name="category[categoryName]" value="<%= category.categoryName %>">
 	<h4>Change colour</h4>
 	<label><%= category.categoryColor %></label>	
-	<input type="text" name="category[categoryColor]" value="<%= category.categoryColor %>">
+	<input type="text" name="category[categoryColor]" value="<%= category.categoryColor %>" pattern="^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$" id="colorString">
+	<button type="button" onclick="
+		var newColor = randomColor();
+		$('#newColorDiv').css('background', newColor); 
+		$('#colorString').attr('value', newColor);
+			">Randomize colour </button><div id="newColorDiv" class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
+	<br>
 	<input type="submit" value="Submit"></input>
+
+	<h4>Contains Subject Groups:</h4>
+	<% category.subjectGroups.forEach(function(subjectGroup) { %>
+		<input type="checkbox" checked="checked" name="category[subjectGroups]" value="<%= subjectGroup._id %>"><%= subjectGroup.subjectGroupName %></input><br>
+	<% }); %>
+
+	<% for(var i = subjectGroups.length; i >= 0; i--) {
+		for(var j = 0; j < category.subjectGroups.length; j++) {
+			if(subjectGroups[i] && (subjectGroups[i].subjectGroupName === category.subjectGroups[j].subjectGroupName)) {
+				subjectGroups.splice(i, 1);
+			}
+		}
+	}
+	subjectGroups.sort(function(a,b) {return (a.subjectGroupName > b.subjectGroupName) ? 1 : ((b.subjectGroupName > a.subjectGroupName) ? -1 : 0);} );
+	subjectGroups.forEach(function(subjectGroup) { %>
+		<input type="checkbox" name="category[subjectGroups]" value="<%= subjectGroup._id %>"><%= subjectGroup.subjectGroupName %></input><br>
+	<% }); %>
 </form>
+
 
 <% include ../partials/footer %>

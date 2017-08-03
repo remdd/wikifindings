@@ -2,8 +2,10 @@
 <% findings.docs.forEach(function(finding){ %>
 	<div class="fThumbDiv">
 		<div class="fThumbSubject">
+<!-- 
 			<div class="fThumbColorDiv fThumbCategoryColorDiv" style="background: <%= finding.category.categoryColor %>"></div>
 			<div class="fThumbColorDiv fThumbSubjectGroupColorDiv" style="background: <%= finding.subjectGroup.subjectGroupColor %>"></div>
+ -->
 			<div class="fThumbColorDiv fThumbSubjectColorDiv" style="background: <%= finding.subject.subjectColor %>"></div>
 			<a href="/findings/s?subject=<%= finding.subject.subjectName %>"><%= finding.subject.subjectName %></a>
 
