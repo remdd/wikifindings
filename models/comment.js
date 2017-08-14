@@ -9,6 +9,10 @@ var commentSchema = mongoose.Schema({
 		},
 		username: String
 	},
+	replies: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "Comment"	
+	},
 	datePosted: Date,
 	dateEdited: Date
 });

@@ -29,7 +29,7 @@ var middlewareObj = {
 					res.redirect('back');
 				} else {
 					if (req.user.isAdministrator === true) {
-						req.flash("success", "Administrator permission");
+						req.flash("success", "Administrator permission granted");
 						next();
 					} else if(!shownFinding.postAuthor.id) {
 						req.flash("error", "You don't have permission to do that!");
@@ -56,7 +56,7 @@ var middlewareObj = {
 					res.redirect('back');
 				} else {
 					if(req.user.isAdministrator === true) {
-						req.flash("success", "Administrator permission");
+						req.flash("success", "Administrator permission granted");
 						next();
 					} else if(!foundComment.author.id) {
 						req.flash("Error", "Something went wrong...");

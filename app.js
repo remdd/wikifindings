@@ -26,7 +26,7 @@ var commentRoutes			= require('./routes/comments'),
 	subjectRoutes			= require('./routes/subjects');
 
 //	Clears database & re-seeds with data from seed file
-seedDB();
+// seedDB();
 
 //	Configure DEV environment variables
 dotenv.config({path: 'EVS.env'});				//	Loads environment variables file
@@ -49,7 +49,7 @@ app.use(flash());
 
 //	Express-session and Passport usage
 app.use(expressSession({
-	secret: "Bryher Higgs-Boson",
+	secret: process.env.EXP_KEY,
 	resave: false,
 	saveUninitialized: false
 }));

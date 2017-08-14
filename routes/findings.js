@@ -131,7 +131,8 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		username: req.user.username
 	}
 	if(req.body.finding.keywords) {
-		req.body.finding.keywords_lower = keywordsToLower(req.body.finding.keywords);
+		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
+		keywordsToLower(req.body.finding.keywords_lower);
 	}
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
@@ -152,7 +153,7 @@ function keywordsToLower(arr) {
 
 //	SHOW info about a finding
 router.get('/:id', function(req, res) {
-	Finding.findById(req.params.id).populate("comments").exec(function(err, shownFinding) {
+	Finding.findById(req.params.id).populate({path: "comments", options: { sort: { 'datePosted': - 1 }}}).exec(function(err, shownFinding) {
 		Subject.findById(shownFinding.subject, function(err, subject) {
 			if(err) {
 				req.flash("error", "Something went wrong...");
@@ -206,7 +207,8 @@ router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 //	UPDATE a finding
 router.put('/:id', middleware.isUsersFinding, function(req, res) {
 	if(req.body.finding.keywords) {
-		req.body.finding.keywords_lower = keywordsToLower(req.body.finding.keywords);
+		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
+		keywordsToLower(req.body.finding.keywords_lower);
 	}
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {

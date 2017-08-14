@@ -1,16 +1,14 @@
 <% include ../partials/header %>
 
-<% if( (currentUser && currentUser.isScientist === true && !finding.postAuthor.id) 
-	|| (finding.postAuthor.id && finding.postAuthor.id.equals(currentUser._id))
-	|| (finding.postAuthor.id && currentUser.isAdministrator) )
-{ %>
+<% if(currentUser) {
+	if(!finding.postAuthor.id || finding.postAuthor.id.equals(currentUser._id) || currentUser.isAdministrator) { %>
 	<div class="shownFindingBtns">
 		<a href="/findings/<%= finding._id %>/edit" class="btn btn-warning">Edit</a>
 		<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
 			<button class="btn btn-danger">Delete</button>
 		</form>
 	</div>
-<% } %>
+<% }} %>
 
 <div class="row">
 	<div class="col col-sm-9 col-xs-12">
