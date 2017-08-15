@@ -8,13 +8,22 @@
 </form>
  -->
 <ul id="toDoList">
+	<li>Bugs
+		<ul>
+			<li>Browser hangs on password reset, although it works ok</li>
+			<li>Reset passwords aren't validated against RegEx</li>
+			<li>New registration password validation against RegEx seems suspect</li>
+			<li>Landing page background display on mobile</li>
+		</ul>
+	</li>
+
 	<li>Routing / views
 		<ul>
-			<li>'empty subject' & 'unused keyword' pages</li>
 			<li>Styling in general!</li>
 			<li>Confirmation step for delete requests</li>
 			<li>'notify missing subject' link needs to do something</li>
 			<li>Contact page / methods / social media link (twitter?)</li>
+			<li>Do something with 'empty subject' & 'unused keyword' pages, rather than just list 0 results?</li>
 			<li>Intelligent routing from login page (eg when adding a comment, should be returned to that 'finding' once logged in)</li>
 			<li class="done">Error handling</li>
 			<li class="done">404 page</li>
@@ -24,31 +33,33 @@
 			<li class="done">'About' page</li>
 		</ul>
 	</li>
+
 	<li>Core functionality
 		<ul>
+			<li>Preceded by / followed by</li>
+			<li>Validation mechanism for Scientist registration</li>
 			<li>'New Finding' form server-side validation</li>
 			<li>'New Finding' form word-count validation (client side only?)</li>
-			<li>Preceded by / followed by</li>
-			<li>Validation of Scientist registration</li>
 			<li class="done">Sort out text case handling on keywords</li>
 			<li class="done">Limit results per page, results-per-page logic etc</li>			
 			<li class="done">Keyword linking</li>
 			<li class="done">Author linking</li>
 		</ul>
 	</li>
+
 	<li>User experience enhancements
 		<ul>
 			<li>Change password link</li>
+			<li>Email activation on signup</li>
 			<li>Comment replies</li>
 			<li>Dynamic comment loading (react.js)</li>
-			<li>Expansion of Finding schema citation to multiple fields</li>
-			<li>User profile (particularly relevant to Scientist users)</li>
+			<li>Implement user profiles (particularly relevant to Scientist users)</li>
 			<li>Audit history & permissions for 'finding' edits</li>
 			<li>Image uploading & hosting (Amazon web bucket?)</li>
 			<li>Complex query building (eg show results BY author WITH keyword etc)</li>
-			<li>'Subject' pages each headed by a short lay introduction to the subject</li>
-			<li>Sort & filter results</li>
-			<li>Display image thumbnails in 'findings list'</li>
+			<li>'Subject' pages each headed by a short lay introduction to the subject?</li>
+			<li>Sort & filter results by user criteria</li>
+			<li>Display image thumbnails in 'findings list'?</li>
 			<li>Display info relating to edits on 'show' & 'index' pages</li>
 			<li>Link to user profile from comment author</li>
 			<li>Appearance & text content of auto-generated user emails (PW reset etc)</li>
@@ -69,14 +80,14 @@
 			<li class="done">Sticky navbar on scroll</li>
 		</ul>
 	</li>
+
 	<li>Back end / admin
 		<ul>
-			<li>Email activation on signup</li>
 			<li>Refactor css</li>
 			<li>Add 'short ID' for posts, visible to Scientists (for use with prec by / followed by)</li>
 			<li>Add 'short ID' for users?</li>
-			<li>Expand & improve seed database</li>
-			<li>Cross-platform testing</li>
+			<li>Expand seed database beyond initial testing lorem ipsum gibberish</li>
+			<li>Cross-platform testing & layout tuning</li>
 			<li>SASS css</li>
 			<li class="done">Move subjects to mongoDB & implement schema</li>
 			<li class="done">User schema</li>
@@ -86,19 +97,23 @@
 	<li>Things to clarify / discuss with Andy
 		<ul>
 			<li>Should the DOI be mandatory?</li>
-			<li>Subject & Category tree structure = Category -> Subject group -> Subject</li>
-			<li>Links from text of a 'finding' - talk further about what this might involve</li>
+			<li>Should a 'finding' store Authors of a finding separately to post author / original publication details?  Seems sensible, to enable easy links to their other work</li>
+			<li>Should 150 word count be enforced?</li>
+			<li>Subject & Category tree structure = Category -> Subject group -> Subject ... discuss</li>
+			<li>Links from within text of a 'finding' - talk further about what this might involve & how Andy sees it working.  Is current 'keywords' approach sufficient?</li>
 			<li>Reset password mail handler - currently using Sendgrid free (under 100 emails per day) - cost implications for greater load</li>
+			<li>Expansion of 'citation' in Finding schema to multiple fields?</li>
+			<li>Need to properly hash out & pin down user roles & access restrictions etc</li>
 		</ul>
 	</li>
 	<li>Final production to-dos
 		<ul>
-			<li>MongoDB security - learn & implement best practice!!</li>
-			<li>Clean up permissions / middlware relating to DB seeds</li>
+			<li>MongoDB security - learn & implement best practices for full deployment</li>
 			<li>MongoDB backups - ditto</li>
 			<li>Read up on node / express deployment best practice</li>
 			<li>Minimize libraries, dependencies, css</li>
 			<li>Performance assessment & tuning</li>
+			<li class="done">Clean up permissions / middlware relating to DB seeds</li>
 			<li class="done">Implement administrator user</li>
 		</ul>
 	</li>
