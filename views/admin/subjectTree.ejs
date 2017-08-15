@@ -116,19 +116,19 @@
 		<hr>
 		<li>
 			<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
-			<h3 class="subjListHeader"><%= category.categoryName %> - <%= category._id %><h3>
+			<h3 class="subjListHeader"><%= category.categoryName %><h3>
 		</li>
 	<ul>
 		<% category.subjectGroups.forEach(function(subjectGroup) { %>
 			<li>
 				<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
-				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %> - <%= subjectGroup._id %> </h4>
+				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %></h4>
 			</li>
 			<ul>
 				<% subjectGroup.subjects.forEach(function(subject) { %>
 					<li>
 						<div class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
-						<h4 class="subjListHeader"><%= subject.subjectName %> - <%= subject._id %></h4>
+						<h4 class="subjListHeader"><%= subject.subjectName %></h4>
 					</li>
 				<% }); %>
 			</ul>
