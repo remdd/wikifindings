@@ -33,7 +33,10 @@ dotenv.config({path: 'EVS.env'});				//	Loads environment variables file
 console.log(process.env.SG_USER);
 
 //	Connects mongoose to db
-mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
+//	Local DBpath
+// mongoose.connect("mongodb://localhost/wikifindings", {useMongoClient: true});
+//	MLab DBpath
+mongoose.connect("mongodb://" + process.env.DB_USER + ":" + process.env.DB_PASS + "@ds145193.mlab.com:45193/wikifindings", {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
 app.use(express.static('public'));
