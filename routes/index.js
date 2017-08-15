@@ -7,6 +7,8 @@ var	crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
 
+var regEx = new RegExp('^(?=.*\d)(?=.*[a-zA-Z]).{8,}$');			// Password complexity regEx - at least 1 number & 1 letter
+
 //	Home route
 router.get('/', function(req, res) {
 	res.render('home');
@@ -20,29 +22,34 @@ router.get('/about', function(req, res) {
 //	AUTHENTICATION ROUTES
 //	Render new user form
 router.get('/register', function(req, res) {
-	res.render('users/register');
+	res.render('users/register', {regEx: regEx} );
 });
 
 //	Register new user route
 router.post('/register', function(req, res) {
 	var newUser = new User({username: req.body.username, email: req.body.email, isScientist: req.body.isScientist});
 	if(req.body.password === req.body.confirm) {
-		User.register(newUser, req.body.password, function(err, user) {
-			if(err) {
-				if(err.code === 11000) {
-					req.flash("error", "Error: Email address already exists in the database");
-					res.redirect('/register');
+		if(regEx.test(req.body.password)) {
+			User.register(newUser, req.body.password, function(err, user) {
+				if(err) {
+					if(err.code === 11000) {
+						req.flash("error", "Error: Email address already exists in the database");
+						res.redirect('/register');
+					} else {
+						req.flash("error", "Error: " + err.message);
+						console.log(err);							// Need to test validations & handle different user errors here
+						res.redirect('/register');
+					}
 				} else {
-					req.flash("error", "Error: " + err.message);
-					console.log(err);							// Need to test validations & handle different user errors here
-					res.redirect('/register');
+					passport.authenticate('local')(req, res, function() {
+						res.redirect('/findings');
+					});
 				}
-			} else {
-				passport.authenticate('local')(req, res, function() {
-					res.redirect('/findings');
-				});
-			}
-		});
+			});
+		} else {
+			req.flash("error", "Error: Password does not meet complexity requirements");
+			res.redirect('/register');
+		}
 	} else {
 		req.flash("error", "Error: Passwords do not match");
 		res.redirect('/register');

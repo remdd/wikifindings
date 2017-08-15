@@ -240,6 +240,51 @@ form select {
 	display: inline-block;
 }
 
+.tooltip {
+	position: relative;
+    display: inline-block;
+    opacity: 1;
+} .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    padding: 14px 10px 10px 10px;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+	top: 50%;
+	transform: translateY(-50%);
+	margin-left: 20px;
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    margin-left: -5px;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent #555 transparent transparent;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+} .tooltiptext ul {
+	padding-left: 20px;
+} .tooltiptext li {
+	margin-top: 10px;
+}
+
 .nav-dropdown {
 	padding-left: 10px;
 }
