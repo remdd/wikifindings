@@ -153,8 +153,12 @@ function keywordsToLower(arr) {
 
 //	SHOW info about a finding
 router.get('/:id', function(req, res) {
-	Finding.findById(req.params.id).populate({path: "comments", options: { sort: { 'datePosted': - 1 }}}).exec(function(err, shownFinding) {
-		Subject.findById(shownFinding.subject, function(err, subject) {
+	Finding.findById(req.params.id)
+	.populate({path: "comments", options: { sort: { 'datePosted': - 1 }}})
+	.populate({path: "precededBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
+	.populate({path: "followedBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
+	.exec(function(err, shownFinding) {
+	 	Subject.findById(shownFinding.subject, function(err, subject) {
 			if(err) {
 				req.flash("error", "Something went wrong...");
 				res.redirect('/findings');

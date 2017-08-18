@@ -336,8 +336,13 @@ form select {
 	background: rgba(0,0,0,0);
 }
 
-
-
+.accTypeInfoLink {
+	margin-top: 10px;
+}
+.inlineLink {
+	border-bottom: 1px dotted blue;
+	padding-bottom: 2px;
+}
 
 
 

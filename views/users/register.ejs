@@ -4,7 +4,7 @@
 	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
 	<div class="col col-xs-12 col-sm-8 col-md-6">
 		<h3>Sign up for a WikiFindings account</h3>
-		<form action="/register" method="POST">
+		<form action="/register" method="POST" name="register">
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Username: </h5>
 				<input required type="text" name="username" placeholder="Username">
@@ -30,15 +30,24 @@
 				<h5 class="registerLabel">Email: </h5>
 				<input required type="email" name="email" placeholder="Email">
 			</div>
-			<h5>Type of account</h5><span>
+			<h5>Type of account</h5>
 
 			<div class="radio">
-				<label><input type="radio" name="isScientist" value=false checked="checked">Regular user</label>
+				<label><input type="radio" name="isScientist" value=false checked="checked" onchange="scientistCheck()">Regular user</label>
 			</div>
 			<div class="radio">
-				<label><input type="radio" name="isScientist" value=true>Scientist</label>
+				<label><input type="radio" name="isScientist" value=true onchange="scientistCheck()">Scientist</label>
 			</div>
-			<a href="#">What's the difference between account types?</a></span>
+			<div class="registerFormDiv ORCIDDiv" style="display: none;">
+				<a href="https://orcid.org/"><h5 class="registerLabel">ORCID iD: </h5></a>
+				<input required type="text" name="ORCIDiD" placeholder="ORCID id">
+			</div>
+
+			<p class="accTypeInfoLink"><span class="inlineLink">What's the difference between account types?</span></p>
+			<div class="accTypeInfo" style="display: none">
+				<p>With a <strong>Regular user</strong> account, you can explore all of the research posted on WikiFindings and join in the discussion by commenting on articles.</p>
+				<p>If you are a researcher looking to contribute further, a verified <strong>Scientist</strong> account will also allow you to post new research articles and propose edits to existing articles.</p>
+			</div>
 
 			<hr />
 
@@ -47,5 +56,17 @@
 	</div>
 	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
 </div>
+
+<script type="text/javascript">
+	$('.accTypeInfoLink').click(function() { console.log("click"); $('.accTypeInfo').toggle('fast'); });
+	function scientistCheck() {
+		if(register.isScientist.value == 'true') {
+			$('.ORCIDDiv').show('fast');
+		} else {
+			$('.ORCIDDiv').hide('fast');
+		}
+	}
+	scientistCheck();
+</script>
 
 <% include ../partials/footer %>

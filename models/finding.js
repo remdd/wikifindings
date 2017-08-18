@@ -26,7 +26,6 @@ var findingSchema = new mongoose.Schema({
 	citation: String,
 	citationLink: String,
 	citationDOI: String,
-	precededBy: Array,
 	postAuthor: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,
@@ -34,6 +33,18 @@ var findingSchema = new mongoose.Schema({
 		},
 		username: String
 	},
+	precededBy: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Finding"
+		}
+	],
+	followedBy: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Finding"
+		}
+		],
 	comments: [
 		{
 			type: mongoose.Schema.Types.ObjectId,

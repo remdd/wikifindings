@@ -44,6 +44,9 @@
 
 <hr />
 
+
+<!--				CITATION 	 							-->
+
 <h4>Details of original research article:</h4>
 <span class="showCitationInfo"><%= finding.citation %></span>
 
@@ -54,10 +57,43 @@
 
 <% if(finding.citationDOI) { %>
 	<h4>Digital Object Identifier (DOI) of original research publication</h4>
-	<a href="https://dx.doi.org/<%= finding.citationDOI %>"><span class="showCitationInfo"><%= finding.citationDOI %></span></a>
+	<a href="https://dx.doi.org/<%= finding.citationDOI %>"><span class="showCitationInfo"><%= finding.citationDOI %></span></a> 
 <% } %>
 
 <hr />
+
+
+<!--				PRECEDED BY 							-->
+
+<% if(finding.precededBy.length > 0) { %>
+
+	<h4>Preceded by:</h4>
+	<% finding.precededBy.forEach(function(finding){ %>
+
+	<% include ../partials/indexedFinding %>
+
+<% })}; %>
+
+
+<hr />
+
+
+<!--				FOLLOWED BY 							-->
+
+<% if(finding.followedBy.length > 0) { %>
+
+	<h4>Followed by:</h4>
+	<% finding.followedBy.forEach(function(finding){ %>
+
+	<% include ../partials/indexedFinding %>
+
+<% })}; %>
+
+
+<hr />
+
+
+<!--				COMMENTS 								-->
 
 <h4>Comments</h4>
 <a class="btn btn-primary" href="/findings/<%= finding._id %>/comments/new">Add new comment</a>
