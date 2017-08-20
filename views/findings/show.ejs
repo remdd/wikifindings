@@ -68,14 +68,14 @@
 <% if(finding.precededBy.length > 0) { %>
 
 	<h4>Preceded by:</h4>
-	<% finding.precededBy.forEach(function(finding){ %>
+	<% finding.precededBy.forEach(function(finding) { %>
+		<% include ../partials/indexedFinding %>
+	<% }); %>
 
-	<% include ../partials/indexedFinding %>
+	<hr />
 
-<% })}; %>
+<% } %>
 
-
-<hr />
 
 
 <!--				FOLLOWED BY 							-->
@@ -83,14 +83,14 @@
 <% if(finding.followedBy.length > 0) { %>
 
 	<h4>Followed by:</h4>
-	<% finding.followedBy.forEach(function(finding){ %>
+	<% finding.followedBy.forEach(function(finding) { %>
+		<% include ../partials/indexedFinding %>
+	<% }); %>
 
-	<% include ../partials/indexedFinding %>
+	<hr />
 
-<% })}; %>
+<% } %>
 
-
-<hr />
 
 
 <!--				COMMENTS 								-->

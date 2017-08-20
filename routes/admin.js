@@ -4,6 +4,7 @@ var middleware 		= require('../middleware');
 var Subject 		= require('../models/subject');
 var SubjectGroup 	= require('../models/subjectgroup');
 var Category 		= require('../models/category');
+var Finding 		= require('../models/finding');
 
 
 //	ADMIN routes ********************
@@ -29,9 +30,20 @@ router.get('/tree', middleware.isAdministrator, function(req, res) {
 							console.log(err);
 							res.redirect('back');
 						} else {
-							res.render('admin/subjectTree', {categories: categories, subjectGroups: subjectGroups, subjects: subjects});
+							Finding.find({})
+							.populate({path: "category"})
+							.populate({path: "subjectGroup"})
+							.populate({path: "subject"})
+							.exec(function(err, allFindings) {
+								if(err) {
+									console.log(err);
+									res.redirect('back');
+								} else {
+									res.render('admin/subjectTree', {categories: categories, subjectGroups: subjectGroups, subjects: subjects , allFindings: allFindings});
+								}
+							});
 						}
-					})
+					});
 				}
 			}).populate({path: 'subjects', options: { sort: 'subjectName'}});
 		}

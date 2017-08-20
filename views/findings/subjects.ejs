@@ -2,27 +2,45 @@
 
 <h3>Subjects index</h3>
 <div class="container">
-	<div class="row subjectThumbs">
-	
-		<% subjects.sort(function(a,b) {return (a.subjectName > b.subjectName) ? 1 : ((b.subjectName > a.subjectName) ? -1 : 0);} );
-		subjects.forEach(function(subject) { %>
-			<a href="/findings/s?subject=<%= subject.subjectName %>">
-				<div class="subjectThumbContainer col col-xs-12 col-sm-6 col-md-4">
-					<div class=subjectThumbDiv style="background: url('img/subjects/<%= subject.subjectName %>.jpg'); background-size: cover;">
-						<div class="subjectThumbOverlay">
-							<h3 class="subjectThumbTitle"><%= subject.subjectName %></h3>				
-						</div>
+
+	<div class="row categoryThumbs">
+		<% categories.sort(function(a,b) {return (a.categoryName > b.categoryName) ? 1 : ((b.categoryName > a.categoryName) ? -1 : 0);} );
+		var cat = 0;
+		categories.forEach(function(category) { %>
+			<div class="subjectThumbContainer col col-xs-12 col-sm-12 col-md-12 catHeader" data-categoryHeader="<%= cat %>">
+				<div class=subjectThumbDiv style="background: url('img/categories/<%= category.categoryName %>.jpg'); background-size: cover;">
+					<div class="subjectThumbOverlay">
+						<h3 class="subjectThumbTitle"><%= category.categoryName %></h3>				
 					</div>
 				</div>
-			</a>
-		<% }) %>
+			</div>
+
+			<% category.subjectGroups.forEach(function(subjectGroup) { %>
+				<a href="#">
+					<div hidden class="subjectThumbContainer col col-xs-12 col-sm-6 col-md-4 subjectGroupLabel" data-category="<%= cat %>">
+						<div class=subjectThumbDiv style="background: url('img/subjectGroups/<%= subjectGroup.subjectGroupName %>.jpg'); background-size: cover;">
+							<div class="subjectThumbOverlay">
+								<h3 class="subjectThumbTitle"><%= subjectGroup.subjectGroupName %></h3>				
+							</div>
+						</div>
+					</div>
+				</a>
+			<% }); %>
+			<% cat++; %>
+
+			<hr />
+		<% }); %>
 
 	</div>
+
 </div>
 
 <script>
 	$('.subjectThumbOverlay').mouseover(function() { $(this).addClass('transparent') });
 	$('.subjectThumbOverlay').mouseleave(function() { $(this).removeClass('transparent') });
+	$('.catHeader').click(function() {
+		$('*[data-category="' + $(this).attr('data-categoryHeader') + '"]').toggle('slow');
+	});
 </script>
 
 <% include ../partials/footer %>

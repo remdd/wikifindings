@@ -168,6 +168,11 @@ form select {
 	color: lightgrey;
 }
 
+.subjListDropdown {
+	display: block;
+} .subjListDropdownLabel {
+	width: 100px;
+}
 
 /* Show page fomatting */
 .shownBox {

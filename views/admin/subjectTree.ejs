@@ -116,19 +116,52 @@
 		<hr>
 		<li>
 			<div class="subjListColorDiv" style="background: <%= category.categoryColor %>"></div>
-			<h3 class="subjListHeader"><%= category.categoryName %><h3>
+			<h3 class="subjListHeader"><%= category.categoryName %>
+				<% 
+					var count = 0;
+					allFindings.forEach(function(finding) {
+						if(finding.category.categoryName === category.categoryName) {
+							count++;
+						} %>
+					<% }); %> 
+				<% if(count > 0) { %>
+					: <%= count %>
+				<% } %>
+			<h3>
 		</li>
 	<ul>
 		<% category.subjectGroups.forEach(function(subjectGroup) { %>
 			<li>
 				<div class="subjListColorDiv" style="background: <%= subjectGroup.subjectGroupColor %>"></div>
-				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %></h4>
+				<h4 class="subjListHeader"><%= subjectGroup.subjectGroupName %>
+					<% 
+						var count = 0;
+						allFindings.forEach(function(finding) {
+							if(finding.subjectGroup.subjectGroupName === subjectGroup.subjectGroupName) {
+								count++;
+							} %>
+						<% }); %> 
+					<% if(count > 0) { %>
+						: <%= count %>
+					<% } %>
+				</h4>
 			</li>
 			<ul>
 				<% subjectGroup.subjects.forEach(function(subject) { %>
 					<li>
 						<div class="subjListColorDiv" style="background: <%= subject.subjectColor %>"></div>
-						<h4 class="subjListHeader"><%= subject.subjectName %></h4>
+						<h4 class="subjListHeader"><%= subject.subjectName %>
+							<% 
+								var count = 0;
+								allFindings.forEach(function(finding) {
+									if(finding.subject.subjectName === subject.subjectName) {
+										count++;
+									} %>
+								<% }); %> 
+							<% if(count > 0) { %>
+								: <%= count %>
+							<% } %>
+						</h4>
 					</li>
 				<% }); %>
 			</ul>
