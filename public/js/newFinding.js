@@ -68,7 +68,6 @@ $(document).ready(function() {
 	 	$('#newSubjectList').removeClass('greyedOut');
 	 	$('#newSubjectList').attr('disabled', false);
 	 	var selectedGroup = $('#newSubjectGroupList').find(":selected").text();
-	 	console.log(selectedGroup);
 	 	$('#newSubjectList').find('*').each(function() {
 	 		$(this).attr('hidden', false);
 	 		if($(this).attr('data-group') != selectedGroup) {
@@ -76,6 +75,21 @@ $(document).ready(function() {
 	 		}
 	 	});
 	});
+
+	//	Search for preceding Finding
+	$('.findingSearchBtn').click(function() {
+		var sidUrl = '/findings/i/' + $('#precedingID').val();
+		alert(sidUrl);
+		$.ajax(sidUrl).done(function(finding) {
+			if(finding) {
+				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[precededBy]" value="' + finding._id + '">' + finding.title + '</input></div>';
+				$('#precedentFindings').append(DOMString);
+			} else {
+				alert("not found...");
+			}
+		});
+	});
+
 
 	//	Functions to run on document ready
 	$('#newCategoryList').trigger('change');

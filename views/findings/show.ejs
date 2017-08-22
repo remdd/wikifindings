@@ -22,7 +22,7 @@
 	</div>
 	<div class="col col-sm-3 col-xs-12 infoPane shownBox">
 		<h4 class="infoPaneLabel">Subject</h4>
-		<h4 class="infoPaneInfo"><a href="/findings/s?subject=<%= subj %>"><%= subj %></a></h4>
+		<h4 class="infoPaneInfo"><a href="/findings/s?subject=<%= finding.subject.subjectName %>"><%= finding.subject.subjectName %></a></h4>
 		<br />
 		<h4 class="infoPaneLabel">Keywords</h4>
 			<% if(finding.keywords) {
@@ -35,20 +35,25 @@
 		<br />
 		<h4 class="infoPaneLabel">Posted on</h4>
 		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
+		<br />
+		<h4 class="infoPaneLabel">Article ID</h4>
+		<h4 class="infoPaneInfo"><%= finding.shortID %></h4>
 	</div>
 </div>
 
 <br />
 
+<% if(finding.image) { %>
 <img class="shownImage shownBox" src="<%= finding.image %>">
 
 <hr />
 
+<% } %>
 
 <!--				CITATION 	 							-->
 
 <h4>Details of original research article:</h4>
-<span class="showCitationInfo"><%= finding.citation %></span>
+<span class="showCitationInfo"><%= finding.citation.full %></span>
 
 <% if(finding.citationLink) { %>
 	<h4>Link to original research publication</h4>

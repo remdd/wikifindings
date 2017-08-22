@@ -7,6 +7,7 @@ var SubjectGroup 	= require('../models/subjectgroup');
 var Category 		= require('../models/category');
 var middleware 		= require('../middleware');
 var	mongoosePaginate = require('mongoose-paginate');
+var shortid 		= require('shortid32');
 
 var resultsToShow = 10;
 
@@ -125,6 +126,7 @@ router.get('/new', middleware.isLoggedIn, function(req, res) {
 
 //	CREATE new finding route
 router.post('/', middleware.isLoggedIn, function(req, res) {
+	req.body.finding.shortID = shortid.generate();		// need to add in validation to check that shortid is available
 	req.body.finding.datePosted = Date.now();
 	req.body.finding.postAuthor = {
 		id: req.user._id,
@@ -137,13 +139,40 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
+			console.log(err);
 			res.redirect('/findings');
 		} else {
+			citationToString(finding);						//	need to use promises / async to wait for DB update before res.redirect
 			res.redirect('/findings/' + finding.id);
 		}
 	});
 });
 
+function citationToString(finding) {
+	var fullString = "";
+	for(var i = 0; i < finding.citation.authors.length; i++) {
+		fullString += finding.citation.authors[i];
+		if(i < finding.citation.authors.length - 1) {
+			fullString += ', ';
+		} else {
+			fullString += '. '
+		}
+	}
+	fullString += finding.citation.title;
+	fullString += '. ';
+	fullString += finding.citation.journal;
+	fullString += '. ';
+	fullString += finding.citation.year;
+	fullString += ';';
+	fullString += finding.citation.location;
+	fullString += '.';
+	console.log(fullString);
+	Finding.update({ _id: finding._id }, { $set: { 'citation.full': fullString }}, function(err) {
+		if(err) {
+			console.log(err);
+		}
+	});
+}
 
 function keywordsToLower(arr) {
 	for(var i = 0; i < arr.length; i ++) {
@@ -157,21 +186,16 @@ router.get('/:id', function(req, res) {
 	.populate({path: "comments", options: { sort: { 'datePosted': - 1 }}})
 	.populate({path: "precededBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
 	.populate({path: "followedBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
+	.populate({path: "subject"})
 	.exec(function(err, shownFinding) {
-	 	Subject.findById(shownFinding.subject, function(err, subject) {
-			if(err) {
-				req.flash("error", "Something went wrong...");
-				res.redirect('/findings');
-			} else {
-				var subj = subject.subjectName;
-				if(err) {
-					req.flash("error", "Something went wrong...");
-					res.redirect('/findings');
-				} else {
-					res.render('findings/show', {finding: shownFinding, subj: subj});
-				}
-			}
-		});
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
+		} else if(!shownFinding) {
+			res.render('404');
+		} else {
+			res.render('findings/show', {finding: shownFinding});
+		};
 	});
 });
 
@@ -236,5 +260,19 @@ router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 	})
 });
 
+//	Search for single Finding by shortID ( preceded by / followed by)
+router.get('/i/:sid', function(req, res) {
+	console.log("route");
+	Finding.findOne({"shortID": req.params.sid})
+	.exec(function(err, shownFinding) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
+		} else {
+			res.json(shownFinding);
+		}
+	});
+});
+ 
 
 module.exports = router;
