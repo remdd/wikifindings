@@ -77,15 +77,29 @@ $(document).ready(function() {
 	});
 
 	//	Search for preceding Finding
+	var precedents = [];
 	$('.findingSearchBtn').click(function() {
-		var sidUrl = '/findings/i/' + $('#precedingID').val();
-		alert(sidUrl);
+		var val = $('#precedingID').val();
+		if(!val) {
+			return;
+		}
+		for(var i = 0; i < precedents.length; i++) {
+			if(precedents[i] === val) {
+				return;
+			}
+		}
+		var sidUrl = '/findings/i/' + val;
 		$.ajax(sidUrl).done(function(finding) {
 			if(finding) {
-				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[precededBy]" value="' + finding._id + '">' + finding.title + '</input></div>';
+				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[precededBy]" value="' + finding._id + '">' 
+					+ finding.title 
+					+ '<br>'
+					+ finding.citation.full
+					+ '</input></div>';
 				$('#precedentFindings').append(DOMString);
+				precedents.push(val);
 			} else {
-				alert("not found...");
+				$('.findingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
 		});
 	});

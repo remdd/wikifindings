@@ -181,6 +181,10 @@ form select {
 } .subjListDropdownLabel {
 	width: 100px;
 }
+.findingSearchWarning {
+	display: inline-block;
+	margin-left: 30px;
+}
 
 /* Show page fomatting */
 .shownBox {

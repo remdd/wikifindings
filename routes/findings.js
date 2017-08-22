@@ -8,6 +8,8 @@ var Category 		= require('../models/category');
 var middleware 		= require('../middleware');
 var	mongoosePaginate = require('mongoose-paginate');
 var shortid 		= require('shortid32');
+var	bodyParser 		= require('body-parser');
+
 
 var resultsToShow = 10;
 
@@ -136,13 +138,12 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
 	}
+	req.body.finding.citation.full = citationToString(req.body.finding);
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
-			console.log(err);
 			res.redirect('/findings');
 		} else {
-			citationToString(finding);						//	need to use promises / async to wait for DB update before res.redirect
 			res.redirect('/findings/' + finding.id);
 		}
 	});
@@ -150,12 +151,18 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 
 function citationToString(finding) {
 	var fullString = "";
-	for(var i = 0; i < finding.citation.authors.length; i++) {
-		fullString += finding.citation.authors[i];
-		if(i < finding.citation.authors.length - 1) {
-			fullString += ', ';
-		} else {
-			fullString += '. '
+	console.log(finding.citation.authors);
+	if(!(Array.isArray(finding.citation.authors))) {
+		fullString += finding.citation.authors;
+		fullString += '. ';
+	} else {
+		for(var i = 0; i < finding.citation.authors.length; i++) {
+			fullString += finding.citation.authors[i];
+			if(i < finding.citation.authors.length - 1) {
+				fullString += ', ';
+			} else {
+				fullString += '. '
+			}
 		}
 	}
 	fullString += finding.citation.title;
@@ -166,12 +173,7 @@ function citationToString(finding) {
 	fullString += ';';
 	fullString += finding.citation.location;
 	fullString += '.';
-	console.log(fullString);
-	Finding.update({ _id: finding._id }, { $set: { 'citation.full': fullString }}, function(err) {
-		if(err) {
-			console.log(err);
-		}
-	});
+	return(fullString);
 }
 
 function keywordsToLower(arr) {
@@ -238,12 +240,13 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
 	}
+	req.body.finding.citation.full = citationToString(req.body.finding);
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
-			res.redirect('/findings/' + req.params.id);
+			res.redirect('/findings/' + updatedFinding._id);
 		}
 	});
 });

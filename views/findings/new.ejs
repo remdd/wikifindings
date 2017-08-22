@@ -13,7 +13,7 @@
 	<% include ../partials/categoryGroupSubjectDropdowns %>
 
 	<br />
-	<label for="finding[keywords]"><h4>Keywords: </h4></label>
+	<label for="finding[keywords]"><h4>Keywords </h4></label>
 	<select multiple name="finding[keywords]" data-role="tagsinput" placeholder="Enter keyword(s)"></select>
 	<h4 class="tagInfo">(use 'Enter' to separate keywords)</h4>
 
@@ -43,82 +43,61 @@
 	<h4>Details of original research article</h4>
 	<div class="row">
 		<div class="citationDiv col">
-			<label for="finding[citation.authors]"><h5>Author(s)</h5></label>
-			<select required multiple name="finding[citation.authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
+			<label for="finding[citation][authors]"><h5>Author(s)</h5></label>
+			<select required multiple name="finding[citation][authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
 			<h5 class="tagInfo">e.g. <strong>Darwin C</strong> (use 'Enter' to separate each author)</h5>
 		</div>
 	</div>
 	<div class="row">
 		<div class="citationDiv col col-lg-8 col-md-10 col-sm-12">
-			<label for="finding[citation.title]" class="twoLineLabel">
+			<label for="finding[citation][title]" class="twoLineLabel">
 				<h5 class="labelInline">Article title</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation.title]" placeholder="Title of original article" class="newFindingTextField">
+			<input required type="text" name="finding[citation][title]" placeholder="Title of original article" class="newFindingTextField">
 
-			<label for="finding[citation.journal]" class="twoLineLabel">
+			<label for="finding[citation][journal]" class="twoLineLabel">
 				<h5 class="labelInline">Journal title</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation.journal]" placeholder="Name of scientific journal" class="newFindingTextField">
+			<input required type="text" name="finding[citation][journal]" placeholder="Name of scientific journal" class="newFindingTextField">
 
-			<label for="finding[citation.year]" class="twoLineLabel">
+			<label for="finding[citation][year]" class="twoLineLabel">
 				<h5 class="labelInline">Year of publication</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation.year]" placeholder="Year" class="newFindingSmallTextField">
+			<input required type="text" name="finding[citation][year]" placeholder="Year" class="newFindingSmallTextField">
 
-			<label for="finding[citation.location]" class="twoLineLabel">
+			<label for="finding[citation][location]" class="twoLineLabel">
 				<h5 class="labelInline">Location in journal, in format <strong>volume(issue):location</strong> - e.g. <strong>5(1):49-52</strong> 
 				<a href="http://www.scientificstyleandformat.org/Tools/SSF-Citation-Quick-Guide.html">(more info on citation format)</a></h5>
 			</label>
-			<input required type="text" name="finding[citation.location]" placeholder="Location" class="newFindingSmallTextField">
+			<input required type="text" name="finding[citation][location]" placeholder="Location" class="newFindingSmallTextField">
 
-			<label for="finding[citation.link]" class="twoLineLabel">
+			<label for="finding[citation][link]" class="twoLineLabel">
 				<h5 class="labelInline">Link to original publication</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input type="url" name="finding[citation.link]" placeholder="URL of original article" class="newFindingTextField">
+			<input type="url" name="finding[citation][link]" placeholder="URL of original article" class="newFindingTextField">
 
-			<label for="finding[citation.DOI]" class="twoLineLabel">
+			<label for="finding[citation][DOI]" class="twoLineLabel">
 				<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation.DOI]" placeholder="DOI of original article" class="newFindingTextField">
+			<input required type="text" name="finding[citation][DOI]" placeholder="DOI of original article" class="newFindingTextField">
 		</div>
 		<div class="col col-lg-4 col-md-2 col-sm-0"></div>
 	</div>
-
-<!-- 	
-	<label for="finding[citation]" class="twoLineLabel">
-		<h5 class="labelInline">Publication details</h5>
-		<h5 class="labelInfo">format: Surname AB (Year), Title, Full Journal Name, Volume : First Page - Last Page</h5>
-	</label>
-	<input required type="text" name="finding[citation]" placeholder="Publication details of original research article" class="newFindingTextField">
-	<br>
-	<label for="finding[citationLink]" class="twoLineLabel">
-		<h5 class="labelInline">Link</h5>
-		<h5 class="labelInfo">please be mindful of any copyright limitations that may apply to your link</h5>
-	</label>
-	<input type="url" name="finding[citationLink]" placeholder="URL of original article" class="newFindingTextField">
-	<br>
-
-	<label for="finding[citationDOI]" class="twoLineLabel">
-		<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
-		<h5 class="labelInfo"></h5>
-	</label>
-	<input type="text" name="finding[citationDOI]" placeholder="DOI of original article" class="newFindingTextField">
-	<br> -->
 
 	<hr />
 
 <!-- Preceded by -->
 
 	<label for="finding[precededBy]"><h4>Preceded by: </h4></label>
-<!--  		<input id="precedentFindings" name="finding[precededBy]" data-role="tagsinput" placeholder="Preceding article(s) ID" style="display: none;"> -->
 		<div id="precedentFindings"></div>
 		<input id="precedingID" type="text" placeholder="Preceding article ID">
-		<div class="btn findingSearchBtn">Search for preceding Finding(s)</div>
+		<div class="btn btn-primary findingSearchBtn">Add</div>
+		<div class="findingSearchWarning"></div>
 	<hr />
 
 <!-- Post author & submit btn -->
