@@ -6,7 +6,6 @@ var express 				= require('express'),
 	Category				= require('./models/category'),
 	SubjectGroup			= require('./models/subjectgroup'),
 	Subject 				= require('./models/subject'),
-	seedDB					= require('./seeds'),
 	passport				= require('passport'),
 	LocalStrategy			= require('passport-local'),
 	passportLocalMongoose	= require('passport-local-mongoose'),
@@ -17,12 +16,13 @@ var express 				= require('express'),
 	dotenv					= require('dotenv'),					//	environment variable manager
 	flash					= require('connect-flash'),				//	flash messages
 	mongoosePaginate 		= require('mongoose-paginate'),
+	mongoDBStore			= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
 	app 					= express();
 
 var commentRoutes			= require('./routes/comments'),
 	findingRoutes			= require('./routes/findings'),
 	indexRoutes				= require('./routes/index'),
-	adminRoutes				= require('./routes/admin');
+	adminRoutes				= require('./routes/admin'),
 	subjectRoutes			= require('./routes/subjects');
 
 //	Clears database & re-seeds with data from seed file
@@ -33,6 +33,7 @@ dotenv.config({path: '.env'});				//	Loads environment variables file
 console.log(process.env.SG_USER);
 
 //	Connects mongoose to db
+mongoose.Promise = global.Promise;			//	Re deprecation warning - need to look into implications
 mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
@@ -47,11 +48,31 @@ app.use(cookieParser());
 //	Flash message use
 app.use(flash());
 
+//	MongoDBStore config
+var store = new mongoDBStore(
+	{
+		uri: process.env.DBPATH,
+		collection: 'sessions'
+	}, function(err) {
+		if(err) {
+			console.log(err);
+		}
+	}
+);
+//	MongoDBStore start error catching
+store.on('error', function(err) {
+	assert.ifError(err);
+	assert.ok(false);
+});
+
 //	Express-session and Passport usage
 app.use(expressSession({
 	secret: process.env.EXP_KEY,
-	resave: false,
-	saveUninitialized: false
+	store: store,									//	Connects to MongoDBStore
+	resave: true,									//	Was false - need to read into, is 'true' a risk?
+	saveUninitialized: true,						//	Was false - need to read into, is 'true' a risk?
+	httpOnly: true,									//	Don't let browser javascript access cookies
+	secure: false									//	Set to true to limit cookies to https only (SET FOR PRODUCTION)
 }));
 app.use(passport.initialize());
 app.use(passport.session());

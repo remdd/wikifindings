@@ -172,5 +172,11 @@ router.post('/tree/subjects', middleware.isAdministrator, function(req, res) {
 	});
 });
 
+router.get('/session', function(req, res) {
+	console.log(req.cookies);
+	console.log("***************************");
+	console.log(req.session);
+	res.render('about');
+});
 
 module.exports = router;
