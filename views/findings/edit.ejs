@@ -155,8 +155,29 @@
 		} %>
 		<div id="precedentFindings"></div>
 		<input id="precedingID" type="text" placeholder="Preceding article ID">
-		<div class="btn btn-primary findingSearchBtn">Add</div>
-		<div class="findingSearchWarning"></div>
+		<div class="btn btn-primary" id="precedentSearchBtn">Add</div>
+		<div id="precedingSearchWarning" class="findingSearchWarning"></div>
+	<hr />
+
+
+<!-- Followed by -->
+
+	<label for="finding[followedBy]"><h4>Followed by: </h4></label>
+		<% if(finding.followedBy) {
+			finding.followedBy.forEach(function(result) { %>
+				<div class="precedentTitle">
+					<input type="checkbox" checked="checked" name="finding[followedBy]" value="<%= result._id %>"> 
+						<%= result.title %>
+						<br>
+						<%= result.citation.full %>
+					</input>
+				</div>
+			<% });
+		} %>
+		<div id="followingFindings"></div>
+		<input id="followingID" type="text" placeholder="Following article ID">
+		<div class="btn btn-primary" id="followingSearchBtn">Add</div>
+		<div id="followingSearchWarning" class="findingSearchWarning"></div>
 	<hr />
 
 
