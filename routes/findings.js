@@ -128,7 +128,7 @@ router.get('/new', middleware.isLoggedIn, function(req, res) {
 
 //	CREATE new finding route
 router.post('/', middleware.isLoggedIn, function(req, res) {
-	req.body.finding.shortID = shortid.generate();		// need to add in validation to check that shortid is available
+	req.body.finding.shortID = shortid.generate();		// need to add in validation to ensure that shortid is available
 	req.body.finding.datePosted = Date.now();
 	req.body.finding.postAuthor = {
 		id: req.user._id,
@@ -142,45 +142,36 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
-			res.redirect('/findings');
+			res.redirect('back');
 		} else {
+			if(req.body.finding.precededBy) {
+				if(!(Array.isArray(req.body.finding.precededBy))) {
+					req.body.finding.precededBy = [req.body.finding.precededBy];		// if precededBy is a single string, convert to single-value array
+				}
+				req.body.finding.precededBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : finding._id }}, function(err, precedingFinding) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+			}
+			if(req.body.finding.followedBy) {
+				if(!(Array.isArray(req.body.finding.followedBy))) {
+					req.body.finding.followedBy = [req.body.finding.followedBy];		// if followedBy is a single string, convert to single-value array
+				}
+				req.body.finding.followedBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : finding._id }}, function(err, followingFinding) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+			}
 			res.redirect('/findings/' + finding.id);
 		}
 	});
 });
-
-function citationToString(finding) {
-	var fullString = "";
-	console.log(finding.citation.authors);
-	if(!(Array.isArray(finding.citation.authors))) {
-		fullString += finding.citation.authors;
-		fullString += '. ';
-	} else {
-		for(var i = 0; i < finding.citation.authors.length; i++) {
-			fullString += finding.citation.authors[i];
-			if(i < finding.citation.authors.length - 1) {
-				fullString += ', ';
-			} else {
-				fullString += '. '
-			}
-		}
-	}
-	fullString += finding.citation.title;
-	fullString += '. ';
-	fullString += finding.citation.journal;
-	fullString += '. ';
-	fullString += finding.citation.year;
-	fullString += ';';
-	fullString += finding.citation.location;
-	fullString += '.';
-	return(fullString);
-}
-
-function keywordsToLower(arr) {
-	for(var i = 0; i < arr.length; i ++) {
-		arr[i] = arr[i].toLowerCase();
-	}
-}
 
 //	SHOW info about a finding
 router.get('/:id', function(req, res) {
@@ -218,7 +209,9 @@ router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 							console.log(err);
 							res.redirect('back');
 						} else {
-							Finding.findById(req.params.id, function(err, shownFinding) {
+							Finding.findById(req.params.id)
+							.populate({path: "precededBy"})
+							.exec(function(err, shownFinding) {
 								if(err) {
 									req.flash("error", "Something went wrong...");
 									res.redirect('/findings');
@@ -240,8 +233,12 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
 	}
+	if(!(req.body.finding.precededBy)) {				//	Removes all Preceding Findings if none checked in Edit form
+		req.body.finding.precededBy = [];
+	}
 	req.body.finding.citation.full = citationToString(req.body.finding);
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
+		console.log(updatedFinding.precededBy);
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
@@ -265,7 +262,6 @@ router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 
 //	Search for single Finding by shortID ( preceded by / followed by)
 router.get('/i/:sid', function(req, res) {
-	console.log("route");
 	Finding.findOne({"shortID": req.params.sid})
 	.exec(function(err, shownFinding) {
 		if(err) {
@@ -276,6 +272,38 @@ router.get('/i/:sid', function(req, res) {
 		}
 	});
 });
- 
+
+//	Utility functions
+function citationToString(finding) {
+	var fullString = "";
+	if(!(Array.isArray(finding.citation.authors))) {
+		fullString += finding.citation.authors;
+		fullString += '. ';
+	} else {
+		for(var i = 0; i < finding.citation.authors.length; i++) {
+			fullString += finding.citation.authors[i];
+			if(i < finding.citation.authors.length - 1) {
+				fullString += ', ';
+			} else {
+				fullString += '. '
+			}
+		}
+	}
+	fullString += finding.citation.title;
+	fullString += '. ';
+	fullString += finding.citation.journal;
+	fullString += '. ';
+	fullString += finding.citation.year;
+	fullString += ';';
+	fullString += finding.citation.location;
+	fullString += '.';
+	return(fullString);
+}
+
+function keywordsToLower(arr) {
+	for(var i = 0; i < arr.length; i ++) {
+		arr[i] = arr[i].toLowerCase();
+	}
+}
 
 module.exports = router;

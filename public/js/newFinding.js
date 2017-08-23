@@ -78,14 +78,15 @@ $(document).ready(function() {
 
 	//	Search for preceding Finding
 	var precedents = [];
-	$('.findingSearchBtn').click(function() {
+	$('#precedentSearchBtn').click(function() {
+		$('.findingSearchWarning').text('');			// Clears any previous 'not found' warning
 		var val = $('#precedingID').val();
 		if(!val) {
-			return;
+			return;										// Take no action if no search string provided
 		}
 		for(var i = 0; i < precedents.length; i++) {
 			if(precedents[i] === val) {
-				return;
+				return;									// Take no action if search string already used
 			}
 		}
 		var sidUrl = '/findings/i/' + val;
@@ -99,7 +100,36 @@ $(document).ready(function() {
 				$('#precedentFindings').append(DOMString);
 				precedents.push(val);
 			} else {
-				$('.findingSearchWarning').text('Finding with ID ' + val + ' not found...');
+				$('#precedingSearchWarning').text('Finding with ID ' + val + ' not found...');
+			}
+		});
+	});
+
+	//	Search for following Finding
+	var following = [];
+	$('#followingSearchBtn').click(function() {
+		$('.findingSearchWarning').text('');
+		var val = $('#followingID').val();
+		if(!val) {
+			return;
+		}
+		for(var i = 0; i < following.length; i++) {
+			if(following[i] === val) {
+				return;
+			}
+		}
+		var sidUrl = '/findings/i/' + val;
+		$.ajax(sidUrl).done(function(finding) {
+			if(finding) {
+				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[followedBy]" value="' + finding._id + '">' 
+					+ finding.title 
+					+ '<br>'
+					+ finding.citation.full
+					+ '</input></div>';
+				$('#followingFindings').append(DOMString);
+				following.push(val);
+			} else {
+				$('#followingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
 		});
 	});

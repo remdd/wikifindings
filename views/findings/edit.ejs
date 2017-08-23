@@ -139,11 +139,24 @@
 	</script>
 
 
-
 <!-- Preceded by -->
 
-	<label for="newPrecededBy"><h4>Preceded by: </h4></label>
-	<input name="newPrecededBy" data-role="tagsinput" placeholder="Article title">
+	<label for="finding[precededBy]"><h4>Preceded by: </h4></label>
+		<% if(finding.precededBy) {
+			finding.precededBy.forEach(function(result) { %>
+				<div class="precedentTitle">
+					<input type="checkbox" checked="checked" name="finding[precededBy]" value="<%= result._id %>"> 
+						<%= result.title %>
+						<br>
+						<%= result.citation.full %>
+					</input>
+				</div>
+			<% });
+		} %>
+		<div id="precedentFindings"></div>
+		<input id="precedingID" type="text" placeholder="Preceding article ID">
+		<div class="btn btn-primary findingSearchBtn">Add</div>
+		<div class="findingSearchWarning"></div>
 	<hr />
 
 
