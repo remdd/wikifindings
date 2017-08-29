@@ -35,6 +35,24 @@
 		<% }); %>
 	</select>
 
-	<span><a href="#">Missing your subject? Add it here</a></span>
+	<span>Missing your subject? <a id="showAddDiv" href="#">Add it to the database</a></span>
+
+	<div class="addSubjectDiv hiddenDiv">
+		<label for="subject[subjectName]" class="subjListDropdownLabel"><h4>New subject</h4></label>
+		<input disabled=true class="" type="text" name="newSubject[subjectName]" id="newSubjectName" placeholder="Name of new subject">
+		<input hidden type="text" name="newSubject[subjectColor]" id="newSubjectColor" value="#555555"></input>
+		<div class="btn btn-primary" id="addSubjectBtn">Add</div>
+		<div id="addSubjectWarning" class="findingSearchWarning"></div>
+	</div>
+
+
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.5.2/randomColor.min.js"></script>
+<script type="text/javascript">
+	$('#showAddDiv').click(function() {
+		$('.addSubjectDiv').toggle('fast');
+		var newColor = randomColor();
+		$('#newSubjectColor').attr('value', newColor);
+	});
+</script>

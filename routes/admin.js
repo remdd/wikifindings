@@ -81,7 +81,7 @@ router.put('/tree/categories/:id', middleware.isAdministrator, function(req, res
 });
 //	CREATE a Category
 router.post('/tree/categories', middleware.isAdministrator, function(req, res) {
-	Category.create(req.body.category, function(err, finding) {
+	Category.create(req.body.category, function(err) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/tree');
@@ -124,7 +124,7 @@ router.put('/tree/subjectGroups/:id', middleware.isAdministrator, function(req, 
 });
 //	CREATE a Subject Group
 router.post('/tree/subjectGroups', middleware.isAdministrator, function(req, res) {
-	SubjectGroup.create(req.body.subjectGroup, function(err, finding) {
+	SubjectGroup.create(req.body.subjectGroup, function(err) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/tree');
@@ -161,13 +161,42 @@ router.put('/tree/subjects/:id', middleware.isAdministrator, function(req, res) 
 });
 //	CREATE a Subject
 router.post('/tree/subjects', middleware.isAdministrator, function(req, res) {
-	Subject.create(req.body.subject, function(err, finding) {
+	Subject.create(req.body.subject, function(err) {
 		if(err) {
+			console.log(err);
 			req.flash("error", "Something went wrong...");
 			res.redirect('/tree');
 		} else {
+			console.log("Success!");
 			req.flash("success", "Successfully added a new Subject");
 			res.redirect('/tree');
+		}
+	});
+});
+//	CREATE a Subject 'inline' (from New / Edit finding form)
+router.post('/tree/newSubject', middleware.isScientist, function(req, res) {
+	var response = {};
+	response.subject = req.body.subject.subjectName;
+	Subject.create(req.body.subject, function(err, subject) {
+		if(err) {
+			console.log(err);
+			response.msg = "Database error - please contact an administrator.";
+			res.json(response);
+		} else {
+			SubjectGroup.findByIdAndUpdate(req.body.subjectGroup, {$push: {'subjects': subject._id } }, function(err, subjectGroup) {
+				if(err) {
+					console.log(err);
+					response.msg = "Database error - please contact an administrator.";
+					res.json(response);
+				} else {
+					subjectGroup.subjects.push(subject._id);
+					console.log("Pushed to subj group");
+					response.subjectId = subject._id;
+					response.subjectName = subject.subjectName;
+					response.msg = "Successfully added new subject.";
+					res.json(response);
+				}
+			});
 		}
 	});
 });

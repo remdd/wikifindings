@@ -179,12 +179,17 @@ form select {
 .subjListDropdown {
 	display: block;
 } .subjListDropdownLabel {
-	width: 100px;
+	width: 120px;
 }
 .findingSearchWarning {
 	display: inline-block;
 	margin-left: 30px;
 }
+.addSubjectDiv {
+	display: block;
+	visibility: none;
+}
+
 
 /* Show page fomatting */
 .shownBox {
@@ -255,6 +260,10 @@ form select {
 .registerLabel {
 	width: 100px;
 	display: inline-block;
+}
+
+.hiddenDiv {
+	display: none;
 }
 
 .tooltip {

@@ -60,6 +60,7 @@ $(document).ready(function() {
 	 			$(this).attr('hidden', true);
 	 		}
 	 	});
+ 		$('#newSubjectName').attr('disabled', true);
 	});
 
 	//	Show available Subjects when Subject Group is changed
@@ -74,6 +75,7 @@ $(document).ready(function() {
 	 			$(this).attr('hidden', true);
 	 		}
 	 	});
+ 		$('#newSubjectName').attr('disabled', false);
 	});
 
 	//	Search for preceding Finding
@@ -130,6 +132,27 @@ $(document).ready(function() {
 				following.push(val);
 			} else {
 				$('#followingSearchWarning').text('Finding with ID ' + val + ' not found...');
+			}
+		});
+	});
+
+	//	Add new subject
+	$('#addSubjectBtn').click(function() {
+		var newSubject = {
+			subject: {
+				subjectName: $('#newSubjectName').val(),
+				subjectColor: $('#newSubjectColor').val()
+			},
+			subjectGroup: $('#newSubjectGroupList').val()
+		}
+		$.ajax("/tree/newSubject", {
+			data: newSubject,
+			type: 'post'
+		}).done(function(response) {
+			$('#newSubjectName').val('');
+			$('#addSubjectWarning').text(response.msg);
+			if(response.subjectId) {
+				$('#newSubjectList').append('<option selected value="' + response.subjectId + '" label="' + response.subjectName + '">' + response.subjectName + '</option>');
 			}
 		});
 	});
