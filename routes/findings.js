@@ -21,12 +21,13 @@ router.get('/', function(req, res) {
 	}
 	Finding.paginate( {}, { 
 		limit: resultsToShow, 
-		populate: 'subject subjectGroup category',
+		populate: 'subject subjectGroup category postAuthor',
 		sort: {datePosted: -1}, 
 		page: req.query.page 
 	}, function(err, allFindings) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
+			console.log(err);
 			res.redirect('/findings');
 		} else {
 			res.render("findings/index", {findings: allFindings});
@@ -44,7 +45,7 @@ router.get('/s', function(req, res) {
 		}
 		Finding.paginate( {subject: subject._id}, { 
 			limit: resultsToShow, 
-			populate: 'subject subjectGroup category',
+			populate: 'subject subjectGroup category postAuthor',
 			sort: {datePosted: -1}, 
 			page: req.query.page 
 		}, function(err, filteredFindings) {
@@ -66,7 +67,7 @@ router.get('/k', function(req, res) {
 	}
 	Finding.paginate({keywords_lower: { $all: [keyword.toLowerCase()] } }, { 
 		limit: resultsToShow, 
-		populate: 'subject subjectGroup category',
+		populate: 'subject subjectGroup category postAuthor',
 		sort: {datePosted: -1}, 
 		page: req.query.page 
 	}, function(err, filteredFindings) {
@@ -87,7 +88,7 @@ router.get('/p', function(req, res) {
 	}
 	Finding.paginate({'postAuthor.username': postAuthor}, { 
 		limit: resultsToShow, 
-		populate: 'subject subjectGroup category',
+		populate: 'subject subjectGroup category postAuthor',
 		sort: {datePosted: -1}, 
 		page: req.query.page 
 	}, function(err, filteredFindings) {
@@ -130,10 +131,7 @@ router.get('/new', middleware.isLoggedIn, function(req, res) {
 router.post('/', middleware.isLoggedIn, function(req, res) {
 	req.body.finding.shortID = shortid.generate();		// need to add in validation to ensure that shortid is available
 	req.body.finding.datePosted = Date.now();
-	req.body.finding.postAuthor = {
-		id: req.user._id,
-		username: req.user.username
-	}
+	req.body.finding.postAuthor = req.user._id;
 	if(req.body.finding.keywords) {
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
@@ -177,9 +175,10 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 router.get('/:id', function(req, res) {
 	Finding.findById(req.params.id)
 	.populate({path: "comments", options: { sort: { 'datePosted': - 1 }}})
-	.populate({path: "precededBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
-	.populate({path: "followedBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject"}}})
+	.populate({path: "precededBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject postAuthor"}}})
+	.populate({path: "followedBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject postAuthor"}}})
 	.populate({path: "subject"})
+	.populate({path: "postAuthor"})
 	.exec(function(err, shownFinding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -288,7 +287,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			});
 		});
 	});
-
 	req.body.finding.citation.full = citationToString(req.body.finding);
 	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
 		if(err) {
@@ -312,7 +310,7 @@ router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 	})
 });
 
-//	Search for single Finding by shortID ( preceded by / followed by)
+//	Search for single Finding by shortID ( used by 'preceded by' / 'followed by' lookups)
 router.get('/i/:sid', function(req, res) {
 	Finding.findOne({"shortID": req.params.sid})
 	.exec(function(err, shownFinding) {

@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 
 <% if(currentUser) {
-	if(!finding.postAuthor.id || finding.postAuthor.id.equals(currentUser._id) || currentUser.isAdministrator) { %>
+	if(!finding.postAuthor.id || finding.postAuthor.equals(currentUser._id) || currentUser.isAdministrator) { %>
 	<div class="shownFindingBtns">
 		<a href="/findings/<%= finding._id %>/edit" class="btn btn-warning">Edit</a>
 		<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">

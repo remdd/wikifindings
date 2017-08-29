@@ -4,26 +4,29 @@ var	mongoosePaginate = require('mongoose-paginate');
 //	Mongoose schema
 var findingSchema = new mongoose.Schema({
 	shortID: { type: String, required: true, unique: true },
-	title: String,
+	title: { type: String, required: true, unique: true },
 	category: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Category"
+		ref: "Category",
+		required: true
 	},
 	subjectGroup: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "SubjectGroup"
+		ref: "SubjectGroup",
+		required: true
 	},
 	subject: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: "Subject"
+		ref: "Subject",
+		required: true
 	},
 	keywords: Array,
 	keywords_lower: Array,
-	background: String,
-	findings: String,
-	implications: String,
+	background: { type: String, required: true },
+	findings: { type: String, required: true },
+	implications: { type: String, required: true },
 	image: String,
-	datePosted: Date,
+	datePosted: { type: Date, required: true },
 	citation: {
 		full: String,
 		authors: { type: Array, required: true },
@@ -35,11 +38,9 @@ var findingSchema = new mongoose.Schema({
 		DOI: { type: String, required: true }
 	},
 	postAuthor: {
-		id: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User"			//	ref: name of the mongoose schema model
-		},
-		username: String		// need to refactor routes so username is populated instead of stored separately
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",			//	ref: name of the mongoose schema model
+		required: true
 	},
 	precededBy: [
 		{
@@ -52,7 +53,7 @@ var findingSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Finding"
 		}
-		],
+	],
 	comments: [
 		{
 			type: mongoose.Schema.Types.ObjectId,

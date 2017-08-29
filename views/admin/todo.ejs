@@ -10,6 +10,10 @@
 <ul id="toDoList">
 	<li>Bugs
 		<ul>
+			<li>If 'Author' field is left blank on new Finding submission, tag field can't be zoomed and no error is displayed - just consoleds</li>
+			<li>Indexed findings have overlapping text on small screens - 'Posted by' can overlap 'Posted on'</li>
+			<li>If a Finding is deleted, all 'preceded by & 'followed by' references to it should be removed</li>
+			<li>Periods should only be added in Citation field concatenation if not entered by user</li>
 			<li>Browser hangs on password reset, although it works ok</li>
 			<li>Reset passwords aren't validated against RegEx</li>
 			<li>New registration password validation against RegEx seems suspect</li>
@@ -38,10 +42,10 @@
 
 	<li>Core functionality
 		<ul>
-			<li>Preceded by / followed by</li>
 			<li>Validation mechanism for Scientist registration</li>
 			<li>'New Finding' form server-side validation</li>
 			<li>'New Finding' form word-count validation (client side only?)</li>
+			<li class="done">Preceded by / followed by</li>
 			<li class="done">Sort out text case handling on keywords</li>
 			<li class="done">Limit results per page, results-per-page logic etc</li>			
 			<li class="done">Keyword linking</li>
