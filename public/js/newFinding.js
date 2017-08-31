@@ -46,6 +46,13 @@ $(document).ready(function() {
 	    return event.keyCode != 13;
 	});
 
+	$('#submitBtn').click(function() {
+		var authors = $('#citationAuthors').has("option").length;
+		if(authors === 0) {
+			alert("You must input at least one author of the the original research article.");
+		}
+	});
+
 	//	Show available Subject Groups when Category is changed
 	$('#newCategoryList').change(function() {
 		$('#newSubjectList').addClass('greyedOut');

@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 	$(window).scroll(function () { 
 
-		if ($(window).scrollTop() > 174) {
+		if ($(window).scrollTop() > 200) {
 			$('#nav_bar').addClass('navbar-sticky');
 		}
 		if ($(window).scrollTop() < 175) {

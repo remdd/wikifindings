@@ -252,7 +252,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
-			console.log("found!");
 			originalFollowedBy = originalFinding.followedBy.slice();
 			originalPrecededBy = originalFinding.precededBy.slice();
 		}

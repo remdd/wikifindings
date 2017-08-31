@@ -31,12 +31,15 @@ var middlewareObj = {
 					if (req.user.isAdministrator === true) {
 						req.flash("success", "Administrator permission granted");
 						next();
-					} else if(!shownFinding.postAuthor.id) {
+					} else if(!shownFinding.postAuthor) {
 						req.flash("error", "You don't have permission to do that!");
 						res.redirect("back");
-					} else if(shownFinding.postAuthor.id.equals(req.user._id)) {	// need to use .equals method as xxx.id is a mongoose model, req.user.id is a string - not equiv!
+					} else if(shownFinding.postAuthor.equals(req.user.id)) {	// need to use .equals method as xxx.id is a mongoose model, req.user.id is a string - not equiv!
+						req.flash("success", "Changes saved");
 						next();
 					} else {
+						console.log(shownFinding.postAuthor);
+						console.log(req.user.id);
 						req.flash("error", "You don't have permission to do that!");
 						res.redirect("back");
 					}

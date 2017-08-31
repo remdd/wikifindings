@@ -9,6 +9,8 @@ var middleware 	= require('../middleware');
 
 var regEx = new RegExp('^(?=.*\d)(?=.*[a-zA-Z]).{8,}$');			// Password complexity regEx - at least 1 number & 1 letter
 
+var adminEmailAddress = "admin@wikifindings.net";
+
 //	Home route
 router.get('/', function(req, res) {
 	res.render('home');
@@ -27,7 +29,10 @@ router.get('/register', function(req, res) {
 
 //	Register new user route
 router.post('/register', function(req, res) {
-	var newUser = new User({username: req.body.username, email: req.body.email, isScientist: req.body.isScientist});
+	var newUser = new User(req.body.user);
+	console.log(req.body.isScientist);
+	newUser.isScientist = req.body.isScientist;
+	console.log(newUser);
 	if(req.body.password === req.body.confirm) {
 		if(regEx.test(req.body.password)) {
 			User.register(newUser, req.body.password, function(err, user) {
@@ -64,10 +69,10 @@ router.get('/login', function(req, res) {
 //	Login route
 router.post('/login', passport.authenticate('local', {
 	successRedirect: '/findings',
-	failureRedirect: '/login'
-}), function(req, res) {
-
-});
+	failureRedirect: '/login',
+	failureFlash: true,
+	successFlash: 'Welcome!'
+}));
 
 //	Logout route
 router.get('/logout', function(req, res) {
@@ -115,8 +120,8 @@ router.post('/forgot', function(req, res, next) {
 			});
 			var mailOptions = {
 				to: user.email,
-				from: 'passwordreset@demo.com',
-				subject: 'Node.js Password Reset',
+				from: adminEmailAddress,
+				subject: 'WikiFindings password reset',
 				text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
 				'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
 				'http://' + req.headers.host + '/reset/' + token + '\n\n' +
@@ -183,13 +188,14 @@ router.post('/reset/:token', function(req, res) {
 			});
 			var mailOptions = {
 				to: user.email,
-				from: 'passwordreset@demo.com',
-				subject: 'Your password has been changed',
+				from: adminEmailAddress,
+				subject: 'Your WikiFindings password has been changed',
 				text: 'Hello,\n\n' +
 				'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
 				req.flash("success", "You have successfully reset your password.");
+				res.redirect('/findings');
 				done(err);
 			});
 		}

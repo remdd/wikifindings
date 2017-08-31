@@ -7,7 +7,7 @@
 		<form action="/register" method="POST" name="register">
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Username: </h5>
-				<input required type="text" name="username" placeholder="Username">
+				<input required type="text" name="user[username]" placeholder="Username">
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Password: </h5>
@@ -28,7 +28,7 @@
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Email: </h5>
-				<input required type="email" name="email" placeholder="Email">
+				<input required type="email" name="user[email]" placeholder="Email">
 			</div>
 			<h5>Type of account</h5>
 
@@ -40,13 +40,20 @@
 			</div>
 			<div class="registerFormDiv ORCIDDiv hiddenDiv">
 				<a href="https://orcid.org/"><h5 class="registerLabel">ORCID iD: </h5></a>
-				<input required type="text" name="ORCIDiD" placeholder="ORCID id">
+				<input id="ORCIDiD" type="text" name="user[ORCIDiD]" placeholder="ORCID iD">
 			</div>
 
 			<p class="accTypeInfoLink"><span class="inlineLink">What's the difference between account types?</span></p>
 			<div class="accTypeInfo hiddenDiv">
 				<p>With a <strong>Regular user</strong> account, you can explore all of the research posted on WikiFindings and join in the discussion by commenting on articles.</p>
 				<p>If you are a researcher looking to contribute further, a verified <strong>Scientist</strong> account will also allow you to post new research articles and propose edits to existing articles.</p>
+			</div>
+
+			<hr />
+
+			<div class="registerFormDiv">
+				<h5>Public bio (optional, visible to all users): </h5>
+				<textarea required type="textArea" class="publicBio" name="user[publicBio]" rows="3" placeholder="A sentence or two to describe yourself to other users of the site"></textarea>
 			</div>
 
 			<hr />
@@ -62,8 +69,10 @@
 	function scientistCheck() {
 		if(register.isScientist.value == 'true') {
 			$('.ORCIDDiv').show('fast');
+			$('#ORCIDiD').attr('required', '');
 		} else {
 			$('.ORCIDDiv').hide('fast');
+			$('#ORCIDiD').removeAttr('required');
 		}
 	}
 	scientistCheck();

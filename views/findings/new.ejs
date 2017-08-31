@@ -44,7 +44,7 @@
 	<div class="row">
 		<div class="citationDiv col">
 			<label for="finding[citation][authors]"><h5>Author(s)</h5></label>
-			<select required multiple name="finding[citation][authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
+			<select required multiple id="citationAuthors" name="finding[citation][authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
 			<h5 class="tagInfo">e.g. <strong>Darwin C</strong> (use 'Enter' to separate each author)</h5>
 		</div>
 	</div>
@@ -117,7 +117,7 @@
 	<h4>Posting as <a href="#"><%= currentUser.username %></a></h4>
 	<input hidden type="text" name="finding[postAuthor]" value="<%= currentUser.username %>">
 
-	<button class="btn btn-primary" form="newFindingForm" value="submit">Submit</button>
+	<button class="btn btn-primary" form="newFindingForm" value="submit" id="submitBtn">Submit</button>
 	<a class="btn btn-danger" href="/findings">Go back</a>
 
 </form>

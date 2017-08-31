@@ -1,5 +1,47 @@
 <% include ../partials/header %>
 
-<h4>Private User profile page</h4>
+<h4>Private user profile for <%= user.username %></h4>
 
-<% include ../partials/header %>
+<h4>Account type : 
+	<% if(user.isAdministrator) { %>
+		Administrator
+	<% } else if(user.isVerifiedScientist) { %>
+		Scientist (verified)
+	<% } else if(user.isScientist) { %>
+		Scientist (pending verification)
+	<% } else { %>
+		Regular user
+	<% } %>		
+</h4>
+
+<hr />
+
+<form action="/users/<%= currentUser.username %>?_method=PUT" method="POST" id="updateUserForm">
+
+	<input type="hidden" name="user[_id]" form="updateUserForm" value="<%= user._id %>">		
+
+	<% if(admin) { %>
+		<input type="hidden" name="user[isScientist]" form="updateUserForm" value="0">		
+		<input type="checkbox" name="user[isScientist]" form="updateUserForm" <% if(user.isScientist){ %>checked<% } %>>		
+		<label for="user[isScientist]"><h5>User is a Scientist</h5></label>
+		<input type="hidden" name="user[isVerifiedScientist]" form="updateUserForm" value="0">
+		<input type="checkbox" name="user[isVerifiedScientist]" form="updateUserForm" <% if(user.isVerifiedScientist){ %>checked<% } %>>
+		<label for="user[isVerifiedScientist]"><h5>User is a Verified Scientist</h5></label>
+	<% } %>
+
+	<h4>Public bio (optional, visible to all users)</h4>
+	<textarea id="publicBioTextArea" class="publicBio" name="user[publicBio]" form="updateUserForm" placeholder="<%= user.publicBio %>"><%= user.publicBio %></textarea>
+	<button class="btn btn-primary" form="updateUserForm" value="submit" id="submitBtn">Update</button>
+</form>
+
+<hr />
+
+<% if(findings.length > 0) { %>
+	<h4><%= findings.length %> Finding<% if(findings.length > 1) { %>s<% } %> posted : </h4>
+	<% findings.forEach(function(finding) { %>
+		<% include ../partials/indexedFinding %>
+	<% }); %>
+
+<% } %>
+
+<% include ../partials/footer %>

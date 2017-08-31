@@ -23,6 +23,7 @@ var commentRoutes			= require('./routes/comments'),
 	findingRoutes			= require('./routes/findings'),
 	indexRoutes				= require('./routes/index'),
 	adminRoutes				= require('./routes/admin'),
+	userRoutes				= require('./routes/users'),
 	subjectRoutes			= require('./routes/subjects');
 
 //	Clears database & re-seeds with data from seed file
@@ -103,6 +104,7 @@ app.use(indexRoutes);
 app.use(commentRoutes);
 app.use("/findings", findingRoutes);
 app.use(adminRoutes);
+app.use("/users", userRoutes);
 app.use("/subjects", subjectRoutes);
 
 //	404 route

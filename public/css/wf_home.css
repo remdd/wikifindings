@@ -26,6 +26,10 @@ body {
     outline-offset: -20px;
 }
 .homepageContentContainer {
+	display: block;
+	text-align: center;
+}
+.homepageHeaderDiv {
 	display: inline-block;
 }
 h1 {

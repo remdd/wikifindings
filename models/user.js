@@ -7,6 +7,7 @@ var UserSchema = new mongoose.Schema({
 	password: { type: String },
 	email: { type: String, required: true, unique: true },
 	ORCIDiD: { type: String, required: false, unique: true }, 
+	publicBio: { type: String, required: false },
 	isScientist: { type: Boolean, default: false },
 	isVerifiedScientist: { type: Boolean, default: false },
 	isAdministrator: { type: Boolean, default: false },
