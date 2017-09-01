@@ -16,9 +16,9 @@
 			</div>
 
 			<% category.subjectGroups.forEach(function(subjectGroup) { %>
-				<a href="#">
+				<a href="/subjects/<%= subjectGroup.subjectGroupName %>">
 					<div hidden class="subjectThumbContainer col col-xs-12 col-sm-6 col-md-4 subjectGroupLabel" data-category="<%= cat %>">
-						<div class=subjectThumbDiv style="background: url('img/subjectGroups/<%= subjectGroup.subjectGroupName %>.jpg'); background-size: cover;">
+						<div class=subjectThumbDiv style="background: url('/img/subjectGroups/<%= subjectGroup.subjectGroupName %>.jpg'); background-size: cover;">
 							<div class="subjectThumbOverlay">
 								<h3 class="subjectThumbTitle"><%= subjectGroup.subjectGroupName %></h3>				
 							</div>

@@ -23,6 +23,8 @@
 	<br>
 	<input type="submit" value="Submit"></input>
 
+	<textarea class="newFindingTextArea" name="subjectGroup[description]"><%= subjectGroup.description %></textarea>
+
 	<h4>Contains Subjects:</h4>
 	<% subjectGroup.subjects.forEach(function(subject) { %>
 		<input type="checkbox" checked="checked" name="subjectGroup[subjects]" value="<%= subject._id %>"><%= subject.subjectName %></input><br>

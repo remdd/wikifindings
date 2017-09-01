@@ -92,6 +92,14 @@ hr {
 	color: red;
 }
 
+.subjGroupImg {
+	max-width: 400px;
+	border-radius: 20px;
+	float: left;
+	margin-right: 20px;
+	box-shadow: 5px 5px 5px rgba(0,0,0,0.15), 10px 10px 15px rgba(0,0,0,0.1), 25px 25px 25px rgba(0,0,0,0.05);
+}
+
 /*	Findings thumbnails	*/
 .fThumbDiv {
 	width: 100%;
@@ -245,7 +253,7 @@ form select {
 	margin-left: 20px;
 }
 .showCitationInfo {
-	margin-left: 20px;
+/*	margin-left: 20px;*/
 }
 .inlineForm {
 	display: inline-block;

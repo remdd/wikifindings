@@ -80,7 +80,7 @@ router.get('/k', function(req, res) {
 	});
 });
 
-//	INDEX BY POSTEDBY route 			-- NEED TO CHANGE postAuthor.username to postAuthor.id for production! Below is a fudge for quick use of seed data
+//	INDEX BY POSTEDBY route 			-- Not currently in use (postAuthor links go to user profile instead).
 router.get('/p', function(req, res) {
 	var postAuthor = req.query.postAuthor;
 	if(!(req.query.page)) {

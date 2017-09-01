@@ -46,10 +46,24 @@ $(document).ready(function() {
 	    return event.keyCode != 13;
 	});
 
+	//	Form validation fixes
 	$('#submitBtn').click(function() {
+		if(newBackgroundWordCount > 200) {
+			alert("'Background' word count cannot exceed 200 words.");
+			return false;
+		}
+		if(newFindingsWordCount > 200) {
+			alert("'Findings' word count cannot exceed 200 words.");
+			return false;
+		}
+		if(newImplicationsWordCount > 200) {
+			alert("'Implications' word count cannot exceed 200 words.");
+			return false;
+		}
 		var authors = $('#citationAuthors').has("option").length;
 		if(authors === 0) {
 			alert("You must input at least one author of the the original research article.");
+			return false;
 		}
 	});
 

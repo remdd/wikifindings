@@ -33,5 +33,19 @@ router.get('/', function(req, res) {
 	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
+//	Subject tree //
+router.get('/:group', function(req, res) {
+	console.log(req.params.group);
+	SubjectGroup.findOne({ subjectGroupName: req.params.group }, function(err, subjectGroup) {
+		if(err) {
+			console.log(err);
+			req.flash('error', 'Something went wrong...');
+			res.redirect('back');
+		} else {
+			res.render('findings/subjectGroup', {subjectGroup: subjectGroup});
+		}
+	}).populate({path: 'subjects', options: { sort: 'subjectName'}});
+});
+
 
 module.exports = router;

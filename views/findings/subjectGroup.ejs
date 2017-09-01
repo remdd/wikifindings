@@ -1,0 +1,39 @@
+<% include ../partials/header %>
+
+<div class="row">
+
+	<div class="subjectThumbContainer col col-xs-12 col-sm-6 col-md-4 subjectGroupLabel">
+		<div class=subjectThumbDiv style="background: url('/img/subjectGroups/<%= subjectGroup.subjectGroupName %>.jpg'); background-size: cover;">
+			<div class="subjectThumbOverlay">
+				<h3 class="subjectThumbTitle"><%= subjectGroup.subjectGroupName %></h3>				
+			</div>
+		</div>
+	</div>
+
+	<div class="col col-xs-0 col-sm-0 col-md-1">
+	</div>
+
+	<div class="col col-xs-12 col-sm-6 col-md-7">
+		<% if(subjectGroup.description) { %>
+			<h4><%= subjectGroup.description %></h4>
+		<% } %>
+	</div>
+
+</div>
+
+<hr />
+
+<div class="row">
+	
+	<% if(subjectGroup.subjects) { %><h4>Subjects within <%= subjectGroup.subjectGroupName %> : </h4><ul><% } %>
+
+	<% subjectGroup.subjects.forEach(function(subject) { %>
+		<li><a href="../findings/s?subject=<%= subject.subjectName %>"><h4><%= subject.subjectName %></h4></a></li>
+	<% }); %>
+
+	<% if(subjectGroup.subjects) { %></ul><% } %>
+
+</div>
+
+
+<% include ../partials/footer %>
