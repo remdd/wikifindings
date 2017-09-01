@@ -17,6 +17,7 @@ var express 				= require('express'),
 	flash					= require('connect-flash'),				//	flash messages
 	mongoosePaginate 		= require('mongoose-paginate'),
 	mongoDBStore			= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
+	favicon					= require('serve-favicon'),
 	app 					= express();
 
 var commentRoutes			= require('./routes/comments'),
@@ -40,6 +41,9 @@ mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 //	Instructs Express to serve contents of public directory
 app.use(express.static('public'));
 
+//	Serves Favicon
+app.use(favicon('public/img/WFFavicon.png'));
+
 //	Morgan logger - send detail of http requests to console
 app.use(logger('dev'));
 
@@ -62,8 +66,9 @@ var store = new mongoDBStore(
 );
 //	MongoDBStore start error catching
 store.on('error', function(err) {
-	assert.ifError(err);
-	assert.ok(false);
+	if(err) {
+		console.log(err);
+	}
 });
 
 //	Express-session and Passport usage

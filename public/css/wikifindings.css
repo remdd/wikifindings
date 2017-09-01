@@ -366,6 +366,7 @@ form select {
 	height: 100%;
 	background: rgba(255,255,255,0.2);
 	padding: 10px 20px;
+	opacity: 1;
 }
 .subjectThumbDiv {
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.15), 10px 10px 15px rgba(0,0,0,0.1), 25px 25px 25px rgba(0,0,0,0.05);
