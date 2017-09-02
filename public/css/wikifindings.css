@@ -412,6 +412,9 @@ form select {
 	margin-right: 10px;
 }
 
+.subjectGroupDescription {
+	white-space: pre-wrap;
+}
 
 /*	Subject tree */
 .tree h3 {

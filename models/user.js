@@ -18,6 +18,8 @@ var UserSchema = new mongoose.Schema({
 });
 
 //	Adds local passport methods to mongoose schema
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose, {
+	usernameField: 'email'
+});
 
 module.exports = mongoose.model("User", UserSchema);

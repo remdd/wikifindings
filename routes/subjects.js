@@ -35,7 +35,6 @@ router.get('/', function(req, res) {
 
 //	Subject tree //
 router.get('/:group', function(req, res) {
-	console.log(req.params.group);
 	SubjectGroup.findOne({ subjectGroupName: req.params.group }, function(err, subjectGroup) {
 		if(err) {
 			console.log(err);

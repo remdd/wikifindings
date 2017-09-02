@@ -114,7 +114,7 @@ router.post('/forgot', function(req, res, next) {
 				service: 'SendGrid',
 				auth: {
 					user: process.env.SG_USER,
-					pass: process.env.SG_PASS					//	Need to implement this properly!
+					pass: process.env.SG_PASS
 				},
 				tls: { rejectUnauthorized: false }
 			});
@@ -164,7 +164,6 @@ router.post('/reset/:token', function(req, res) {
 					user.setPassword(req.body.password, function(err) {
 						user.resetPasswordToken = undefined;
 						user.resetPasswordExpires = undefined;
-
 						user.save(function(err) {
 							req.logIn(user, function(err) {
 								done(err, user);
@@ -182,7 +181,7 @@ router.post('/reset/:token', function(req, res) {
 				service: 'SendGrid',
 				auth: {
 					user: process.env.SG_USER,
-					pass: process.env.SG_PASS					//	Need to implement this properly!
+					pass: process.env.SG_PASS
 				},
 				tls: { rejectUnauthorized: false }
 			});

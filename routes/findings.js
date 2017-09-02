@@ -339,13 +339,19 @@ function citationToString(finding) {
 		}
 	}
 	fullString += finding.citation.title;
-	fullString += '. ';
+	if(finding.citation.title.substr(finding.citation.title.length - 1) != '.') {
+		fullString += '. ';
+	}
 	fullString += finding.citation.journal;
-	fullString += '. ';
+	if(finding.citation.journal.substr(finding.citation.journal.length - 1) != '.') {
+		fullString += '. ';
+	}
 	fullString += finding.citation.year;
 	fullString += ';';
 	fullString += finding.citation.location;
-	fullString += '.';
+	if(finding.citation.location.substr(finding.citation.location.length - 1) != '.') {
+		fullString += '. ';
+	}
 	return(fullString);
 }
 

@@ -1,31 +1,30 @@
-var express 				= require('express'),
-	bodyParser 				= require('body-parser'),
-	mongoose 				= require('mongoose'),
-	methodOverride			= require('method-override'),
-	User					= require('./models/user'),
-	Category				= require('./models/category'),
-	SubjectGroup			= require('./models/subjectgroup'),
-	Subject 				= require('./models/subject'),
-	passport				= require('passport'),
-	LocalStrategy			= require('passport-local'),
-	passportLocalMongoose	= require('passport-local-mongoose'),
-	expressSession			= require('express-session'),
-	bcrypt					= require('bcrypt-nodejs'),				//	
-	logger					= require('morgan'),					//	http request logger
-	cookieParser			= require('cookie-parser'),				//	?
-	dotenv					= require('dotenv'),					//	environment variable manager
-	flash					= require('connect-flash'),				//	flash messages
-	mongoosePaginate 		= require('mongoose-paginate'),
-	mongoDBStore			= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
-	favicon					= require('serve-favicon'),
-	app 					= express();
+var express 					= require('express'),
+	bodyParser 					= require('body-parser'),
+	mongoose 					= require('mongoose'),
+	methodOverride				= require('method-override'),
+	User						= require('./models/user'),
+	Category					= require('./models/category'),
+	SubjectGroup				= require('./models/subjectgroup'),
+	Subject 					= require('./models/subject'),
+	passport					= require('passport'),
+	LocalStrategy				= require('passport-local'),
+	expressSession				= require('express-session'),
+	bcrypt						= require('bcrypt-nodejs'),				//	
+	logger						= require('morgan'),					//	http request logger
+	cookieParser				= require('cookie-parser'),				//	?
+	dotenv						= require('dotenv'),					//	environment variable manager
+	flash						= require('connect-flash'),				//	flash messages
+	mongoosePaginate 			= require('mongoose-paginate'),
+	mongoDBStore				= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
+	favicon						= require('serve-favicon'),
+	app 						= express();
 
-var commentRoutes			= require('./routes/comments'),
-	findingRoutes			= require('./routes/findings'),
-	indexRoutes				= require('./routes/index'),
-	adminRoutes				= require('./routes/admin'),
-	userRoutes				= require('./routes/users'),
-	subjectRoutes			= require('./routes/subjects');
+var commentRoutes				= require('./routes/comments'),
+	findingRoutes				= require('./routes/findings'),
+	indexRoutes					= require('./routes/index'),
+	adminRoutes					= require('./routes/admin'),
+	userRoutes					= require('./routes/users'),
+	subjectRoutes				= require('./routes/subjects');
 
 //	Clears database & re-seeds with data from seed file
 // seedDB();
@@ -83,7 +82,10 @@ app.use(expressSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy({
+	usernameField: 'email',
+	passwordField: 'password'
+}, User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

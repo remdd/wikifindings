@@ -8,11 +8,18 @@
 </form>
  -->
 <ul id="toDoList">
+
+	<li>Dev priorities
+		<ul>
+			<li>Version control, archiving of edited Findings</li>
+			<li>User signup email verification</li>
+		</ul>
+	</li>
+
 	<li>Bugs
 		<ul>
 			<li>Indexed findings have overlapping text on small screens - 'Posted by' can overlap 'Posted on'</li>
 			<li>If a Finding is deleted, all 'preceded by & 'followed by' references to it should be removed</li>
-			<li>Periods should only be added in Citation field concatenation if not entered by user</li>
 			<li>New registration password validation against RegEx seems suspect...?</li>
 			<li>Landing page background display on mobile</li>
 		</ul>
@@ -29,7 +36,6 @@
 	<li>Core functionality
 		<ul>
 			<li>'New Finding' form server-side validation</li>
-			<li>'New Finding' form word-count validation (client side only?)</li>
 		</ul>
 	</li>
 
@@ -47,7 +53,6 @@
 			<li>Display image thumbnails in 'findings list'?</li>
 			<li>Display info relating to edits on 'show' & 'index' pages</li>
 			<li>Link to user profile from comment author</li>
-			<li>Appearance & text content of auto-generated user emails (PW reset etc)</li>
 			<li>Improve validation of citation authors - replace 'alert' with more elegant catch</li>
 		</ul>
 	</li>
@@ -62,7 +67,6 @@
 	<li>Things to clarify / discuss with Andy
 		<ul>
 			<li>Legal - registration boilerplate etc</li>
-			<li>Need to properly hash out & pin down user roles & access restrictions etc</li>
 		</ul>
 	</li>
 	<li>Final production to-dos
@@ -77,6 +81,11 @@
 
 	<li>Done
 		<ul>
+			<li class="done">Need to properly hash out & pin down user roles & access restrictions etc</li>
+			<li class="done">Login with email instead of username</li>
+			<li class="done">Appearance & text content of auto-generated user emails (PW reset etc)</li>
+			<li class="done">Periods should only be added in Citation field concatenation if not entered by user</li>
+			<li class="done">'New Finding' form word-count validation (client side only?)</li>
 			<li class="done">Should 150 word count be enforced? - Warning at 150, enforce 200</li>
 			<li class="done">Preceded by / followed by</li>
 			<li class="done">Contact page / methods / social media link (twitter?)</li>
