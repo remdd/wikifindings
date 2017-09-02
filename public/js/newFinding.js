@@ -122,6 +122,7 @@ $(document).ready(function() {
 					+ '</input></div>';
 				$('#precedentFindings').append(DOMString);
 				precedents.push(val);
+				$('#precedingID').val('');
 			} else {
 				$('#precedingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
@@ -151,6 +152,7 @@ $(document).ready(function() {
 					+ '</input></div>';
 				$('#followingFindings').append(DOMString);
 				following.push(val);
+				$('#followingID').val('');
 			} else {
 				$('#followingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
