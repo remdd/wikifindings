@@ -2,10 +2,10 @@ var mongoose = require("mongoose");
 var	mongoosePaginate = require('mongoose-paginate');
 
 //	Mongoose schema
-var findingSchema = new mongoose.Schema({
-	ref: { type: mongoose.Schema.Types.ObjectId },
-	shortID: { type: String, required: true, unique: true },
-	title: { type: String, required: true, unique: true },
+var findingVersionSchema = new mongoose.Schema({
+	ref: { type: mongoose.Schema.Types.ObjectId },					//	Stores ObjectId of 'live' Finding
+	shortID: { type: String, required: true, unique: false },		//	Unique changed to 'false'
+	title: { type: String, required: true, unique: false },			//	Unique changed to 'false'
 	category: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Category",
@@ -75,7 +75,7 @@ var findingSchema = new mongoose.Schema({
 	]
 });
 
-findingSchema.plugin(mongoosePaginate);
+findingVersionSchema.plugin(mongoosePaginate);
 
 //	Compile 'finding' mongoose model from schema & return model
-module.exports = mongoose.model("Finding", findingSchema);
+module.exports = mongoose.model("Finding_version", findingVersionSchema);

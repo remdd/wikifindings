@@ -1,6 +1,7 @@
 var express 		= require('express');
 var router 			= express.Router();
 var Finding 		= require('../models/finding');
+var Finding_version = require('../models/finding_version');
 var Comment 		= require('../models/comment');
 var Subject 		= require('../models/subject');
 var SubjectGroup 	= require('../models/subjectgroup');
@@ -9,7 +10,7 @@ var middleware 		= require('../middleware');
 var	mongoosePaginate = require('mongoose-paginate');
 var shortid 		= require('shortid32');
 var	bodyParser 		= require('body-parser');
-
+var mongoose 		= require('mongoose');
 
 var resultsToShow = 10;
 
@@ -254,59 +255,117 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 		} else {
 			originalFollowedBy = originalFinding.followedBy.slice();
 			originalPrecededBy = originalFinding.precededBy.slice();
+			//	Removes all existing precededBy & followedBy references to Finding being updated
+			originalPrecededBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
+			originalFollowedBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
+			//	Adds all precededBy & followedBy references from update request
+			req.body.finding.precededBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
+			req.body.finding.followedBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
 		}
-		//	Removes all existing precededBy & followedBy references to Finding being updated
-		originalPrecededBy.forEach(function(pid) {
-			Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
-				if(err) {
-					console.log(err);
-				}
-			});
-		});
-		originalFollowedBy.forEach(function(pid) {
-			Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
-				if(err) {
-					console.log(err);
-				}
-			});
-		});
-		//	Adds all precededBy & followedBy references from update request
-		req.body.finding.precededBy.forEach(function(pid) {
-			Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : req.params.id }}, function(err) {
-				if(err) {
-					console.log(err);
-				}
-			});
-		});
-		req.body.finding.followedBy.forEach(function(pid) {
-			Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : req.params.id }}, function(err) {
-				if(err) {
-					console.log(err);
-				}
-			});
-		});
 	});
 	req.body.finding.citation.full = citationToString(req.body.finding);
-	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, updatedFinding) {
+	req.body.finding.lastEditedBy = req.user._id;
+	req.body.finding.lastEdited = Date.now();
+	Finding.findByIdAndUpdate(req.params.id, req.body.finding, function(err, findingPreUpdate) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
-			res.redirect('/findings/' + updatedFinding._id);
+			findingPreUpdate.ref = findingPreUpdate._id;
+			findingPreUpdate._id = mongoose.Types.ObjectId();
+			findingPreUpdate.isNew = true;
+			Finding_version.create(findingPreUpdate, function(err, findingVersion) {
+				if(err) {
+					console.log(err);
+					req.flash('error', 'Something went wrong...');
+					res.redirect('/findings/' + req.params.id);
+				} else {
+					res.redirect('/findings/' + req.params.id);
+				}
+			});
 		}
 	});
 });
 
-//	DELETE a finding
+//	DELETE a finding (storing a copy to Versions)
 router.delete('/:id', middleware.isUsersFinding, function(req, res) {
-	Finding.findByIdAndRemove(req.params.id, function(err) {
+	Finding.findById(req.params.id, function(err, findingToDelete) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
-			res.redirect('/findings');
+
+			//	Remove preceded by / followed by references to this Finding in other documents
+			//	Ensure followedBy & precededBy are Arrays
+			if(!(findingToDelete.followedBy)) {
+				findingToDelete.followedBy = [];
+			} else if(!(Array.isArray(findingToDelete.followedBy))) {
+				findingToDelete.followedBy = [findingToDelete.followedBy];
+			}
+			if(!(findingToDelete.precededBy)) {
+				findingToDelete.precededBy = [];
+			} else if(!(Array.isArray(findingToDelete.precededBy))) {
+				findingToDelete.precededBy = [findingToDelete.precededBy];
+			}
+			findingToDelete.precededBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
+			findingToDelete.followedBy.forEach(function(pid) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
+					if(err) {
+						console.log(err);
+					}
+				});
+			});
+
+			//	Configure document and save as final Version
+			findingToDelete.ref = findingToDelete._id;
+			findingToDelete._id = mongoose.Types.ObjectId();
+			findingToDelete.isNew = true;
+			findingToDelete.deletedBy = req.user._id;
+			findingToDelete.dateDeleted = Date.now();
+			Finding_version.create(findingToDelete, function(err, createdFinding) {
+				if(err) {
+					console.log(err);
+					req.flash('error', 'Something went wrong...');
+					res.redirect('/findings');
+				} else {
+					Finding.findByIdAndRemove(req.params.id, function(err) {
+						req.flash('success', 'Finding deleted successfully.');
+						res.redirect('/findings');
+					});
+				}
+			});
 		}
-	})
+	});
 });
 
 //	Search for single Finding by shortID ( used by 'preceded by' / 'followed by' lookups)
