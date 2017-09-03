@@ -1,6 +1,4 @@
 $(document).ready(function() {
-	console.log("newFinding.js connected");
-
 	var newBackgroundWordCount = 0;
 	var newFindingsWordCount = 0;
 	var newImplicationsWordCount = 0;
@@ -49,20 +47,20 @@ $(document).ready(function() {
 	//	Form validation fixes
 	$('#submitBtn').click(function() {
 		if(newBackgroundWordCount > 200) {
-			alert("'Background' word count cannot exceed 200 words.");
+			alert("The 'Background' field must contain fewer than 200 hundred words - ideally no more than 150.");
 			return false;
 		}
 		if(newFindingsWordCount > 200) {
-			alert("'Findings' word count cannot exceed 200 words.");
+			alert("The 'Findings' field must contain fewer than 200 hundred words - ideally no more than 150.");
 			return false;
 		}
 		if(newImplicationsWordCount > 200) {
-			alert("'Implications' word count cannot exceed 200 words.");
+			alert("The 'Implications' field must contain fewer than 200 hundred words - ideally no more than 150.");
 			return false;
 		}
 		var authors = $('#citationAuthors').has("option").length;
 		if(authors === 0) {
-			alert("You must input at least one author of the the original research article.");
+			alert("You must enter at least one of the authors of the the original research article.");
 			return false;
 		}
 	});

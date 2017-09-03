@@ -8,7 +8,7 @@
 
 <form action="/findings/<%= finding._id %>?_method=PUT" method="POST" id="editFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding" value="<%= finding.title %>">
+	<input required class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding" value="<%= finding.title %>">
 
 	<% include ../partials/categoryGroupSubjectDropdowns %>
 
@@ -54,17 +54,17 @@
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="editFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"><%= finding.background %></textarea>
+	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="editFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"><%= finding.background %></textarea>
 
 	<h4>Findings
 		<span class="wordCountSpan"><span id="newFindingsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newFindingsTextArea" class="newFindingTextArea" name="finding[findings]" form="editFindingForm" placeholder="Enter a summary of the article's findings in plain English"><%= finding.findings %></textarea>
+	<textarea required id="newFindingsTextArea" class="newFindingTextArea" name="finding[findings]" form="editFindingForm" placeholder="Enter a summary of the article's findings in plain English"><%= finding.findings %></textarea>
 
 	<h4>Implications
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.findings %></textarea>
+	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.findings %></textarea>
 
 	<h4>Accompanying image</h4>
 	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings" value="<%= finding.image %>">
@@ -141,7 +141,7 @@
 
 <!-- Preceded by -->
 
-	<label for="finding[precededBy]"><h4>Preceded by: </h4></label>
+	<label for="finding[precededBy]"><h4>Preceded by</h4></label>
 		<% if(finding.precededBy) {
 			finding.precededBy.forEach(function(result) { %>
 				<div class="precedentTitle">
@@ -162,7 +162,7 @@
 
 <!-- Followed by -->
 
-	<label for="finding[followedBy]"><h4>Followed by: </h4></label>
+	<label for="finding[followedBy]"><h4>Followed by</h4></label>
 		<% if(finding.followedBy) {
 			finding.followedBy.forEach(function(result) { %>
 				<div class="precedentTitle">

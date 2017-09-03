@@ -8,7 +8,7 @@
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
+	<input required class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
 	<% include ../partials/categoryGroupSubjectDropdowns %>
 
@@ -22,7 +22,6 @@
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<input type="hidden" id="backgroundWordCountInput" name="backgroundWordCount" form="newFindingForm" value="12345">
 	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
 
 	<h4>Findings
@@ -35,7 +34,7 @@
 	</h4>
 	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="newFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"></textarea>
 
-	<h4>Accompanying image</h4>
+	<h4>Accompanying image (optional)</h4>
 	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings">
 	<hr />
 
@@ -76,7 +75,7 @@
 			<input required type="text" name="finding[citation][location]" placeholder="Location" class="newFindingSmallTextField">
 
 			<label for="finding[citation][link]" class="twoLineLabel">
-				<h5 class="labelInline">Link to original publication</h5>
+				<h5 class="labelInline">Link to original publication, if copyright allows (optional)</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
 			<input type="url" name="finding[citation][link]" placeholder="URL of original article" class="newFindingTextField">
@@ -95,7 +94,7 @@
 
 <!-- Preceded by -->
 
-	<label for="finding[precededBy]"><h4>Preceded by: </h4></label>
+	<label for="finding[precededBy]"><h4>Preceded by</h4></label>
 	<div id="precedentFindings"></div>
 	<input id="precedingID" type="text" placeholder="Preceding article ID">
 	<div class="btn btn-primary" id="precedentSearchBtn">Add</div>
@@ -105,7 +104,7 @@
 
 <!-- Followed by -->
 
-	<label for="finding[followedBy]"><h4>Followed by: </h4></label>
+	<label for="finding[followedBy]"><h4>Followed by</h4></label>
 	<div id="followingFindings"></div>
 	<input id="followingID" type="text" placeholder="Following article ID">
 	<div class="btn btn-primary" id="followingSearchBtn">Add</div>
