@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var passportLocalMongoose = require("passport-local-mongoose");
+var passportLocalMongooseEmail = require("passport-local-mongoose-email");
 var bcrypt = require("bcrypt-nodejs");
 
 var UserSchema = new mongoose.Schema({
@@ -18,7 +18,7 @@ var UserSchema = new mongoose.Schema({
 });
 
 //	Adds local passport methods to mongoose schema
-UserSchema.plugin(passportLocalMongoose, {
+UserSchema.plugin(passportLocalMongooseEmail, {
 	usernameField: 'email'
 });
 

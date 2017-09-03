@@ -33,26 +33,52 @@ router.post('/register', function(req, res) {
 	console.log(req.body.isScientist);
 	newUser.isScientist = req.body.isScientist;
 	console.log(newUser);
-	if(req.body.password === req.body.confirm) {
-		if(regEx.test(req.body.password)) {
-			User.register(newUser, req.body.password, function(err, user) {
-				if(err) {
-					if(err.code === 11000) {
-						req.flash("error", "Error: Email address already exists in the database");
-						res.redirect('/register');
+	if(req.body.password === req.body.confirmPassword) {
+		if(req.body.user.email === req.body.confirmEmail) {
+			if(regEx.test(req.body.password)) {
+				User.register(newUser, req.body.password, function(err, user) {
+					if(err) {
+						if(err.code === 11000) {
+							req.flash("error", "Error: Email address already exists in the database");
+							res.redirect('/register');
+						} else {
+							req.flash("error", "Error: " + err.message);
+							console.log(err);							// Need to test validations & handle different user errors here
+							res.redirect('/register');
+						}
 					} else {
-						req.flash("error", "Error: " + err.message);
-						console.log(err);							// Need to test validations & handle different user errors here
-						res.redirect('/register');
+						var authenticationURL = 'http://' + req.headers.host + '/verify/' + user.authToken;
+						var smtpTransport = nodemailer.createTransport({
+							service: 'SendGrid',
+							auth: {
+								user: process.env.SG_USER,
+								pass: process.env.SG_PASS
+							},
+							tls: { rejectUnauthorized: false }
+						});
+						var mailOptions = {
+							to: user.email,
+							from: adminEmailAddress,
+							subject: 'Welcome to WikiFindings! Please confirm your email.',
+							html:     
+							'<p>Hello,</p>' +
+							'<p>Thank you for signing up for a WikiFindings account!<p>' +
+							'<p><a target=_blank href=\"' + authenticationURL + '\">Please click here to confirm your email and complete your registration.</a></p>' +
+							'<p>If you have received this email in error, please disregard it.</p>'
+						};
+						smtpTransport.sendMail(mailOptions, function(err) {
+							req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
+							res.redirect('/findings');
+							done(err);
+						});
 					}
-				} else {
-					passport.authenticate('local')(req, res, function() {
-						res.redirect('/findings');
-					});
-				}
-			});
+				});
+			} else {
+				req.flash("error", "Error: Password does not meet complexity requirements");
+				res.redirect('/register');
+			}
 		} else {
-			req.flash("error", "Error: Password does not meet complexity requirements");
+			req.flash("error", "Error: Emails do not match");
 			res.redirect('/register');
 		}
 	} else {
@@ -60,6 +86,20 @@ router.post('/register', function(req, res) {
 		res.redirect('/register');
 	}
 });
+
+router.get('/verify/:token', function(req, res) {
+	User.verifyEmail(req.params.token, function(err, existingAuthToken) {
+		if(err) {
+			console.log('err:', err);
+			req.flash('error', err);
+		} else {
+			console.log("Success!");
+			res.render('users/verify');
+		}
+	});
+});
+
+
 
 //	Render login form
 router.get('/login', function(req, res) {
