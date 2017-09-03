@@ -13,7 +13,7 @@
 
 <div class="row">
 	<div class="col col-sm-9 col-xs-12">
-		<h4 class="shownTitle shownBox"><%= finding.title %></h4>
+		<h4 class="shownTitle"><%= finding.title %></h4>
 		<h4 class="shownHeader">Background</h4>
 		<p class="shownP shownBox"><%= finding.background %></p>
 		<h4 class="shownHeader">Findings</h4>
@@ -21,7 +21,7 @@
 		<h4 class="shownHeader">Implications</h4>
 		<p class="shownP shownBox"><%= finding.implications %></p>
 	</div>
-	<div class="col col-sm-3 col-xs-12 infoPane shownBox">
+	<div class="col col-sm-3 col-xs-12 infoPane">
 		<h4 class="infoPaneLabel">Subject</h4>
 		<h4 class="infoPaneInfo"><a href="/findings/s?subject=<%= finding.subject.subjectName %>"><%= finding.subject.subjectName %></a></h4>
 		<br />
@@ -33,9 +33,7 @@
 		<br />
 		<h4 class="infoPaneLabel">Posted by</h4>
 		<h4 class="infoPaneInfo"><a href="/users/<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
-		<br />
-		<h4 class="infoPaneLabel">Posted on</h4>
-		<h4 class="infoPaneInfo"><%= finding.datePosted.toDateString() %></h4>
+		<h4 class="infoPaneInfo">on <%= finding.datePosted.toDateString() %></h4>
 		<br />
 		<h4 class="infoPaneLabel">Article ID</h4>
 		<h4 class="infoPaneInfo"><%= finding.shortID %></h4>

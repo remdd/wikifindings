@@ -138,6 +138,7 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		keywordsToLower(req.body.finding.keywords_lower);
 	}
 	req.body.finding.citation.full = citationToString(req.body.finding);
+	validateFinding(req, res);
 	Finding.create(req.body.finding, function(err, finding) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
@@ -418,6 +419,14 @@ function keywordsToLower(arr) {
 	for(var i = 0; i < arr.length; i ++) {
 		arr[i] = arr[i].toLowerCase();
 	}
+}
+
+function validateFinding(req, res) {
+	if(!req.body.finding.title) {
+		req.flash('error', 'You must enter a Title.');
+		res.redirect('back');
+	}
+	console.log("All ok!");
 }
 
 module.exports = router;

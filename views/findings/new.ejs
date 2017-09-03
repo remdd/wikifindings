@@ -8,7 +8,7 @@
 
 <form action="/findings" method="POST" id="newFindingForm">
 	<h4>Title</h4>
-	<input required class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
+	<input class="newFindingTextField" type="text" name="finding[title]" placeholder="A single sentence stating the main finding of the work, sufficient to give the lay reader an idea of the background and implications of the finding">
 
 	<% include ../partials/categoryGroupSubjectDropdowns %>
 
@@ -22,6 +22,7 @@
 	<h4>Background
 		<span class="wordCountSpan"><span id="newBackgroundWordCountSpan">XXX</span> / 150</span>
 	</h4>
+	<input type="hidden" id="backgroundWordCountInput" name="backgroundWordCount" form="newFindingForm" value="12345">
 	<textarea required id="newBackgroundTextArea" class="newFindingTextArea" name="finding[background]" form="newFindingForm" placeholder="Enter a summary of the article's Introduction in plain English"></textarea>
 
 	<h4>Findings
