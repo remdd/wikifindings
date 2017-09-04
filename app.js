@@ -17,6 +17,7 @@ var express 					= require('express'),
 	mongoosePaginate 			= require('mongoose-paginate'),
 	mongoDBStore				= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
 	favicon						= require('serve-favicon'),
+	path						= require('path'),						//	native Node module
 	app 						= express();
 
 var commentRoutes				= require('./routes/comments'),
@@ -38,7 +39,7 @@ mongoose.Promise = global.Promise;			//	Re deprecation warning - need to look in
 mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //	Serves Favicon
 app.use(favicon('public/img/WFFavicon.png'));

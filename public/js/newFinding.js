@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	console.log('newfinding.js connected');
 	var newBackgroundWordCount = 0;
 	var newFindingsWordCount = 0;
 	var newImplicationsWordCount = 0;
