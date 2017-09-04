@@ -42,6 +42,7 @@ mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
 process.env.PWD = process.cwd();
+console.log(process.env.PWD);
 app.use(express.static(process.env.PWD + '/public'));
 app.use('/scripts', express.static(process.env.PWD + '/public/js/'));
 
