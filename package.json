@@ -28,6 +28,10 @@
     "shortid32": "^0.1.1",
     "word-count": "^0.2.2"
   },
+  "engines": {
+    "node": "6.10.3",
+    "npm": "3.10.10"
+  } 
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
