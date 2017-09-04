@@ -6,8 +6,6 @@
 
 	<li>Dev priorities for go-live
 		<ul>
-			<li>User signup email verification</li>
-			<li>'New Finding' form server-side validation</li>
 			<li>Complex query building (eg show results BY author WITH keyword etc)</li>
 			<li>Confirmation step for delete requests</li>
 			<li>Improve user schema - login tracking etc</li>
@@ -18,10 +16,8 @@
 	<li>Individual bugs
 		<ul>
 			<li>Indexed findings have overlapping text on small screens - 'Posted by' can overlap 'Posted on'</li>
-			<li>If a Finding is deleted, all 'preceded by & 'followed by' references to it should be removed</li>
 			<li>New registration password validation against RegEx seems suspect...?</li>
 			<li>Landing page background display on mobile</li>
-			<li>'Keywords to lower' not working for single keywords?  Investigate</li>
 		</ul>
 	</li>
 
@@ -40,6 +36,7 @@
 
 	<li>Non-critical tweaks & enhancements
 		<ul>
+			<li>Ajax warnings for already-registered usernames / emails</li>
 			<li>Image uploading & hosting (Amazon web bucket?)</li>
 			<li>Comment replies</li>
 			<li>Intelligent routing from login page (eg when adding a comment, should be returned to that 'finding' once logged in)</li>
@@ -55,6 +52,10 @@
 
 	<li>Done!
 		<ul>
+			<li class="done">User signup email verification</li>
+			<li class="done">'New Finding' form server-side validation</li>
+			<li class="done">'Keywords to lower' not working for single keywords?  Investigate</li>
+			<li class="done">If a Finding is deleted, all 'preceded by & 'followed by' references to it should be removed</li>
 			<li class="done">Version control, archiving of edited Findings</li>
 			<li class="done">Need to properly hash out & pin down user roles & access restrictions etc</li>
 			<li class="done">Login with email instead of username</li>
