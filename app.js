@@ -44,7 +44,6 @@ mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 process.env.PWD = process.cwd();
 console.log(process.env.PWD);
 app.use(express.static(process.env.PWD + '/public'));
-app.use('/scripts', express.static(process.env.PWD + '/public/js/'));
 
 //	Serves Favicon
 app.use(favicon('public/img/WFFavicon.png'));
