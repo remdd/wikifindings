@@ -1,3 +1,5 @@
+"use strict";
+
 var express 					= require('express'),
 	bodyParser 					= require('body-parser'),
 	mongoose 					= require('mongoose'),
@@ -39,7 +41,8 @@ mongoose.Promise = global.Promise;			//	Re deprecation warning - need to look in
 mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
-app.use(express.static(path.join(__dirname, 'public')));
+process.env.PWD = process.cwd();
+app.use(express.static(process.env.PWD + '/public'));
 
 //	Serves Favicon
 app.use(favicon('public/img/WFFavicon.png'));
