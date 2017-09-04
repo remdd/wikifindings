@@ -10,7 +10,7 @@
 
 /**
  * Note: For the purpose of this internal documentation, arguments of the type
- * {Nodes} are to be interpreted as either {NodeList} or {Element}.
+ * {Nodes} are to be interpreted as either {NodeList} or {Element}. 
  */
 
 ;(function (global) {
