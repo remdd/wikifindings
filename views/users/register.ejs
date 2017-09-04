@@ -14,18 +14,19 @@
 
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Email: </h5>
-				<input required type="email" name="user[email]" placeholder="Email">
+				<input required type="email" name="user[email]" id="email" placeholder="Email" onblur="checkEmails();">
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Confirm: </h5>
-				<input required type="email" name="confirmEmail" placeholder="Confirm email">
+				<input required type="email" name="confirmEmail" id="confirmEmail" placeholder="Confirm email" onblur="checkEmails();">
+				<span class="inlineWarning" id="emailWarningSpan"></span>
 			</div>
 
 			<hr />
 
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Password: </h5>
-				<input required type="password" name="password" placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}">
+				<input required type="password" name="password" id="password" placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}" onblur="checkPasswords();">
 				<i class="fa fa-info-circle tooltip" aria-hidden="true">
 					<span class="tooltiptext">Passwords must:
 						<ul>
@@ -38,7 +39,8 @@
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Confirm: </h5>
-				<input required type="password" name="confirmPassword" placeholder="Confirm password">
+				<input required type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password" onblur="checkPasswords();">
+				<span class="inlineWarning" id="passwordWarningSpan"></span>
 			</div>
 
 			<hr />
@@ -89,6 +91,20 @@
 		}
 	}
 	scientistCheck();
+	function checkEmails() {
+		if($('#confirmEmail').val() && $('#email').val() != $('#confirmEmail').val()) {
+			$('#emailWarningSpan').text('Warning - emails do not match!');
+		} else {
+			$('#emailWarningSpan').text('');
+		}
+	}
+	function checkPasswords() {
+		if($('#confirmPassword').val() && $('#password').val() != $('#confirmPassword').val()) {
+			$('#passwordWarningSpan').text('Warning - passwords do not match!');
+		} else {
+			$('#passwordWarningSpan').text('');
+		}
+	}
 </script>
 
 <% include ../partials/footer %>

@@ -218,6 +218,11 @@ form select {
 	margin-top: 20px;
 }
 
+.inlineWarning {
+	display: inline-block;
+	margin-left: 30px;
+	color: red;	
+}
 
 /* Show page fomatting */
 .shownBox {
@@ -404,8 +409,6 @@ form select {
 .inlineLink {
 	border-bottom: 1px dotted blue;
 }
-
-
 
 .precedentTitle {
 	width: 100%;
