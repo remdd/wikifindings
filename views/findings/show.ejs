@@ -31,6 +31,11 @@
 					<h4 class="infoPaneInfo"><a href="/findings/k?keyword=<%= finding.keywords[i] %>"><%= finding.keywords[i] %></a></h4>
 			<% }} %>
 		<br />
+
+		<% if(finding.image) { %>
+			<img class="shownImage shownBox" src="<%= finding.image %>">
+		<% } %>
+
 		<h4 class="infoPaneLabel">Posted by</h4>
 		<h4 class="infoPaneInfo"><a href="/users/<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
 		<h4 class="infoPaneInfo">on <%= finding.datePosted.toDateString() %></h4>
@@ -40,14 +45,7 @@
 	</div>
 </div>
 
-<br />
-
-<% if(finding.image) { %>
-<img class="shownImage shownBox" src="<%= finding.image %>">
-
 <hr />
-
-<% } %>
 
 <!--				CITATION 	 							-->
 

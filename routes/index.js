@@ -7,7 +7,7 @@ var	crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
 
-var regEx = new RegExp('^(?=.*\d)(?=.*[a-zA-Z]).{8,}$');			// Password complexity regEx - at least 1 number & 1 letter
+var regEx = /(?=.*\d)(?=.*[a-zA-Z]).{8,20}/;			// Password complexity regEx - at least 1 number & 1 letter
 
 var adminEmailAddress = "admin@wikifindings.net";
 
@@ -30,12 +30,11 @@ router.get('/register', function(req, res) {
 //	Register new user route
 router.post('/register', function(req, res) {
 	var newUser = new User(req.body.user);
-	console.log(req.body.isScientist);
 	newUser.isScientist = req.body.isScientist;
-	console.log(newUser);
 	if(req.body.password === req.body.confirmPassword) {
 		if(req.body.user.email === req.body.confirmEmail) {
-			if(regEx.test(req.body.password)) {
+			var pwTest = regEx.test(req.body.password);
+			if(pwTest) {
 				User.register(newUser, req.body.password, function(err, user) {
 					if(err) {
 						if(err.code === 11000) {
@@ -200,16 +199,22 @@ router.post('/reset/:token', function(req, res) {
 					req.flash("error", "Error: your reset token is invalid or has expired.");
 					return res.redirect('back');
 				}
-				if(req.body.password === req.body.confirm) {
-					user.setPassword(req.body.password, function(err) {
-						user.resetPasswordToken = undefined;
-						user.resetPasswordExpires = undefined;
-						user.save(function(err) {
-							req.logIn(user, function(err) {
-								done(err, user);
+				if(req.body.password === req.body.confirmPassword) {
+					var pwTest = regEx.test(req.body.password);
+					if(pwTest) {
+						user.setPassword(req.body.password, function(err) {
+							user.resetPasswordToken = undefined;
+							user.resetPasswordExpires = undefined;
+							user.save(function(err) {
+								req.logIn(user, function(err) {
+									done(err, user);
+								});
 							});
 						});
-					});
+					} else {				
+						req.flash("error", "Error: Password does not meet complexity requirements");
+						res.redirect('back');
+					}
 				} else {
 					req.flash("error", "Error: Passwords do not match");
 					return res.redirect('back');

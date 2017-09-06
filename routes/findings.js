@@ -1,5 +1,6 @@
 var express 		= require('express');
 var router 			= express.Router();
+
 var Finding 		= require('../models/finding');
 var Finding_version = require('../models/finding_version');
 var Comment 		= require('../models/comment');
@@ -12,9 +13,22 @@ var shortid 		= require('shortid32');
 var	bodyParser 		= require('body-parser');
 var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
+var	dotenv			= require('dotenv');
+var Uploader		= require('s3-image-uploader');
 
 var resultsToShow = 10;
 
+//	Configure DEV environment variables
+dotenv.config({path: '.env'});				//	Loads environment variables file
+
+//	Instantiate S3 Image Uploader
+var uploader = new Uploader({
+	aws: {
+		key: process.env.NODE_AWS_KEY,
+		secret: process.env.NODE_AWS_SECRET
+	},
+	websockets: false
+});
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
@@ -129,11 +143,36 @@ router.get('/new', middleware.isLoggedIn, function(req, res) {
 	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
+//	IMAGE UPLOAD route
+
+
 //	CREATE new finding route
 router.post('/', middleware.isLoggedIn, function(req, res) {
 	req.body.finding.shortID = shortid.generate();		// need to add in validation to ensure that shortid is available
 	req.body.finding.datePosted = Date.now();
 	req.body.finding.postAuthor = req.user._id;
+
+	if(req.body.finding.imageURL) {
+		req.body.finding.image = req.body.finding.imageURL;
+	} else if (req.body.finding.imageUpload) {
+
+		// console.log(req.body.finding.imageUpload);
+		// var filename = shortid.generate();
+		// uploader.upload({
+		// 	fileId: filename,
+		// 	bucket: process.env.S3_BUCKET,
+		// 	source: req.body.finding.imageUpload,
+		// 	name: filename
+		// },
+		// function(data) {
+		// 	console.log('upload success: ', data);
+		// },
+		// function(errMsg, errObject) {
+		// 	console.error('unable to upload: ' + errMsg + ' : ' + errObject);
+		// });
+
+	}
+
 	if(req.body.finding.keywords) {
 		if(!(Array.isArray(req.body.finding.keywords))) {
 			req.body.finding.keywords = [req.body.finding.keywords];

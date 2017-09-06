@@ -26,20 +26,20 @@
 
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Password: </h5>
-				<input required type="password" name="password" id="password" placeholder="Password" minlength="8" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}" onblur="checkPasswords();">
+				<input required type="password" name="password" id="password" placeholder="Password" minlength="8" maxlength="20" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,20}" onblur="checkPasswords();">
 				<i class="fa fa-info-circle tooltip" aria-hidden="true">
 					<span class="tooltiptext">Passwords must:
 						<ul>
-							<li>Be at least 8 characters long</li>
-							<li>Include at least one letter</li>
-							<li>Include at least one number</li>
+							<li>be 8 - 20 characters long</li>
+							<li>include at least one letter</li>
+							<li>include at least one number</li>
 						</ul>
 					</span>
 				</i>
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Confirm: </h5>
-				<input required type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password" onblur="checkPasswords();">
+				<input required type="password" name="confirmPassword" id="confirmPassword" minlength="8" maxlength="20" placeholder="Confirm password" onblur="checkPasswords();">
 				<span class="inlineWarning" id="passwordWarningSpan"></span>
 			</div>
 

@@ -66,6 +66,21 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#imageUploadInput').on('change', function() {
+		if(typeof(FileReader) == "undefined") {
+			alert("Your browser does not support HTML5, which is required for this functionality.");
+		} else {
+			var container = $("#imagePreview");
+			container.empty();
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				$('<img />', {'src': e.target.result }).appendTo(container);
+				$('#imageUploadData').val(e.target.result);
+			}
+			reader.readAsDataURL($(this)[0].files[0]);
+		}
+	});
+
 	//	Show available Subject Groups when Category is changed
 	$('#newCategoryList').change(function() {
 		$('#newSubjectList').addClass('greyedOut');

@@ -7,25 +7,36 @@
 		<form action="/reset/<%= token %>" method="POST">
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Password: </h5>
-				<input type="password" name="password" placeholder="New password" minlength="8" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,}">
+				<input type="password" name="password" id="password" placeholder="New password" minlength="8" maxlength="20" pattern="(?=.*\d)(?=.*[a-zA-Z]).{8,20}" onblur="checkPasswords();">
 				<i class="fa fa-info-circle tooltip" aria-hidden="true">
 					<span class="tooltiptext">Passwords must:
 						<ul>
-							<li>Be at least 8 characters long</li>
-							<li>Include at least one letter</li>
-							<li>Include at least one number</li>
+							<li>be 8 - 20 characters long</li>
+							<li>include at least one letter</li>
+							<li>include at least one number</li>
 						</ul>
 					</span>
 				</i>
 			</div>
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Confirm: </h5>
-				<input type="password" name="confirm" placeholder="Confirm password">
+				<input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password" minlength="8" maxlength="20" onblur="checkPasswords();">
+				<span class="inlineWarning" id="passwordWarningSpan"></span>
 			</div>
 			<button class="btn btn-primary spacedDownBtn">Update password</button>
 		</form>
 	</div>
 	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
 </div>
+
+<script type="text/javascript">
+	function checkPasswords() {
+		if($('#confirmPassword').val() && $('#password').val() != $('#confirmPassword').val()) {
+			$('#passwordWarningSpan').text('Warning - passwords do not match!');
+		} else {
+			$('#passwordWarningSpan').text('');
+		}
+	}
+</script>
 
 <% include ../partials/footer %>
