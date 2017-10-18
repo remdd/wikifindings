@@ -19,18 +19,53 @@
 						</div>
 					</div>
 				</a>
+
 				<br />
 				<a href="/findings" class="mutedLink">
 					<div class="homepageContentContainer">
 						<h3>The dynamic repository of lay summaries of research articles.</h3>
 					</div>
 				</a>
+
 				<hr />
 				<a href="/findings" class="mutedLink">
 					<div class="homepageContentContainer">
 						<h4>Enter</h4>
 					</div>
 				</a>
+
+				<% if(currentUser && currentUser.isScientist === true) { %> %>
+					<hr />
+					<a href="/findings/new" class="mutedLink">
+						<div class="homepageContentContainer">
+							<h4>Post a new Finding</h4>
+						</div>
+					</a>
+				<% } %>
+
+				<hr />
+				<% if(!currentUser) { %>
+					<div class="homepageContentContainer">
+						<a href="/register" class="mutedLink">
+							<h4>Register</h4>					
+						</a>
+						/
+						<a href="/login" class="mutedLink">
+							<h4>Log in</h4>					
+						</a>
+					</div>
+   				<% } else { %>
+					<div class="homepageContentContainer">
+						<a href="/users/<%= currentUser.username %>" class="mutedLink">
+							<h4>View your user profile (logged in as <%= currentUser.username %>)</h4>
+						</a>
+						/
+						<a href="/logout" class="mutedLink">
+							<h4>Log out</h4>					
+						</a>
+					</div>
+				<% } %>
+
 				<hr />
 				<a href="/about" class="mutedLink">
 					<div class="homepageContentContainer">

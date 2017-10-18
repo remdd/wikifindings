@@ -28,6 +28,9 @@ body {
 .homepageContentContainer {
 	display: block;
 	text-align: center;
+} .homepageContentContainer h4 {
+	display: inline-block;
+	margin: 0;
 }
 .homepageHeaderDiv {
 	display: inline-block;
