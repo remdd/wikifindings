@@ -280,6 +280,8 @@ router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 
 //	UPDATE a finding
 router.put('/:id', middleware.isUsersFinding, function(req, res) {
+	
+	//	If present, ensure keywords are in array & copy to keywords_lower
 	if(req.body.finding.keywords) {
 		if(!(Array.isArray(req.body.finding.keywords))) {
 			req.body.finding.keywords = [req.body.finding.keywords];
@@ -287,13 +289,76 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
 	}
+
+	//	Update version edit user records, populate 'full string' citation
 	req.body.finding.citation.full = citationToString(req.body.finding);
 	req.body.finding.lastEditedBy = req.user._id;
 	req.body.finding.lastEdited = Date.now();
+
+	//	Validate Finding & update DB if passes
 	validateFinding(req);
 	if(req.body.finding.failValidation) {
 		res.redirect('back');
 	} else {
+
+		//	Maintain sync of preceded by / followed by records
+		var originalPrecededBy = [];
+		var originalFollowedBy = [];
+
+		//	Ensure req.body.finding.followedBy & precededBy are Arrays
+		if(!(req.body.finding.followedBy)) {
+			req.body.finding.followedBy = [];
+		} else if(!(Array.isArray(req.body.finding.followedBy))) {
+			req.body.finding.followedBy = [req.body.finding.followedBy];
+		}
+		if(!(req.body.finding.precededBy)) {
+			req.body.finding.precededBy = [];
+		} else if(!(Array.isArray(req.body.finding.precededBy))) {
+			req.body.finding.precededBy = [req.body.finding.precededBy];
+		}
+
+		//	Remove all preceded / followed by references to original Finding in other Findings, add new ones
+		Finding.findById(req.params.id, function(err, originalFinding) {
+			if(err) {
+				req.flash("error", "Something went wrong...");
+				res.redirect('/findings');
+			} else {
+				originalFollowedBy = originalFinding.followedBy.slice();
+				originalPrecededBy = originalFinding.precededBy.slice();
+				//	Removes all existing precededBy & followedBy references to Finding being updated
+				originalPrecededBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+				originalFollowedBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+				//	Adds all precededBy & followedBy references from update request
+				req.body.finding.precededBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : req.params.id }}, function(err) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+				req.body.finding.followedBy.forEach(function(pid) {
+					Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : req.params.id }}, function(err) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				});
+			}
+		});
+
+		//	Update Finding in DB
 		Finding.findByIdAndUpdate(req.params.id, req.body.finding, { runValidators: true }, function(err, findingPreUpdate) {
 			if(err) {
 				if(!(req.flash)) {
@@ -301,59 +366,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 				}
 				res.redirect('back');
 			} else {
-				//	Maintain sync of preceded by / followed by records
-				var originalPrecededBy = [];
-				var originalFollowedBy = [];
-				//	Ensure req.body.finding.followedBy & precededBy are Arrays
-				if(!(req.body.finding.followedBy)) {
-					req.body.finding.followedBy = [];
-				} else if(!(Array.isArray(req.body.finding.followedBy))) {
-					req.body.finding.followedBy = [req.body.finding.followedBy];
-				}
-				if(!(req.body.finding.precededBy)) {
-					req.body.finding.precededBy = [];
-				} else if(!(Array.isArray(req.body.finding.precededBy))) {
-					req.body.finding.precededBy = [req.body.finding.precededBy];
-				}
-				Finding.findById(req.params.id, function(err, originalFinding) {
-					if(err) {
-						req.flash("error", "Something went wrong...");
-						res.redirect('/findings');
-					} else {
-						originalFollowedBy = originalFinding.followedBy.slice();
-						originalPrecededBy = originalFinding.precededBy.slice();
-						//	Removes all existing precededBy & followedBy references to Finding being updated
-						originalPrecededBy.forEach(function(pid) {
-							Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
-								if(err) {
-									console.log(err);
-								}
-							});
-						});
-						originalFollowedBy.forEach(function(pid) {
-							Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
-								if(err) {
-									console.log(err);
-								}
-							});
-						});
-						//	Adds all precededBy & followedBy references from update request
-						req.body.finding.precededBy.forEach(function(pid) {
-							Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : req.params.id }}, function(err) {
-								if(err) {
-									console.log(err);
-								}
-							});
-						});
-						req.body.finding.followedBy.forEach(function(pid) {
-							Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : req.params.id }}, function(err) {
-								if(err) {
-									console.log(err);
-								}
-							});
-						});
-					}
-				});
 				//	Saves original Finding to Versions
 				findingPreUpdate.ref = findingPreUpdate._id;
 				findingPreUpdate._id = mongoose.Types.ObjectId();
@@ -482,7 +494,7 @@ function keywordsToLower(arr) {
 	}
 }
 
-function validateFinding(req) {			// 	Server side validation in case client-side fails or is bypassed
+function validateFinding(req) {			// 	Server side validation as protection against client-side failure or bypass
 	if(!req.body.finding.title) {
 		req.flash('error', 'You must enter a Title.');
 	} else if(!req.body.finding.category) {
