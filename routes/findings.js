@@ -14,7 +14,7 @@ var	bodyParser 		= require('body-parser');
 var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
 var	dotenv			= require('dotenv');
-var Uploader		= require('s3-image-uploader');
+// var Uploader		= require('s3-image-uploader');
 
 var resultsToShow = 10;
 
@@ -22,13 +22,13 @@ var resultsToShow = 10;
 dotenv.config({path: '.env'});				//	Loads environment variables file
 
 //	Instantiate S3 Image Uploader
-var uploader = new Uploader({
-	aws: {
-		key: process.env.NODE_AWS_KEY,
-		secret: process.env.NODE_AWS_SECRET
-	},
-	websockets: false
-});
+// var uploader = new Uploader({
+// 	aws: {
+// 		key: process.env.NODE_AWS_KEY,
+// 		secret: process.env.NODE_AWS_SECRET
+// 	},
+// 	websockets: false
+// });
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
