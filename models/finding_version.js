@@ -35,7 +35,7 @@ var findingVersionSchema = new mongoose.Schema({
 		journal: { type: String, required: true },
 		location: { type: String, required: true },
 		link: { type: String, required: false },
-		DOI: { type: String, required: true }
+		DOI: { type: String, required: false }
 	},
 	postAuthor: {
 		type: mongoose.Schema.Types.ObjectId,

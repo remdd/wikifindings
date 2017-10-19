@@ -519,8 +519,6 @@ function validateFinding(req) {			// 	Server side validation as protection again
 		req.flash('error', 'You must enter the year in which the original article was published.');
 	} else if(!req.body.finding.citation.location) {
 		req.flash('error', 'You must enter the location at which the original article appears in the publishing journal.');
-	} else if(!req.body.finding.citation.DOI) {
-		req.flash('error', 'You must enter the Digital Object Identifier of the original article.');
 	} else if(wordCount(req.body.finding.background) > 200) {
 		req.flash('error', "The 'Background' field must contain fewer than 200 hundred words - ideally no more than 150.");
 		req.body.finding.failValidation = true;
