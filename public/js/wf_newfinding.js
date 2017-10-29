@@ -59,7 +59,7 @@ $(document).ready(function() {
 			alert("The 'Implications' field must contain fewer than 200 hundred words - ideally no more than 150.");
 			return false;
 		}
-		var authors = $('#citationAuthors').has("option").length;
+		var authors = $('#citation_authors').has("option").length;
 		if(authors === 0) {
 			alert("You must enter at least one of the authors of the the original research article.");
 			return false;
@@ -173,6 +173,13 @@ $(document).ready(function() {
 		});
 	});
 
+	//	Display 'add new subject' fields on click
+	$('#showAddDiv').click(function() {
+		$('.addSubjectDiv').toggle('fast');
+		var newColor = randomColor();
+		$('#newSubjectColor').attr('value', newColor);
+	});
+
 	//	Add new subject
 	$('#addSubjectBtn').click(function() {
 		var newSubject = {
@@ -191,9 +198,96 @@ $(document).ready(function() {
 			if(response.subjectId) {
 				$('#newSubjectList').append('<option selected value="' + response.subjectId + '" label="' + response.subjectName + '">' + response.subjectName + '</option>');
 			}
+			$('.addSubjectDiv').toggle('fast');
 		});
 	});
 
+	//	AJAX call to Crossref.org to autofill from DOI key
+	$('#checkDOI').click(checkDOI);
+	function checkDOI() {
+		var DOI = $('#citation_DOI').val();
+		var URL = 'https://api.crossref.org/works/' + DOI;
+		$.ajax({
+			url: URL,
+			error: function() {
+				$('#DOIWarning').html("<span class='warningSpan'>Warning</span>: DOI <strong>" + DOI + "</strong> did not resolve at <a href='https://www.crossref.org'>crossref.org</a>.");
+			},
+			success: function() {
+				$('#DOIWarning').html("<span class='successSpan'>Success</span>: DOI <strong>" + DOI + "</strong> found on <a href='https://www.crossref.org'>crossref.org</a> and autofilled where possible.")
+			}
+		}).done(function(res) {
+			if(res.status === 'ok') {
+				//	Clear any previous form values
+				$('#citation_title, #citation_journal, #citation_year, #citation_location').val('');
+				$('#citation_authors').tagsinput('removeAll');
+
+				//	Get & Set new values	
+				console.log(res);
+				if(res.message.title) {
+					$('#citation_title').val(res.message.title);
+				}
+				if(res.message['container-title']) {
+					$('#citation_journal').val(res.message['container-title']);
+				}
+
+				//	Get & Set year of publication
+				var year, created, print, online;
+				if(res.message.created['date-time']) {
+					created = (parseInt(res.message.created['date-time']));
+					year = created;
+					console.log(created);
+				} if(res.message['published-print'] && res.message['published-print']['date-parts'][0][0]) {
+					print = (parseInt(res.message['published-print']['date-parts'][0][0]));
+					console.log(print);
+					if(print < year) {
+						year = print;
+					}
+				} if(res.message['published-online'] && res.message['published-online']['date-parts'][0][0]) {
+					online = (parseInt(res.message['published-online']['date-parts'][0][0]));
+					console.log(online);
+					if(online < year) {
+						year = online;
+					}
+				}
+				if(year !== undefined) {
+					$('#citation_year').val(year);
+				}
+
+				//	Get & Set location in publication
+				var location = '';
+				if(res.message.volume) {
+					location += res.message.volume;
+				} if(res.message.issue) {
+					location += '(' + res.message.issue + ')';
+				} if(res.message.page) {
+					location += ':' + res.message.page;
+				}
+				if(location != '') {
+					$('#citation_location').val(location);
+				}
+				if(res.message.author && res.message.author.length > 0) {
+					var authors = [];
+					for(var i = 0; i < res.message.author.length; i++) {
+						var author;
+						if(res.message.author[i].family) {
+							author = res.message.author[i].family;
+						} if(res.message.author[i].given) {
+							author += ' ';
+							var forenames = res.message.author[i].given.split(/\W+/);			//	Split given name string at one or more non-word characters
+							forenames.forEach(function(forename) {
+								author += forename.slice(0,1)									//	Concatenate first initial of each forename to 'author' string
+							});
+						}
+						authors.push(author);
+					}
+					authors.forEach(function(author) {
+						$('#citation_authors').tagsinput('add', author);
+					});
+				} 
+			}
+		});
+		return false;
+	}
 
 	//	Functions to run on document ready
 	$('#newCategoryList').trigger('change');

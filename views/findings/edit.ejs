@@ -64,7 +64,7 @@
 	<h4>Implications
 		<span class="wordCountSpan"><span id="newImplicationsWordCountSpan">XXX</span> / 150</span>
 	</h4>
-	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.findings %></textarea>
+	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.implications %></textarea>
 
 	<h4>Accompanying image</h4>
 	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings" value="<%= finding.image %>">
@@ -75,37 +75,51 @@
 
 	<h4>Details of original research article</h4>
 	<div class="row">
+		<div class="citationDiv col col-lg-8 col-md-10 col-sm-12">
+			<label for="finding[citation][DOI]" class="twoLineLabel">
+				<h5 class="labelInline">DOI (Digital Object Identifier - optional)</h5>
+				<h5 class="labelInfo"></h5>
+			</label>
+			<input type="text" name="finding[citation][DOI]" placeholder="DOI of original article" class="newFindingTextField" value="<%= finding.citation.DOI %>" id="citation_DOI">
+
+			<span id="checkDOI"><a href="#">Autocomplete from DOI</a></span>
+			<div id="DOIWarning" class="findingSearchWarning"></div>
+		</div>
+	</div>
+
+	<div class="row">
 		<div class="citationDiv col">
 			<label for="finding[citation][authors]"><h5>Author(s)</h5></label>
-			<select required multiple id="citationAuthors" name="finding[citation][authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
+			<select required multiple id="citation_authors" name="finding[citation][authors]" data-role="tagsinput" placeholder="Surname & initial(s)"></select>
 			<h5 class="tagInfo">e.g. <strong>Darwin C</strong> (use 'Enter' to separate each author)</h5>
 		</div>
 	</div>
+	
 	<div class="row">
 		<div class="citationDiv col col-lg-8 col-md-10 col-sm-12">
 			<label for="finding[citation][title]" class="twoLineLabel">
 				<h5 class="labelInline">Article title</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation][title]" placeholder="Title of original article" class="newFindingTextField" value="<%= finding.citation.title %>">
+			<input required type="text" name="finding[citation][title]" placeholder="Title of original article" class="newFindingTextField" value="<%= finding.citation.title %>" id="citation_title">
 
 			<label for="finding[citation][journal]" class="twoLineLabel">
 				<h5 class="labelInline">Journal title</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation][journal]" placeholder="Name of scientific journal" class="newFindingTextField" value="<%= finding.citation.journal %>">
+			<input required type="text" name="finding[citation][journal]" placeholder="Name of scientific journal" class="newFindingTextField" value="<%= finding.citation.journal %>" id="citation_journal">
 
 			<label for="finding[citation][year]" class="twoLineLabel">
 				<h5 class="labelInline">Year of publication</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input required type="text" name="finding[citation][year]" placeholder="Year" class="newFindingSmallTextField" value="<%= finding.citation.year %>">
+			<input required type="text" name="finding[citation][year]" placeholder="Year" class="newFindingSmallTextField" value="<%= finding.citation.year %>" id="citation_year">
 
 			<label for="finding[citation][location]" class="twoLineLabel">
 				<h5 class="labelInline">Location in journal, in format <strong>volume(issue):location</strong> - e.g. <strong>5(1):49-52</strong> 
 				<a href="http://www.scientificstyleandformat.org/Tools/SSF-Citation-Quick-Guide.html">(more info on citation format)</a></h5>
 			</label>
-			<input required type="text" name="finding[citation][location]" placeholder="Location" class="newFindingSmallTextField" value="<%= finding.citation.location %>">
+			<input required type="text" name="finding[citation][location]" placeholder="Location" class="newFindingSmallTextField" value="<%= finding.citation.location %>" id="citation_location">
 
 			<label for="finding[citation][link]" class="twoLineLabel">
 				<h5 class="labelInline">Link to original publication</h5>
@@ -113,11 +127,6 @@
 			</label>
 			<input type="url" name="finding[citation][link]" placeholder="URL of original article" class="newFindingTextField" value="<%= finding.citation.link %>%>">
 
-			<label for="finding[citation][DOI]" class="twoLineLabel">
-				<h5 class="labelInline">DOI (Digital Object Identifier - optional)</h5>
-				<h5 class="labelInfo"></h5>
-			</label>
-			<input type="text" name="finding[citation][DOI]" placeholder="DOI of original article" class="newFindingTextField" value="<%= finding.citation.DOI %>">
 		</div>
 		<div class="col col-lg-4 col-md-2 col-sm-0"></div>
 	</div>
@@ -133,7 +142,7 @@
 				citation_authors.push("<%= result %>");
 			<% }); %>
 			citation_authors.forEach(function(result) {	
-				$('#citationAuthors').tagsinput('add', result);
+				$('#citation_authors').tagsinput('add', result);
 			});
 		});
 	</script>

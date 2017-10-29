@@ -1,29 +1,11 @@
 <% include ../partials/header %>
 
-<h3>Recent Findings - pick a title to learn more.</h3>
+<h3>Showing all Findings. Select an article to learn more:</h3>
 
-<div class="paginationDiv">
-	<div>Showing maximum of <%= findings.limit %> results per page - page <%= findings.page %> of <%= findings.pages %> (<%= findings.total %> results total)</div>
-
-	<% if(findings.total > 1) { %>
-		<div>
-
-			<a class="btn btn-xs 
-				<% if(findings.page == 1) { %>
-					disabled
-				<% } %>
-			" href="/findings?page=<%= Number(findings.page) -1 %>">Previous page</a>
-
-			<a class="btn btn-xs 
-				<% if(findings.page == findings.pages) { %>
-					disabled
-				<% } %>
-			" href="/findings?page=<%= Number(findings.page) +1 %>">Next page</a>
-
-	<% } %>
-
-</div>
+<% include ../partials/paginationDiv %>
 
 <% include ../partials/findingsindex %>
+
+<% include ../partials/paginationDiv %>
 
 <% include ../partials/footer %>

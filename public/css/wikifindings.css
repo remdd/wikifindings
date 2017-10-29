@@ -209,6 +209,17 @@ form select {
 	display: inline-block;
 	margin-left: 30px;
 }
+#addSubjectWarning {
+	display: block;
+}
+.warningSpan {
+	color: red;
+} .successSpan {
+	color: green;
+}
+#DOIWarning {
+	display: block;
+}
 .addSubjectDiv {
 	display: block;
 	visibility: none;
