@@ -14,7 +14,6 @@ var	bodyParser 		= require('body-parser');
 var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
 var	dotenv			= require('dotenv');
-var _				= require('underscore');
 // var Uploader		= require('s3-image-uploader');
 
 var resultsToShow = 10;
@@ -178,8 +177,6 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 		}
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
-		// encodeKeywords(req.body.finding.keywords);
-		// encodeKeywords(req.body.finding.keywords_lower);
 	}
 	req.body.finding.citation.full = citationToString(req.body.finding);
 	validateFinding(req);
@@ -289,8 +286,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 		}
 		req.body.finding.keywords_lower = req.body.finding.keywords.slice();
 		keywordsToLower(req.body.finding.keywords_lower);
-		// encodeKeywords(req.body.finding.keywords);
-		// encodeKeywords(req.body.finding.keywords_lower);
 	}
 
 	//	Update version edit user records, populate 'full string' citation
@@ -494,12 +489,6 @@ function citationToString(finding) {
 function keywordsToLower(arr) {
 	for(var i = 0; i < arr.length; i++) {
 		arr[i] = arr[i].toLowerCase();
-	}
-}
-
-function encodeKeywords(arr) {
-	for(var i = 0; i < arr.length; i++) {
-		arr[i] = _.escape(arr[i]);
 	}
 }
 
