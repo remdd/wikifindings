@@ -2,6 +2,7 @@
 
 <script type="text/javascript" src="/js/wf_countable.js"></script>
 <script type="text/javascript" src="/js/wf_newfinding.js"></script>
+<script type="text/javascript" src="/lib/underscore-min.js"></script>
 
 <h3>Edit a Finding</h3>
 <hr />
@@ -20,12 +21,11 @@
 	<!-- Assigns the existing keywords array to keywords tag field on document ready -->
 	<script>
 		$(document).ready(function() {
-			var keywords = [];
-			<% finding.keywords.forEach(function(result) { %>
-				keywords.push("<%= result %>");
-			<% }); %>
-			keywords.forEach(function(result) {	
-				$('#editKeywords').tagsinput('add', result);
+			var keywords = <%- JSON.stringify(finding.keywords) %>;
+
+			keywords.forEach(function(keyword) {	
+				$('#editKeywords').tagsinput('add', keyword);
+				console.log(keyword);
 			});
 
 			$('#newCategoryList').children().each(function() {
@@ -94,7 +94,7 @@
 			<h5 class="tagInfo">e.g. <strong>Darwin C</strong> (use 'Enter' to separate each author)</h5>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<div class="citationDiv col col-lg-8 col-md-10 col-sm-12">
 			<label for="finding[citation][title]" class="twoLineLabel">
@@ -134,7 +134,7 @@
 	<hr />
 
 
-	<!-- Assigns the existing keywords array to keywords tag field on document ready -->
+	<!-- Assigns the existing authors array to authors tag field on document ready -->
 	<script>
 		$(document).ready(function() {
 			var citation_authors = [];

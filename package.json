@@ -27,6 +27,7 @@
     "s3-image-uploader": "^1.0.7",
     "serve-favicon": "^2.4.3",
     "shortid32": "^0.1.1",
+    "underscore": "^1.8.3",
     "use-strict": "^1.0.1",
     "word-count": "^0.2.2"
   },
