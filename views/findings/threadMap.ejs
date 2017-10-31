@@ -5,6 +5,7 @@
 <script type="text/javascript" src="/lib/vis/vis.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/lib/vis/vis.min.css">
 
+<div id="eventDiv"></div>
 <div id="tm_container"></div>
 
 <script type="text/javascript">
@@ -95,8 +96,8 @@
 					label: false
 				},
 				font: {
-					face: 'Enriqueta',
-					size: 12
+					face: 'Maven Pro',
+					size: 14
 				},
 				margin: 10,
 				scaling: {
@@ -123,10 +124,13 @@
 		//	Initiate network display
 		var network = new vis.Network(container, data, options);
 
-		//	Disable physics after physics.stabilization.iterations completes
-		// network.on("stabilizationIterationsDone", function () {
-		//     network.setOptions( { physics: false } );
-		// });
+		//	Network click listener
+	    network.on("click", function (params) {
+	        params.event = "[original event]";
+	        document.getElementById('eventDiv').innerHTML = '<h2>Click event:</h2>' + JSON.stringify(params, null, 4);
+	        console.log('click event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
+	    });
+
 	});
 
 

@@ -27,7 +27,8 @@ var commentRoutes				= require('./routes/comments'),
 	indexRoutes					= require('./routes/index'),
 	adminRoutes					= require('./routes/admin'),
 	userRoutes					= require('./routes/users'),
-	subjectRoutes				= require('./routes/subjects');
+	subjectRoutes				= require('./routes/subjects'),
+	threadMapRoutes				= require('./routes/threadMap');
 
 //	Clears database & re-seeds with data from seed file
 // seedDB();
@@ -118,6 +119,7 @@ app.use("/findings", findingRoutes);
 app.use(adminRoutes);
 app.use("/users", userRoutes);
 app.use("/subjects", subjectRoutes);
+app.use("/threads", threadMapRoutes);
 
 //	404 route
 app.get('*', function(req, res) {
