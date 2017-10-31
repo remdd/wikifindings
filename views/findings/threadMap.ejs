@@ -1,0 +1,114 @@
+<% include ../partials/header %>
+<link rel="stylesheet" type="text/css" href="/css/threadMap.css">
+
+<script type="text/javascript" src="/lib/lodash.js"></script>
+<script type="text/javascript" src="/lib/vis/vis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/lib/vis/vis.min.css">
+
+<div id="tm_container"></div>
+
+<script type="text/javascript">
+	$(function() {
+
+		var threads = <%- JSON.stringify(threads) %>;				//	Note to self - remember EJS calls JSON.stringify, not client!!
+		console.log(threads);
+
+		//	Vis config & display
+		var nodes = [];
+		var edges = [];
+		var groups = {};
+
+		//	Add threads to Nodes and add 'followed by' connections as 'edges'
+		threads.forEach(function(thread) {
+			//	Set up node with primary info from thread
+			var node = {
+				id: thread._id,
+				label: thread.title,
+				group: thread.subject.subjectName
+			}
+			//	Add thread subject to 'groups' array if not already present
+			var subject = {};
+			subject[thread.subject.subjectName] = {'color': {'border': thread.subject.subjectColor, 'background': 'white'} };
+			var uniq = true;
+			for(var i = 0; i < groups.length; i++) {
+				if(_.has(groups[i], thread.subject.subjectName)) {
+					uniq = false;
+				}
+			}
+			if(uniq) {
+				Object.assign(groups, subject);
+			}
+			nodes.push(node);
+			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
+				thread.followedBy.forEach(function(follow) {
+					var edge = {
+						from: thread._id,
+						to: follow
+					}
+					edges.push(edge);
+				});
+			}
+		});
+
+		//	Add nodes & edges as vis datasets
+		nodes = new vis.DataSet(nodes);
+		edges = new vis.DataSet(edges);
+
+		console.log(nodes);
+		console.log(edges);
+		console.log(groups);
+
+		//	Select container for vis visualization, add node & edge data
+		var container = document.getElementById('tm_container');
+		var data = {
+			nodes: nodes,
+			edges: edges
+		};
+
+		//	Configure options
+		var options = {
+			interaction: {
+				dragNodes: false
+			},
+			physics: {
+				barnesHut: {
+					avoidOverlap: 0.5
+				}
+			},
+			layout: {
+				randomSeed: undefined
+			},
+			edges: {
+				arrows: 'to'
+			},
+			nodes: {
+				shape: 'box',
+				shapeProperties: {
+					borderRadius: 3
+				},
+				borderWidth: 2,
+				borderWidthSelected: 2,
+				chosen: false,
+				widthConstraint: {
+					maximum: 150
+				},
+				font: {
+					face: 'Enriqueta'
+				}
+			},
+			groups: {}
+		};
+		Object.assign(options.groups, groups);
+
+		console.log(options);
+
+
+		//	Initiate network display
+		var network = new vis.Network(container, data, options);
+	});
+
+
+</script>
+
+
+<% include ../partials/footer %>
