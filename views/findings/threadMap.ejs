@@ -13,6 +13,8 @@
 		var threads = <%- JSON.stringify(threads) %>;				//	Note to self - remember EJS calls JSON.stringify, not client!!
 		console.log(threads);
 
+		var finding = <%- JSON.stringify(finding) %>;
+
 		//	Vis config & display
 		var nodes = [];
 		var edges = [];
@@ -24,7 +26,12 @@
 			var node = {
 				id: thread._id,
 				label: thread.title,
-				group: thread.subject.subjectName
+				group: thread.subject.subjectName,
+				title: 'Go to Finding'
+			}
+			if(thread._id === finding._id) {
+				node.x = 0;
+				node.y = 0;
 			}
 			//	Add thread subject to 'groups' array if not already present
 			var subject = {};
@@ -67,36 +74,46 @@
 
 		//	Configure options
 		var options = {
-			interaction: {
-				dragNodes: false
+			edges: {
+				arrows: 'to',				//	Arrows point to 'followed by' findings
+				length: 180
 			},
-			physics: {
-				barnesHut: {
-					avoidOverlap: 0.5
-				}
+			groups: {},
+			interaction: {
+				dragNodes: false,
+				navigationButtons: true
 			},
 			layout: {
-				randomSeed: undefined
-			},
-			edges: {
-				arrows: 'to'
+				randomSeed: undefined,
+				improvedLayout: true
 			},
 			nodes: {
+				borderWidth: 2,
+				borderWidthSelected: 2,
+				chosen: {
+					node: true,
+					label: false
+				},
+				font: {
+					face: 'Enriqueta',
+					size: 12
+				},
+				margin: 10,
+				scaling: {
+					label: false
+				},
 				shape: 'box',
 				shapeProperties: {
 					borderRadius: 3
 				},
-				borderWidth: 2,
-				borderWidthSelected: 2,
-				chosen: false,
-				widthConstraint: {
-					maximum: 150
-				},
-				font: {
-					face: 'Enriqueta'
-				}
+				widthConstraint: 150
 			},
-			groups: {}
+			physics: {
+				enabled: true,
+				barnesHut: {
+					avoidOverlap: 0.2
+				}
+			}
 		};
 		Object.assign(options.groups, groups);
 
@@ -105,6 +122,11 @@
 
 		//	Initiate network display
 		var network = new vis.Network(container, data, options);
+
+		//	Disable physics after physics.stabilization.iterations completes
+		// network.on("stabilizationIterationsDone", function () {
+		//     network.setOptions( { physics: false } );
+		// });
 	});
 
 
