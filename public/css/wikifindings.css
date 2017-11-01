@@ -111,6 +111,9 @@ hr {
 	position: relative;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
 }
+.fThumbDiv h4 {
+	line-height: 1.25;
+}
 .fThumbSubject {
 	position: absolute;
 	max-width: 30%;

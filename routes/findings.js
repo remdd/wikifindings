@@ -315,6 +315,9 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			req.body.finding.precededBy = [req.body.finding.precededBy];
 		}
 
+		console.log(req.body.finding.followedBy);
+		console.log(req.body.finding.precededBy);
+
 		//	Remove all preceded / followed by references to original Finding in other Findings, add new ones
 		Finding.findById(req.params.id, function(err, originalFinding) {
 			if(err) {

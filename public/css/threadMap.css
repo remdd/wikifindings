@@ -1,7 +1,7 @@
 #tm_container {
 	width: 100%;
 	height: 600px;
-	background: #EEEEEE;
+	background: white;
 	border: 2px solid lightgrey;
 }
 .t_container {
@@ -21,4 +21,10 @@
 	border: 2px solid lightgrey;
 	border-radius: 10px;
 	position: absolute;
+}
+.indexedFinding {
+	display: block;
+}
+.hiddenThread {
+	display: none;
 }

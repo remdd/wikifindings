@@ -15,6 +15,39 @@ var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
 var	dotenv			= require('dotenv');
 
+
+//	Display 'thread map' for a Finding
+router.get('/:n&:id', function(req, res) {
+	console.log(req.params);
+	var threads = {};
+	Finding.findById(req.params.id)
+	.exec(function(err, finding) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('back');
+		} else {
+			console.log(threads);
+			res.render('findings/threadMap', {finding: finding, threads: threads});
+		}
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //	Display 'thread map' for a Finding
 router.get('/:id', function(req, res) {
 	Finding.findById(req.params.id)
@@ -109,6 +142,7 @@ router.get('/:id', function(req, res) {
 			res.render('404');
 		} else {
 			var finding_ids = [];
+
 			finding_ids.push(finding._id);
 			if(typeof finding.followedBy !== 'undefined' && finding.followedBy.length > 0) {
 				finding.followedBy.forEach(function(f) {
@@ -260,7 +294,6 @@ router.get('/:id', function(req, res) {
 					}
 				});
 			}
-			console.log(finding_ids);
 			var unique_ids = [];
 
 			finding_ids.forEach(function(id){
@@ -277,12 +310,12 @@ router.get('/:id', function(req, res) {
 
 			Finding.find( { '_id': { $in: unique_ids } } )
 			.populate({path: "subject"})
+			.populate({path: "postAuthor"})
 			.exec(function(err, threads) {
 				if(err) {
 					req.flash("error", "Something went wrong...");
 					res.redirect('back');
 				} else {
-					console.log(threads);
 					res.render('findings/threadMap', {finding: finding, threads: threads});
 				}
 			});

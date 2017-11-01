@@ -2,14 +2,30 @@
 <link rel="stylesheet" type="text/css" href="/css/threadMap.css">
 
 <script type="text/javascript" src="/lib/lodash.js"></script>
-<script type="text/javascript" src="/lib/vis/vis.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/lib/vis/vis.min.css">
+<script type="text/javascript" src="/lib/vis/vis.js"></script>
+<link rel="stylesheet" type="text/css" href="/lib/vis/vis.css">
 
-<div id="eventDiv"></div>
 <div id="tm_container"></div>
 
+<!--	Display selected Finding in index format -->
+<h3>Selected Finding</h3>
+<div id="selectedFindingDiv">
+	<% threads.forEach(function(thread) { %>
+		<% var finding = thread; %>
+		<div class="indexedFinding hiddenThread" data-id="<%= finding._id.toString(); %>">
+			<h4><a href="/threads/<%= thread._id.toString(); %>">Recreate Thread Network centred on this Finding</a></h3>
+			<% include ../partials/indexedFinding %>
+		</div>
+	<% }); %>
+</div>
+
+<div id="eventDiv"></div>
+
+
 <script type="text/javascript">
-	$(function() {
+	$(document).ready(function() {
+
+		$('.headerRow').css('display', 'none');
 
 		var threads = <%- JSON.stringify(threads) %>;				//	Note to self - remember EJS calls JSON.stringify, not client!!
 		console.log(threads);
@@ -27,16 +43,30 @@
 			var node = {
 				id: thread._id,
 				label: thread.title,
-				group: thread.subject.subjectName,
-				title: 'Go to Finding'
+				group: thread.subject.subjectName
+				// title: 'Tooltip text'							//	Can use to set tooltip text if desired
 			}
 			if(thread._id === finding._id) {
-				node.x = 0;
-				node.y = 0;
+				console.log("centring");							//	Add any properties to original node only
+				thread.fixed = true;
+				// thread.physics = false;
+				// thread.x = 0;
+				// thread.y = 0;
 			}
 			//	Add thread subject to 'groups' array if not already present
 			var subject = {};
-			subject[thread.subject.subjectName] = {'color': {'border': thread.subject.subjectColor, 'background': 'white'} };
+			subject[thread.subject.subjectName] = 
+			{
+				'color': {
+					'border': thread.subject.subjectColor, 
+					'background': 'white',
+					'highlight': {
+						'borderWidth': 1,
+						'border': 'red',
+						'background': 'green'
+					}
+				} 
+			};
 			var uniq = true;
 			for(var i = 0; i < groups.length; i++) {
 				if(_.has(groups[i], thread.subject.subjectName)) {
@@ -66,6 +96,13 @@
 		console.log(edges);
 		console.log(groups);
 
+
+		var selectNode = function(values, id, selected, hovering) {
+			values.color = "#DDDDDD";
+			values.borderWidth = 2;
+			values.margin = 10;
+		}
+
 		//	Select container for vis visualization, add node & edge data
 		var container = document.getElementById('tm_container');
 		var data = {
@@ -77,59 +114,118 @@
 		var options = {
 			edges: {
 				arrows: 'to',				//	Arrows point to 'followed by' findings
-				length: 180
+				length: 180,
+				width: 3
 			},
 			groups: {},
 			interaction: {
-				dragNodes: false,
+				dragNodes: true,					//	Set whether nodes are draggable
 				navigationButtons: true
 			},
 			layout: {
-				randomSeed: undefined,
+				randomSeed: 233318,			//233318,
 				improvedLayout: true
 			},
 			nodes: {
 				borderWidth: 2,
 				borderWidthSelected: 2,
 				chosen: {
-					node: true,
+					node: selectNode,
 					label: false
 				},
 				font: {
 					face: 'Maven Pro',
 					size: 14
 				},
+				heightConstraint: 100,
+				labelHighlightBold: false,
 				margin: 10,
 				scaling: {
 					label: false
+				},
+				shadow: {
+					enabled: true,
+					color: 'rgba(0,0,0,0.3)',
+					size: 10,
+					x: 5,
+					y: 5
 				},
 				shape: 'box',
 				shapeProperties: {
 					borderRadius: 3
 				},
-				widthConstraint: 150
+				widthConstraint: {
+					minimum: 100,
+					maximum: 150
+				}
 			},
 			physics: {
 				enabled: true,
 				barnesHut: {
-					avoidOverlap: 0.2
+					avoidOverlap: 0.4
+				},
+				stabilization: {
+					iterations: 2000,
+					fit: true
 				}
 			}
 		};
 		Object.assign(options.groups, groups);
-
 		console.log(options);
 
-
-		//	Initiate network display
+		//	Instantiate network
 		var network = new vis.Network(container, data, options);
+		console.log(network.getSeed());					//	Get layout seed
+
+        network.once("stabilizationIterationsDone", function() {			//	Callback when network is loaded & stabilized
+            move();
+        	network.stopSimulation();					//	Stops further node restlessness after initial stabilization iterations
+        	var id = finding._id.toString();
+        	$('div').find('[data-id="' + id + '"]').removeClass('hiddenThread');
+        	network.physics.options.enabled = false;						//	Disables physics after initial load
+        });
+
+        network.on('deselectNode', function(e) {
+        	e.previousSelection.nodes.forEach(function(node) {
+        		//	Code here?
+        	});
+        });
+
+		function move() {
+			network.focus(finding._id, {				//	Focus on selected 'Finding'
+				scale: 1,								//	Zoom level
+				animation: {
+					duration: 1000,
+					easingFunction: 'easeInOutQuad'
+				}
+			});
+		}
 
 		//	Network click listener
-	    network.on("click", function (params) {
+	    network.on("selectNode", function (params) {
 	        params.event = "[original event]";
-	        document.getElementById('eventDiv').innerHTML = '<h2>Click event:</h2>' + JSON.stringify(params, null, 4);
-	        console.log('click event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
+	        // document.getElementById('eventDiv').innerHTML = '<h3>click event:</h3><pre>' + JSON.stringify(params, null, 4) + '</pre>';
+	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
+	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
+		        console.log('select event - node: ' + selectedNodeID);
+		        updateSelectedFinding(selectedNodeID);
+	        }
 	    });
+	    network.on("dragStart", function (params) {
+	        params.event = "[original event]";
+	        // document.getElementById('eventDiv').innerHTML = '<h3>click event:</h3><pre>' + JSON.stringify(params, null, 4) + '</pre>';
+	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
+	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
+		        console.log('dragStart event - node: ' + selectedNodeID);
+		        updateSelectedFinding(selectedNodeID);
+	        }
+	    });
+
+	    function updateSelectedFinding(id) {
+	    	console.log('updating: ' + id);
+	    	$('.indexedFinding').addClass('hiddenThread');
+	    	$('div').find('[data-id="' + id + '"]').removeClass('hiddenThread');
+	    }
 
 	});
 
