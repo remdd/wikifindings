@@ -68,21 +68,17 @@
 
 		//	Add threads to Nodes and add 'followed by' connections as 'edges'
 		threads.forEach(function(thread) {
-			//	Set up node with primary info from thread
+
+			//	Create and configure nodes from threads and push to nodes array
 			var node = {
 				id: thread._id,
 				label: thread.title,
 				group: thread.subject.subjectName
 				// title: 'Tooltip text'							//	Can use to set tooltip text if desired
 			}
-			if(thread._id === finding._id) {
-				console.log("centring");							//	Add any properties to original node only
-				// node.fixed = true;									//	Fix origin node
-				// thread.physics = false;
-				// thread.x = 0;
-				// thread.y = 0;
-			}
-			//	Add thread subject to 'groups' array if not already present
+			nodes.push(node);
+
+			//	Add unique thread subjects to groups array
 			var subject = {};
 			subject[thread.subject.subjectName] = 
 			{
@@ -105,7 +101,8 @@
 			if(uniq) {
 				Object.assign(groups, subject);
 			}
-			nodes.push(node);
+
+			//	Push 'followedBy' links to edges array
 			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
 				thread.followedBy.forEach(function(follow) {
 					var edge = {
