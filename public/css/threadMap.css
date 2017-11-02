@@ -57,6 +57,8 @@ i.headerIcon {
 	height: 80%;
 	padding: 0 40px;
 	overflow: auto;
+} .popupContents ul li {
+	margin-bottom: 10px;
 } .popupFooter {
 	position: absolute;
 	bottom: 0;
