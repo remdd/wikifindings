@@ -1,9 +1,38 @@
 <% include ../partials/header %>
-<link rel="stylesheet" type="text/css" href="/css/threadMap.css">
 
+<link rel="stylesheet" type="text/css" href="/css/threadMap.css">
 <script type="text/javascript" src="/lib/lodash.js"></script>
 <script type="text/javascript" src="/lib/vis/vis.js"></script>
 <link rel="stylesheet" type="text/css" href="/lib/vis/vis.css">
+
+
+<!--	Info modal 				-->
+<div id="aboutModal" class="popup closed">
+	<div class="popupContents">
+		<h4>About the Thread Network</h4>
+		<hr>
+		<ul>
+			<li>The Thread Network is a means of visualizing threads of research through the connections made between different Findings.</li>
+			<li>The display loads with a specific Finding at the 'origin'; the <strong>central node</strong>.</li>
+			<li>Any other Findings that directly reference this Finding as Preceding or Following it are then added to the display, and connected to the <strong>central node</strong> with an arrow (which points <em>from</em> the Preceding <em>to</em> the Following Finding).</li>
+			<li>Further nodes are then added to represent the Findings that directly reference these Findings, and then another set to represent the Findings that directly reference these.</li>
+			<li>At this point, the network includes any Finding connected to the <strong>central node</strong> by 3 or fewer degrees of separation.</li>
+			<li>A final set of Findings are then added to represent the Findings that are 4 degrees separated from the <strong>central node</strong>.</li>
+			<li>The connections to and from these '4th degree' nodes are only shown where they link with another node present in the display. That is to say, just because a 4th degree node is displayed with just one line connecting it to the network, it does not necessarily only have a single 'preceding' or 'following' connection - it may have many others that are out of scope of the current diagram.</li>
+			<li>To explore the connections to and from these more peripheral nodes, select one by clicking it and use the 'Rebuild Thread Network with selected Finding at origin' link below the network display.</li>
+			<hr>
+			<li>Due to the dynamic nature of the data displayed in the Network and the process used to generate the display, it is possible (particularly when the network includes a lot of nodes, or their relationships are complex) for nodes to occasionally load overlapping or otherwise obscuring each other. In this event, note that nodes can be dragged with the mouse to adjust the network into a more readable arrangement.</li>
+		</ul>
+	</div>
+	<div class="popupFooter">
+		<h4 class="closePopup"><i class="fa fa-window-close headerIcon" aria-hidden="true"></i>Close</h4>
+	</div>
+</div>
+<div id="popupOverlay" class="popupOverlay closed"></div>
+
+
+<h3>Thread Network</h3>
+<h4><a id="aboutLink" href="#"><i class="fa fa-info-circle headerIcon" aria-hidden="true"></i>About</a></h4>
 
 <div id="tm_container"></div>
 
@@ -12,8 +41,8 @@
 <div id="selectedFindingDiv">
 	<% threads.forEach(function(thread) { %>
 		<% var finding = thread; %>
-		<div class="indexedFinding hiddenThread" data-id="<%= finding._id.toString(); %>">
-			<h4><a href="/threads/<%= thread._id.toString(); %>">Recreate Thread Network centred on this Finding</a></h3>
+		<div class="indexedFinding hiddenThread" data-id="<%= finding._id %>">
+			<h4><a href="/threads/<%= thread._id %>"><i class="fa fa-repeat headerIcon" aria-hidden="true"></i>Rebuild Thread Network with selected Finding at origin</a></h4>
 			<% include ../partials/indexedFinding %>
 		</div>
 	<% }); %>
@@ -25,7 +54,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		$('.headerRow').css('display', 'none');
+		// $('.headerRow').css('display', 'none');
 
 		var threads = <%- JSON.stringify(threads) %>;				//	Note to self - remember EJS calls JSON.stringify, not client!!
 		console.log(threads);
@@ -48,7 +77,7 @@
 			}
 			if(thread._id === finding._id) {
 				console.log("centring");							//	Add any properties to original node only
-				thread.fixed = true;
+				// node.fixed = true;									//	Fix origin node
 				// thread.physics = false;
 				// thread.x = 0;
 				// thread.y = 0;
@@ -91,11 +120,6 @@
 		//	Add nodes & edges as vis datasets
 		nodes = new vis.DataSet(nodes);
 		edges = new vis.DataSet(edges);
-
-		console.log(nodes);
-		console.log(edges);
-		console.log(groups);
-
 
 		var selectNode = function(values, id, selected, hovering) {
 			values.color = "#DDDDDD";
@@ -155,7 +179,7 @@
 					borderRadius: 3
 				},
 				widthConstraint: {
-					minimum: 100,
+					minimum: 150,
 					maximum: 150
 				}
 			},
@@ -180,9 +204,10 @@
         network.once("stabilizationIterationsDone", function() {			//	Callback when network is loaded & stabilized
             move();
         	network.stopSimulation();					//	Stops further node restlessness after initial stabilization iterations
-        	var id = finding._id.toString();
+        	var id = finding._id;
         	$('div').find('[data-id="' + id + '"]').removeClass('hiddenThread');
         	network.physics.options.enabled = false;						//	Disables physics after initial load
+        	network.selectNodes([finding._id]);				//	Selects origin thread after initial load
         });
 
         network.on('deselectNode', function(e) {
@@ -201,22 +226,21 @@
 			});
 		}
 
-		//	Network click listener
+		//	Handle node selection event
 	    network.on("selectNode", function (params) {
 	        params.event = "[original event]";
 	        // document.getElementById('eventDiv').innerHTML = '<h3>click event:</h3><pre>' + JSON.stringify(params, null, 4) + '</pre>';
 	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
 	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
-		        console.log('select event - node: ' + selectedNodeID);
 		        updateSelectedFinding(selectedNodeID);
 	        }
 	    });
+		//	Handle node drag start event
 	    network.on("dragStart", function (params) {
 	        params.event = "[original event]";
 	        // document.getElementById('eventDiv').innerHTML = '<h3>click event:</h3><pre>' + JSON.stringify(params, null, 4) + '</pre>';
 	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
 	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
-		        console.log('dragStart event - node: ' + selectedNodeID);
 		        updateSelectedFinding(selectedNodeID);
 	        }
 	    });
@@ -227,6 +251,12 @@
 	    	$('div').find('[data-id="' + id + '"]').removeClass('hiddenThread');
 	    }
 
+	    $('#aboutLink').click(function() {
+	    	$('.popup, .popupOverlay').removeClass('closed');
+	    });
+	    $('.closePopup, .popupOverlay').click(function() {
+	    	$('.popup, .popupOverlay').addClass('closed');
+	    });
 	});
 
 
