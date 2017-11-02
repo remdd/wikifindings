@@ -53,6 +53,7 @@ router.get('/:n&:id', function(req, res) {
 			res.redirect('back');
 		} else {
 			origin = finding;
+			threads.push(finding._id);
 			var relatives = [];
 			if (typeof finding.followedBy !== 'undefined' && finding.followedBy.length > 0) {
 				relatives = relatives.concat(finding.followedBy);
