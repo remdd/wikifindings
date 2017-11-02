@@ -17,9 +17,9 @@ var	dotenv			= require('dotenv');
 
 //	Remove identical objectIDs from an array
 function dedupeIDs(objectIDs) {
-	const ids = {}
-	objectIDs.forEach(_id => (ids[_id.toString()] = _id))
-	return Object.values(ids)
+	const ids = {};
+	objectIDs.forEach(_id => (ids[_id.toString()] = _id));
+	return Object.values(ids);
 }
 
 //	Display 'thread map' for a Finding
