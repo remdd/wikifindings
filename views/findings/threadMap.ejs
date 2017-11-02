@@ -12,16 +12,14 @@
 		<h4>About the Thread Network</h4>
 		<hr>
 		<ul>
-			<li>The Thread Network is a means of visualizing threads of research through the connections made between different Findings.</li>
-			<li>The display loads with a specific Finding at the 'origin'; the <strong>central node</strong>.</li>
-			<li>Any other Findings that directly reference this Finding as Preceding or Following it are then added to the display, and connected to the <strong>central node</strong> with an arrow (which points <em>from</em> the Preceding <em>to</em> the Following Finding).</li>
-			<li>Further nodes are then added to represent the Findings that directly reference these Findings, and then another set to represent the Findings that directly reference these.</li>
-			<li>At this point, the network includes any Finding connected to the <strong>central node</strong> by 3 or fewer degrees of separation.</li>
-			<li>A final set of Findings are then added to represent the Findings that are 4 degrees separated from the <strong>central node</strong>.</li>
-			<li>The connections to and from these '4th degree' nodes are only shown where they link with another node present in the display. That is to say, just because a 4th degree node is displayed with just one line connecting it to the network, it does not necessarily only have a single 'preceding' or 'following' connection - it may have many others that are out of scope of the current diagram.</li>
-			<li>To explore the connections to and from these more peripheral nodes, select one by clicking it and use the 'Rebuild Thread Network with selected Finding at origin' link below the network display.</li>
+			<li>The Thread Network is a means of visualizing threads of research by mapping the connections that exist between different Findings.</li>
+			<li>The network display is loaded with a specific Finding at the 'origin' - the <strong>central node</strong>.</li>
+			<li>All of the Findings that directly reference this Finding (by Preceding or Following it) are then added to the display as additional 'nodes', connected to the <strong>central node</strong> by an arrow - which points <em>from</em> the Preceding <em>to</em> the Following Finding.</li>
+			<li>Further nodes are then added to represent the Findings that directly reference these Findings, and then another set to represent the Findings that directly reference these, and so on - until all of the Findings that are connected to the original Finding by 5 or less 'degrees of separation' have been added.</li>
+			<li>Any Findings that connect to the <strong>central node</strong> by 6 degrees of separation are represented only as grey dots, and are connected to other Findings by dashed arrows - their titles etc are not displayed. These are included to indicate where a thread of research continues beyond the scope of the network as it is currently displayed.</li>
+			<li>To further explore the connections around these more distant nodes, simply select a nearby Finding by clicking it and then click the 'Rebuild Thread Network with selected Finding at origin' link that can be found below the network display.</li>
 			<hr>
-			<li>Due to the dynamic nature of the data displayed in the Network and the process used to generate the display, it is possible (particularly when the network includes a lot of nodes, or their relationships are complex) for nodes to occasionally load overlapping or otherwise obscuring each other. In this event, note that nodes can be dragged with the mouse to adjust the network into a more readable arrangement.</li>
+			<li>Due to the dynamic nature of the network and the process used to generate the display, it is possible (particularly when the network includes a lot of nodes, or their relationships are complex) for nodes to occasionally load partially overlapping each other or obscuring the connecting arrows. In this event, note that nodes can be moved into a more readable arrangement simply by dragging them with the mouse.</li>
 		</ul>
 	</div>
 	<div class="popupFooter">
@@ -42,7 +40,7 @@
 	<% threads.forEach(function(thread) { %>
 		<% var finding = thread; %>
 		<div class="indexedFinding hiddenThread" data-id="<%= finding._id %>">
-			<h4><a href="/threads/<%= thread._id %>"><i class="fa fa-repeat headerIcon" aria-hidden="true"></i>Rebuild Thread Network with selected Finding at origin</a></h4>
+			<h4><a href="/threads/5&<%= thread._id %>"><i class="fa fa-repeat headerIcon" aria-hidden="true"></i>Rebuild Thread Network with the selected Finding at the origin</a></h4>
 			<% include ../partials/indexedFinding %>
 		</div>
 	<% }); %>
@@ -65,6 +63,43 @@
 		var nodes = [];
 		var edges = [];
 		var groups = {};
+		var distants = [];					//	Distants are Findings that are at the final degree of separation - returned from DB as ObjectIDs only (not populated)
+		var distant_edges = [];				//	Distant_edges are used to connect Distants to Nodes
+
+		var threadIDs = [];
+		threads.forEach(function(thread) {
+			threadIDs.push(thread._id);
+		});
+		console.log(threadIDs.length + " threads: " + threadIDs);
+		threads.forEach(function(thread) {
+			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
+				for(var i = 0; i < thread.followedBy.length; i++) {
+					if($.inArray(thread.followedBy[i], threadIDs) === -1 && $.inArray(thread.followedBy[i], distants) === -1) {
+						distants.push(thread.followedBy[i]);
+					}
+				}
+			}
+			if(typeof thread.precededBy !== 'undefined' && thread.precededBy.length > 0) {
+				for(var i = 0; i < thread.precededBy.length; i++) {
+					if($.inArray(thread.precededBy[i], threadIDs) === -1 && $.inArray(thread.precededBy[i], distants) === -1) {
+						distants.push(thread.precededBy[i]);
+					}
+				}
+			}
+
+		});
+		console.log(distants.length + " distants: " + distants);
+
+		distants.forEach(function(distant) {
+			console.log(distant);
+			var node = {
+				id: distant,
+				shape: 'dot',
+				color: 'lightgrey',
+				size: 15
+			}
+			nodes.push(node);
+		});
 
 		//	Add threads to Nodes and add 'followed by' connections as 'edges'
 		threads.forEach(function(thread) {
@@ -73,10 +108,39 @@
 			var node = {
 				id: thread._id,
 				label: thread.title,
-				group: thread.subject.subjectName
-				// title: 'Tooltip text'							//	Can use to set tooltip text if desired
+				group: thread.subject.subjectName,
+				relatives: thread.followedBy.length + thread.precededBy.length,
+				title: thread.subject.subjectName							//	Can use to set tooltip text if desired
 			}
 			nodes.push(node);
+
+			//	Push 'followedBy' links to edges array
+			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
+				thread.followedBy.forEach(function(follow) {
+					var edge = {
+						from: thread._id,
+						to: follow
+					}
+					if($.inArray(follow, distants) !== -1) {
+						edge.dashes = true;
+						edge.color = 'lightgrey';
+					}
+					edges.push(edge);
+				});
+			}
+			if(typeof thread.precededBy !== 'undefined' && thread.precededBy.length > 0) {
+				thread.precededBy.forEach(function(prec) {
+					if($.inArray(prec, distants) !== -1) {
+						var edge = {
+							from: prec,
+							to: thread._id,
+							dashes: true,
+							color: 'lightgrey'
+						}
+						edges.push(edge);
+					}
+				});
+			}
 
 			//	Add unique thread subjects to groups array
 			var subject = {};
@@ -102,16 +166,6 @@
 				Object.assign(groups, subject);
 			}
 
-			//	Push 'followedBy' links to edges array
-			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
-				thread.followedBy.forEach(function(follow) {
-					var edge = {
-						from: thread._id,
-						to: follow
-					}
-					edges.push(edge);
-				});
-			}
 		});
 
 		//	Add nodes & edges as vis datasets
@@ -196,7 +250,7 @@
 
 		//	Instantiate network
 		var network = new vis.Network(container, data, options);
-		console.log(network.getSeed());					//	Get layout seed
+		// console.log(network.getSeed());					//	Get layout seed
 
         network.once("stabilizationIterationsDone", function() {			//	Callback when network is loaded & stabilized
             move();
@@ -230,6 +284,7 @@
 	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
 	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
 		        updateSelectedFinding(selectedNodeID);
+		        console.log(network.body.nodes[selectedNodeID]);
 	        }
 	    });
 		//	Handle node drag start event
@@ -239,11 +294,11 @@
 	        if(typeof this.getNodeAt(params.pointer.DOM) !== 'undefined') {
 	        	var selectedNodeID = this.getNodeAt(params.pointer.DOM);
 		        updateSelectedFinding(selectedNodeID);
+		        console.log(network.body.nodes[selectedNodeID]);
 	        }
 	    });
 
 	    function updateSelectedFinding(id) {
-	    	console.log('updating: ' + id);
 	    	$('.indexedFinding').addClass('hiddenThread');
 	    	$('div').find('[data-id="' + id + '"]').removeClass('hiddenThread');
 	    }

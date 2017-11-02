@@ -105,7 +105,7 @@ router.get('/:n&:id', function(req, res) {
 			console.log("FINAL THREAD ID ARRAY:");
 			console.log(threads);
 			Finding.find( { '_id': { $in: threads } } )
-			.populate({path: "subject"})
+			.populate( "subject" )
 			.populate( "postAuthor", 'username' )
 			.exec(function(err, threads) {
 				if(err) {
@@ -120,518 +120,283 @@ router.get('/:n&:id', function(req, res) {
 
 
 
+// //	Display 'thread map' for a Finding
+// router.get('/:id', function(req, res) {
+// 	Finding.findById(req.params.id)
+// 	.populate( [
+// 	{ path: 'subject' }, 
+// 	{ path: "precededBy", 
+// 	populate: [ 
+// 		{
+// 			path: 'subject'
+// 		}, {
+// 			path: 'precededBy',
+// 			populate: [
+// 				{
+// 					path: 'subject'
+// 				}, {
+// 					path: 'precededBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}, {
+// 					path: 'followedBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}
+// 			]
+// 		}, {
+// 			path: 'followedBy',
+// 			populate: [
+// 				{
+// 					path: 'subject'
+// 				}, {
+// 					path: 'precededBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}, {
+// 					path: 'followedBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}
+// 			]
+// 		}, 
+// 	] },
+// 	{ path: 'followedBy', 
+// 	populate: [ 
+// 		{
+// 			path: 'subject'
+// 		}, {
+// 			path: 'precededBy',
+// 			populate: [
+// 				{
+// 					path: 'subject'
+// 				}, {
+// 					path: 'precededBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}, {
+// 					path: 'followedBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}
+// 			]
+// 		}, {
+// 			path: 'followedBy',
+// 			populate: [
+// 				{
+// 					path: 'subject'
+// 				}, {
+// 					path: 'precededBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}, {
+// 					path: 'followedBy',
+// 					populate: {
+// 						path: 'subject'
+// 					}
+// 				}
+// 			]
+// 		}
+// 	]
+// 	} ] )
+// 	.exec(function(err, finding) {
+// 		if(err) {
+// 			req.flash("error", "Something went wrong...");
+// 			res.redirect('back');
+// 		} else if(!finding) {
+// 			res.render('404');
+// 		} else {
+// 			var finding_ids = [];
 
-	//	Set 'n' levels of recursion
-	//	Query DB for Origin finding
-	//	Push all Prec / Following Finding IDs to array
-	//	Query DB for this array
-	//	Loop previous 2 steps n times
+// 			finding_ids.push(finding._id);
+// 			if(typeof finding.followedBy !== 'undefined' && finding.followedBy.length > 0) {
+// 				finding.followedBy.forEach(function(f) {
+// 					finding_ids.push(f._id);
+// 					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
+// 						f.followedBy.forEach(function(g) {
+// 							finding_ids.push(g._id);
+// 							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
+// 								g.followedBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
+// 								g.precededBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 						})
+// 					}
+// 					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
+// 						f.precededBy.forEach(function(g) {
+// 							finding_ids.push(g._id);
+// 							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
+// 								g.followedBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
+// 								g.precededBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 						})
+// 					}
+// 				});
+// 			}
+// 			if(typeof finding.precededBy !== 'undefined' && finding.precededBy.length > 0) {
+// 				finding.precededBy.forEach(function(f) {
+// 					finding_ids.push(f._id);
+// 					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
+// 						f.followedBy.forEach(function(g) {
+// 							finding_ids.push(g._id);
+// 							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
+// 								g.followedBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
+// 								g.precededBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 						})
+// 					}
+// 					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
+// 						f.precededBy.forEach(function(g) {
+// 							finding_ids.push(g._id);
+// 							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
+// 								g.followedBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
+// 								g.precededBy.forEach(function(h) {
+// 									finding_ids.push(h._id);
+// 									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
+// 										h.followedBy.forEach(function(i) {
+// 											finding_ids.push(i);
+// 										});
+// 									}
+// 									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
+// 										h.precededBy.forEach(function(i) {
+// 											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
+// 										});
+// 									}
+// 								});
+// 							}
+// 						})
+// 					}
+// 				});
+// 			}
+// 			var unique_ids = [];
+
+// 			finding_ids.forEach(function(id){
+// 				var uniq = true;
+// 				for(var i = 0; i < unique_ids.length; i++) {
+// 					if(id.equals(unique_ids[i])) {
+// 						uniq = false;
+// 					}
+// 				}
+// 				if(uniq) {
+// 					unique_ids.push(id);
+// 				}
+// 			});
+
+// 			Finding.find( { '_id': { $in: unique_ids } } )
+// 			.populate({path: "subject"})
+// 			.populate( "postAuthor", 'username' )
+// 			.exec(function(err, threads) {
+// 				if(err) {
+// 					req.flash("error", "Something went wrong...");
+// 					res.redirect('back');
+// 				} else {
+// 					console.log(threads);
+// 					res.render('findings/threadMap', {finding: finding, threads: threads});
+// 				}
+// 			});
+// 		};
+// 	});
 
 
 
-/*
-	//	Configure query population array to n levels of recursion
-	var populate = [
-		{ path: 'subject' }
-	];
-	//	Push to Populate array to add another level of recursion
-	var recursivePopulate = [
-		{ path: 'precededBy ', 'populate': [ { path: 'subject' } ] },
-		{ path: 'followedBy ', 'populate': [ { path: 'subject' } ] }
-	];
-	var n = 3;							//	Sets recursion depth from HTML query
-	for(var i = 0; i < n; i++) {
-		for(var j = 0; j < recursivePopulate.length; j++) {
-			Array.prototype.push.apply(recursivePopulate[j].populate, recursivePopulate);
-		}
-	}
-	console.log(recursivePopulate);
-	console.log(populate);
-
-	//	DB query
-	Finding.findById(req.params.id)
-	.populate( populate )
-	.exec(function(err, finding) {
-		if(err) {
-			req.flash("error", "Something went wrong...");
-			res.redirect('back');
-		} else {
-			console.log(threads);
-			var finding_ids = [];
-
-			finding_ids.push(finding._id);
-			if(typeof finding.followedBy !== 'undefined' && finding.followedBy.length > 0) {
-				finding.followedBy.forEach(function(f) {
-					finding_ids.push(f._id);
-					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
-						f.followedBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
-						f.precededBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-				});
-			}
-			if(typeof finding.precededBy !== 'undefined' && finding.precededBy.length > 0) {
-				finding.precededBy.forEach(function(f) {
-					finding_ids.push(f._id);
-					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
-						f.followedBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
-						f.precededBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-				});
-			}
-			var unique_ids = [];
-
-			finding_ids.forEach(function(id){
-				var uniq = true;
-				for(var i = 0; i < unique_ids.length; i++) {
-					if(id.equals(unique_ids[i])) {
-						uniq = false;
-					}
-				}
-				if(uniq) {
-					unique_ids.push(id);
-				}
-			});
-
-			Finding.find( { '_id': { $in: unique_ids } } )
-			.populate({path: "subject"})
-			.populate({path: "postAuthor"})
-			.exec(function(err, threads) {
-				if(err) {
-					req.flash("error", "Something went wrong...");
-					res.redirect('back');
-				} else {
-					res.render('findings/threadMap', {finding: finding, threads: threads});
-				}
-			});
-		};
-	});
-
-
-	*/
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//	Display 'thread map' for a Finding
-router.get('/:id', function(req, res) {
-	Finding.findById(req.params.id)
-	.populate( [
-	{ path: 'subject' }, 
-	{ path: "precededBy", 
-	populate: [ 
-		{
-			path: 'subject'
-		}, {
-			path: 'precededBy',
-			populate: [
-				{
-					path: 'subject'
-				}, {
-					path: 'precededBy',
-					populate: {
-						path: 'subject'
-					}
-				}, {
-					path: 'followedBy',
-					populate: {
-						path: 'subject'
-					}
-				}
-			]
-		}, {
-			path: 'followedBy',
-			populate: [
-				{
-					path: 'subject'
-				}, {
-					path: 'precededBy',
-					populate: {
-						path: 'subject'
-					}
-				}, {
-					path: 'followedBy',
-					populate: {
-						path: 'subject'
-					}
-				}
-			]
-		}, 
-	] },
-	{ path: 'followedBy', 
-	populate: [ 
-		{
-			path: 'subject'
-		}, {
-			path: 'precededBy',
-			populate: [
-				{
-					path: 'subject'
-				}, {
-					path: 'precededBy',
-					populate: {
-						path: 'subject'
-					}
-				}, {
-					path: 'followedBy',
-					populate: {
-						path: 'subject'
-					}
-				}
-			]
-		}, {
-			path: 'followedBy',
-			populate: [
-				{
-					path: 'subject'
-				}, {
-					path: 'precededBy',
-					populate: {
-						path: 'subject'
-					}
-				}, {
-					path: 'followedBy',
-					populate: {
-						path: 'subject'
-					}
-				}
-			]
-		}
-	]
-	} ] )
-	.exec(function(err, finding) {
-		if(err) {
-			req.flash("error", "Something went wrong...");
-			res.redirect('back');
-		} else if(!finding) {
-			res.render('404');
-		} else {
-			var finding_ids = [];
-
-			finding_ids.push(finding._id);
-			if(typeof finding.followedBy !== 'undefined' && finding.followedBy.length > 0) {
-				finding.followedBy.forEach(function(f) {
-					finding_ids.push(f._id);
-					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
-						f.followedBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
-						f.precededBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-				});
-			}
-			if(typeof finding.precededBy !== 'undefined' && finding.precededBy.length > 0) {
-				finding.precededBy.forEach(function(f) {
-					finding_ids.push(f._id);
-					if(typeof f.followedBy !== 'undefined' && f.followedBy.length > 0) {
-						f.followedBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-					if(typeof f.precededBy !== 'undefined' && f.precededBy.length > 0) {
-						f.precededBy.forEach(function(g) {
-							finding_ids.push(g._id);
-							if(typeof g.followedBy !== 'undefined' && g.followedBy.length > 0) {
-								g.followedBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-							if(typeof g.precededBy !== 'undefined' && g.precededBy.length > 0) {
-								g.precededBy.forEach(function(h) {
-									finding_ids.push(h._id);
-									if(typeof h.followedBy !== 'undefined' && h.followedBy.length > 0) {
-										h.followedBy.forEach(function(i) {
-											finding_ids.push(i);
-										});
-									}
-									if(typeof h.precededBy !== 'undefined' && h.precededBy.length > 0) {
-										h.precededBy.forEach(function(i) {
-											finding_ids.push(i);		//	Note the 4th level of recursion is not populated, contains ObjectIDs only
-										});
-									}
-								});
-							}
-						})
-					}
-				});
-			}
-			var unique_ids = [];
-
-			finding_ids.forEach(function(id){
-				var uniq = true;
-				for(var i = 0; i < unique_ids.length; i++) {
-					if(id.equals(unique_ids[i])) {
-						uniq = false;
-					}
-				}
-				if(uniq) {
-					unique_ids.push(id);
-				}
-			});
-
-			Finding.find( { '_id': { $in: unique_ids } } )
-			.populate({path: "subject"})
-			.populate( "postAuthor", 'username' )
-			.exec(function(err, threads) {
-				if(err) {
-					req.flash("error", "Something went wrong...");
-					res.redirect('back');
-				} else {
-					console.log(threads);
-					res.render('findings/threadMap', {finding: finding, threads: threads});
-				}
-			});
-		};
-	});
 });
 
 module.exports = router;

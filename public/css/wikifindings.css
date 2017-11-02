@@ -166,6 +166,9 @@ hr {
 	position: absolute;
 	right: 20px;
 }
+.threadMapLink img {
+	margin-right: 30px;
+}
 form select {
 	margin-right: 30px;
 }
