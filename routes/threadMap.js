@@ -36,7 +36,7 @@ router.get('/:n&:id', function(req, res) {
 	} else {
 		n_levels = req.params.n;
 	}
-	console.log("n: " + n_levels);
+	// console.log("n: " + n_levels);
 
 	//	Array to contain all Finding IDs to be returned
 	var threads = [];
@@ -61,13 +61,13 @@ router.get('/:n&:id', function(req, res) {
 			if (typeof finding.precededBy !== 'undefined' && finding.precededBy.length > 0) {
 				relatives = relatives.concat(finding.precededBy);
 			}
-			console.log("Relatives of Origin Finding:")
-			console.log(relatives);
-			console.log("***********************");
+			// console.log("Relatives of Origin Finding:")
+			// console.log(relatives);
+			// console.log("***********************");
 			relatives = dedupeIDs(relatives);
-			console.log("Unique relatives of Origin Finding:")
-			console.log(relatives);
-			console.log("***********************");
+			// console.log("Unique relatives of Origin Finding:")
+			// console.log(relatives);
+			// console.log("***********************");
 			threads = threads.concat(relatives);
 			findRelatives(threads);
 		}
@@ -76,7 +76,7 @@ router.get('/:n&:id', function(req, res) {
 	function findRelatives(arr) {
 		n_levels -= 1;
 		if(n_levels > 0) {
-			console.log("n_level: " + n_levels);
+			// console.log("n_level: " + n_levels);
 			relatives = [];
 			Finding.find( { '_id': { $in: arr } } )
 			.exec(function(err, findings) {
@@ -94,17 +94,17 @@ router.get('/:n&:id', function(req, res) {
 						}
 					});
 					relatives = dedupeIDs(relatives);
-					console.log("Adding " + relatives.length + " relatives...");
-					console.log(relatives);
+					// console.log("Adding " + relatives.length + " relatives...");
+					// console.log(relatives);
 					threads = threads.concat(relatives);
 					findRelatives(relatives);
 				}
 			});
 		} else {
 			threads = dedupeIDs(threads);
-			console.log("* * * * * * * * * *");
-			console.log("FINAL THREAD ID ARRAY:");
-			console.log(threads);
+			// console.log("* * * * * * * * * *");
+			// console.log("FINAL THREAD ID ARRAY:");
+			// console.log(threads);
 			Finding.find( { '_id': { $in: threads } } )
 			.populate( "subject" )
 			.populate( "postAuthor", 'username' )

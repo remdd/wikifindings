@@ -204,7 +204,7 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 				}
 				if(req.body.finding.followedBy) {
 					if(!(Array.isArray(req.body.finding.followedBy))) {
-						req.body.finding.followedBy = [req.body.finding.followedBy];		// if followedBy is a single string, convert to single-value array
+						req.body.finding.followedBy = [req.body.finding.followedBy];
 					}
 					req.body.finding.followedBy.forEach(function(pid) {
 						Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : finding._id }}, function(err, followingFinding) {
@@ -328,14 +328,14 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 				originalPrecededBy = originalFinding.precededBy.slice();
 				//	Removes all existing precededBy & followedBy references to Finding being updated
 				originalPrecededBy.forEach(function(pid) {
-					Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
+					Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
 					});
 				});
 				originalFollowedBy.forEach(function(pid) {
-					Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
+					Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
@@ -343,14 +343,14 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 				});
 				//	Adds all precededBy & followedBy references from update request
 				req.body.finding.precededBy.forEach(function(pid) {
-					Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : req.params.id }}, function(err) {
+					Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
 					});
 				});
 				req.body.finding.followedBy.forEach(function(pid) {
-					Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : req.params.id }}, function(err) {
+					Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
@@ -407,14 +407,14 @@ router.delete('/:id', middleware.isUsersFinding, function(req, res) {
 				findingToDelete.precededBy = [findingToDelete.precededBy];
 			}
 			findingToDelete.precededBy.forEach(function(pid) {
-				Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : req.params.id }}, function(err) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : findingToDelete._id }}, function(err) {
 					if(err) {
 						console.log(err);
 					}
 				});
 			});
 			findingToDelete.followedBy.forEach(function(pid) {
-				Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : req.params.id }}, function(err) {
+				Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : findingToDelete._id }}, function(err) {
 					if(err) {
 						console.log(err);
 					}
