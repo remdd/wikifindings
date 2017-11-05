@@ -315,9 +315,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			req.body.finding.precededBy = [req.body.finding.precededBy];
 		}
 
-		console.log(req.body.finding.followedBy);
-		console.log(req.body.finding.precededBy);
-
 		//	Remove all preceded / followed by references to original Finding in other Findings, add new ones
 		Finding.findById(req.params.id, function(err, originalFinding) {
 			if(err) {
@@ -326,30 +323,93 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			} else {
 				originalFollowedBy = originalFinding.followedBy.slice();
 				originalPrecededBy = originalFinding.precededBy.slice();
-				//	Removes all existing precededBy & followedBy references to Finding being updated
+				console.log("Original f -> p");
+				console.log(originalFollowedBy);
+				console.log(originalPrecededBy);
+				console.log("New f -> p");
+				console.log(req.body.finding.followedBy);
+				console.log(req.body.finding.precededBy);
+
+				//	Arrays of Object IDs to push / pull from related Findings
+				var followedByToRemove = [];
+				var followedByToAdd = [];
+				var precededByToRemove = [];
+				var precededByToAdd = [];
+
+				//	Populate push & pull arrays by comparing original Finding arrays to req.body.finding
+				originalFollowedBy.forEach(function(fid) {
+					var remove = true;
+					for(var i = 0; i < req.body.finding.followedBy.length; i++) {
+						if(fid.equals(req.body.finding.followedBy[i])) {
+							remove = false;
+						}
+					}
+					if(remove) {
+						followedByToRemove.push(fid);
+					}
+				});
+				req.body.finding.followedBy.forEach(function(fid) {
+					var add = true;
+					for(var i = 0; i < originalFollowedBy.length; i++) {
+						if(originalFollowedBy[i].equals(fid)) {
+							add = false;
+						}
+					}
+					if(add) {
+						followedByToAdd.push(fid);
+					}
+				});
 				originalPrecededBy.forEach(function(pid) {
+					var remove = true;
+					for(var i = 0; i < req.body.finding.precededBy.length; i++) {
+						if(pid.equals(req.body.finding.precededBy[i])) {
+							remove = false;
+						}
+					}
+					if(remove) {
+						precededByToRemove.push(pid);
+					}
+				});
+				req.body.finding.precededBy.forEach(function(pid) {
+					var add = true;
+					for(var i = 0; i < originalPrecededBy.length; i++) {
+						if(originalPrecededBy[i].equals(pid)) {
+							add = false;
+						}
+					}
+					if(add) {
+						precededByToAdd.push(pid);
+					}
+				});
+				console.log("FB remove: " + followedByToRemove);
+				console.log("FB add: " + followedByToAdd);
+				console.log("PB remove: " + precededByToRemove);
+				console.log("PB add: " + precededByToAdd);
+
+				//	Update other Findings with *removed* followed / preceded by references to the edited Finding
+				precededByToRemove.forEach(function(pid) {
 					Finding.findByIdAndUpdate(pid, { $pull: { "followedBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
 					});
 				});
-				originalFollowedBy.forEach(function(pid) {
+				followedByToRemove.forEach(function(pid) {
 					Finding.findByIdAndUpdate(pid, { $pull: { "precededBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
 					});
 				});
-				//	Adds all precededBy & followedBy references from update request
-				req.body.finding.precededBy.forEach(function(pid) {
+				//	Update other Findings with *new* followed / preceded by references to the edited Finding
+				precededByToAdd.forEach(function(pid) {
 					Finding.findByIdAndUpdate(pid, { $push: { "followedBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
 						}
 					});
 				});
-				req.body.finding.followedBy.forEach(function(pid) {
+				followedByToAdd.forEach(function(pid) {
 					Finding.findByIdAndUpdate(pid, { $push: { "precededBy" : originalFinding._id }}, function(err) {
 						if(err) {
 							console.log(err);
