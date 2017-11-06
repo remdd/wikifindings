@@ -37,7 +37,7 @@
 		<% } %>
 
 		<h4 class="infoPaneLabel">Posted by</h4>
-		<h4 class="infoPaneInfo"><a href="/users/<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
+		<h4 class="infoPaneInfo"><a href="/users/?username=<%= finding.postAuthor.username %>"><%= finding.postAuthor.username %></a></h4>
 		<h4 class="infoPaneInfo">on <%= finding.datePosted.toDateString() %></h4>
 		<br />
 		<h4 class="infoPaneLabel">Article ID</h4>
