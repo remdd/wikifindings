@@ -14,6 +14,7 @@ var	bodyParser 		= require('body-parser');
 var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
 var	dotenv			= require('dotenv');
+var async			= require('async');
 // var Uploader		= require('s3-image-uploader');
 
 var resultsToShow = 10;
@@ -422,32 +423,33 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 						}
 					});
 				});
-			}
-		});
 
-		//	Update Finding in DB
-		Finding.findByIdAndUpdate(req.params.id, req.body.finding, { runValidators: true }, function(err, findingPreUpdate) {
-			if(err) {
-				if(!(req.flash)) {
-					req.flash("error", "Something went wrong...");
-				}
-				res.redirect('back');
-			} else {
-				//	Saves original Finding to Versions
-				findingPreUpdate.ref = findingPreUpdate._id;
-				findingPreUpdate._id = mongoose.Types.ObjectId();
-				findingPreUpdate.isNew = true;
-				Finding_version.create(findingPreUpdate, function(err, findingVersion) {
+				//	Update Finding in DB
+				Finding.findByIdAndUpdate(req.params.id, req.body.finding, { runValidators: true }, function(err, findingPreUpdate) {
 					if(err) {
-						console.log(err);
-						req.flash('error', 'Something went wrong...');
-						res.redirect('/findings/' + req.params.id);
+						if(!(req.flash)) {
+							req.flash("error", "Something went wrong...");
+						}
+						res.redirect('back');
 					} else {
-						res.redirect('/findings/' + req.params.id);
+						//	Saves original Finding to Versions
+						findingPreUpdate.ref = findingPreUpdate._id;
+						findingPreUpdate._id = mongoose.Types.ObjectId();
+						findingPreUpdate.isNew = true;
+						Finding_version.create(findingPreUpdate, function(err, findingVersion) {
+							if(err) {
+								console.log(err);
+								req.flash('error', 'Something went wrong...');
+								res.redirect('/findings/' + req.params.id);
+							} else {
+								res.redirect('/findings/' + req.params.id);
+							}
+						});
 					}
 				});
 			}
 		});
+
 	}
 });
 
