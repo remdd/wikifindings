@@ -298,11 +298,7 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 	if(req.body.finding.failValidation) {
 		res.redirect('back');
 	} else {
-
 		//	Maintain sync of preceded by / followed by records
-		var originalPrecededBy = [];
-		var originalFollowedBy = [];
-
 		//	Ensure req.body.finding.followedBy & precededBy are Arrays
 		if(!(req.body.finding.followedBy)) {
 			req.body.finding.followedBy = [];
@@ -315,12 +311,22 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 			req.body.finding.precededBy = [req.body.finding.precededBy];
 		}
 
-		//	Remove all preceded / followed by references to original Finding in other Findings, add new ones
+		//	Remove duplicate followed by / preceded by references from req.body.finding
+		req.body.finding.followedBy = req.body.finding.followedBy.filter(function(item, pos) {
+			return req.body.finding.followedBy.indexOf(item) == pos;
+		});
+		req.body.finding.precededBy = req.body.finding.precededBy.filter(function(item, pos) {
+			return req.body.finding.precededBy.indexOf(item) == pos;
+		});
+
+		//	Remove any deleted preceded / followed by references to original Finding in other Findings, add new ones
 		Finding.findById(req.params.id, function(err, originalFinding) {
 			if(err) {
 				req.flash("error", "Something went wrong...");
 				res.redirect('/findings');
 			} else {
+				var originalPrecededBy = [];
+				var originalFollowedBy = [];
 				originalFollowedBy = originalFinding.followedBy.slice();
 				originalPrecededBy = originalFinding.precededBy.slice();
 				console.log("Original f -> p");

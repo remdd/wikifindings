@@ -152,7 +152,7 @@
 	<label for="finding[precededBy]"><h4>Preceded by</h4></label>
 		<% if(finding.precededBy) {
 			finding.precededBy.forEach(function(result) { %>
-				<div class="precedentTitle">
+				<div class="precedingTitle relativeTitle">
 					<input type="checkbox" checked="checked" name="finding[precededBy]" value="<%= result._id %>"> 
 						<%= result.title %>
 						<br>
@@ -173,7 +173,7 @@
 	<label for="finding[followedBy]"><h4>Followed by</h4></label>
 		<% if(finding.followedBy) {
 			finding.followedBy.forEach(function(result) { %>
-				<div class="precedentTitle">
+				<div class="followingTitle relativeTitle">
 					<input type="checkbox" checked="checked" name="finding[followedBy]" value="<%= result._id %>"> 
 						<%= result.title %>
 						<br>

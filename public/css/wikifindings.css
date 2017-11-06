@@ -429,11 +429,11 @@ form select {
 	border-bottom: 1px dotted blue;
 }
 
-.precedentTitle {
+.relativeTitle {
 	width: 100%;
 	background: lightgrey;
 	margin-bottom: 10px;
-} .precedentTitle input {
+} .relativeTitle input {
 	margin-right: 10px;
 }
 

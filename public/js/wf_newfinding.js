@@ -114,29 +114,32 @@ $(document).ready(function() {
 	});
 
 	//	Search for preceding Finding
-	var precedents = [];
 	$('#precedentSearchBtn').click(function() {
 		$('.findingSearchWarning').text('');			// Clears any previous 'not found' warning
 		var val = $('#precedingID').val();
 		if(!val) {
 			return;										// Take no action if no search string provided
 		}
-		for(var i = 0; i < precedents.length; i++) {
-			if(precedents[i] === val) {
-				return;									// Take no action if search string already used
-			}
-		}
 		var sidUrl = '/findings/i/' + val;
 		$.ajax(sidUrl).done(function(finding) {
 			if(finding) {
-				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[precededBy]" value="' + finding._id + '">' 
-					+ finding.title 
-					+ '<br>'
-					+ finding.citation.full
-					+ '</input></div>';
-				$('#precedentFindings').append(DOMString);
-				precedents.push(val);
-				$('#precedingID').val('');
+				var add = true;
+				$('.precedingTitle').each(function() {
+					if($(this).children().first().val() === finding._id) {				//	Checks value of input elements that are children to .precedingTitle class divs
+						add = false;
+					}
+				});
+				if(add) {
+					var DOMString = '<div class="precedingTitle relativeTitle"><input type="checkbox" checked="checked" name="finding[precededBy]" value="' + finding._id + '">' 
+						+ finding.title 
+						+ '<br>'
+						+ finding.citation.full
+						+ '</input></div>';
+					$('#precedentFindings').append(DOMString);
+					$('#precedingID').val('');
+				} else {
+					$('#precedingSearchWarning').text('Finding ' + val + ' is already listed.');
+				}
 			} else {
 				$('#precedingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
@@ -144,29 +147,32 @@ $(document).ready(function() {
 	});
 
 	//	Search for following Finding
-	var following = [];
 	$('#followingSearchBtn').click(function() {
 		$('.findingSearchWarning').text('');
 		var val = $('#followingID').val();
 		if(!val) {
 			return;
 		}
-		for(var i = 0; i < following.length; i++) {
-			if(following[i] === val) {
-				return;
-			}
-		}
 		var sidUrl = '/findings/i/' + val;
 		$.ajax(sidUrl).done(function(finding) {
 			if(finding) {
-				var DOMString = '<div class="precedentTitle"><input type="checkbox" checked="checked" name="finding[followedBy]" value="' + finding._id + '">' 
-					+ finding.title 
-					+ '<br>'
-					+ finding.citation.full
-					+ '</input></div>';
-				$('#followingFindings').append(DOMString);
-				following.push(val);
-				$('#followingID').val('');
+				var add = true;
+				$('.followingTitle').each(function() {
+					if($(this).children().first().val() === finding._id) {
+						add = false;
+					}
+				});
+				if(add) {
+					var DOMString = '<div class="followingTitle relativeTitle"><input type="checkbox" checked="checked" name="finding[followedBy]" value="' + finding._id + '">' 
+						+ finding.title 
+						+ '<br>'
+						+ finding.citation.full
+						+ '</input></div>';
+					$('#followingFindings').append(DOMString);
+					$('#followingID').val('');
+				} else {
+					$('#followingSearchWarning').text('Finding ' + val + ' is already listed.');
+				}
 			} else {
 				$('#followingSearchWarning').text('Finding with ID ' + val + ' not found...');
 			}
