@@ -2,20 +2,31 @@
 <div class="paginationDiv">
 	<div>Page <%= findings.page %> of <%= findings.pages %> (<%= findings.total %> result<% if(findings.total > 1) { %>s<% } %> total), up to <%= findings.limit %> results per page.</div>
 
-	<% if(findings.total > 1) { %>
+	<% if(findings.pages > 1) { %>
 		<div>
-
 			<a class="btn btn-xs 
 				<% if(findings.page == 1) { %>
 					disabled
 				<% } %>
-			" href="/findings?page=<%= Number(findings.page) -1 %>">Previous page</a>
+			" href="/<%= queryString %>&page=<%= Number(findings.page) -1 %>">Previous page</a>
 
 			<a class="btn btn-xs 
 				<% if(findings.page == findings.pages) { %>
 					disabled
 				<% } %>
-			" href="/findings?page=<%= Number(findings.page) +1 %>">Next page</a>
+			" href="/<%= queryString %>&page=<%= Number(findings.page) +1 %>">Next page</a>
+
+			<% 	var count = 1;
+				for (var i = 0; i < findings.pages; i++) { %>
+					<a class="btn btn-xs" href="/<%= queryString %>&page=<%= count %>"><%= count %></a>
+					<% count++; 
+				} %>
+
+
+
+		</div>
+
+		<div></div>
 
 	<% } %>
 

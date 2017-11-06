@@ -9,11 +9,16 @@
 
 <hr />
 
-<% if(findings.length > 0) { %>
-	<h4><%= user.username %> has posted <%= findings.length %> Finding<% if(findings.length > 1) { %>s<% } %> :</h4>
-	<% findings.forEach(function(finding) { %>
-		<% include ../partials/indexedFinding %>
-	<% }); %>
+<% if(findings.total > 0) { %>
+
+	<h4><%= user.username %> has posted <%= findings.total %> Finding<% if(findings.total > 1) { %>s<% } %> :</h4>
+
+	<% include ../partials/paginationDiv %>
+
+	<% include ../partials/findingsindex %>
+
+	<% include ../partials/paginationDiv %>
+
 
 <% } %>
 

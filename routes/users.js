@@ -7,28 +7,35 @@ var	async = require('async');
 var	crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
+var	mongoosePaginate = require('mongoose-paginate');
 
 //	User profile route
-router.get('/:username', function(req, res) {
-	User.findOne( { username: req.params.username }, function(err, foundUser) {
+router.get('/', function(req, res) {
+	var queryString = 'users/?username=' + req.query.username;
+	User.findOne( { username: req.query.username }, function(err, foundUser) {
 		if(err) {
 			console.log(err);
 		} else if(!foundUser) {
 			res.render('404');
 		} else {
-			Finding.find({'postAuthor': foundUser})
-			.populate('subject subjectGroup category postAuthor')
-			.sort({ datePosted: -1 })
-			.exec(function(err, filteredFindings) {
+			if(!(req.query.page)) {
+				req.query.page = 1;
+			}
+			Finding.paginate( {'postAuthor': foundUser}, { 
+				limit: 10,													//	Hardcoded for now 
+				populate: 'subject subjectGroup category postAuthor',
+				sort: { datePosted: -1 }, 
+				page: req.query.page 
+			}, function(err, filteredFindings) {
 				if(err) {
 					console.log(err);
 					req.flash("error", "Something went wrong...");
-					res.redirect('back');
+					res.redirect('/findings');
 				} else {
 					if(req.user && req.user.username == foundUser.username) {
-						res.render('users/privateProfile', { user: foundUser, findings: filteredFindings, admin: false });
+						res.render('users/privateProfile', { user: foundUser, findings: filteredFindings, admin: false, queryString: queryString });
 					} else if(req.user && req.user.isAdministrator) {
-						res.render('users/privateProfile', { user: foundUser, findings: filteredFindings, admin: true });
+						res.render('users/privateProfile', { user: foundUser, findings: filteredFindings, admin: true, queryString: queryString });
 					} else {
 						var publicUser = {
 							_id: foundUser._id,
@@ -37,7 +44,7 @@ router.get('/:username', function(req, res) {
 							isScientist: foundUser.isScientist,
 							isVerifiedScientist: foundUser.isVerifiedScientist
 						};
-						res.render('users/publicProfile', { user: publicUser, findings: filteredFindings, admin: false });
+						res.render('users/publicProfile', { user: publicUser, findings: filteredFindings, admin: false, queryString: queryString });
 					}
 				}
 			});

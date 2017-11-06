@@ -33,6 +33,7 @@ dotenv.config({path: '.env'});				//	Loads environment variables file
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
+	var queryString = 'findings?';
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
@@ -47,7 +48,7 @@ router.get('/', function(req, res) {
 			console.log(err);
 			res.redirect('/findings');
 		} else {
-			res.render("findings/index", {findings: allFindings});
+			res.render("findings/index", {findings: allFindings, queryString: queryString});
 		}
 	});
 });
@@ -55,30 +56,41 @@ router.get('/', function(req, res) {
 
 //	INDEX BY SUBJECT route
 router.get('/s', function(req, res) {
+	var queryString = 'findings/s?subject=' + req.query.subject;
 	var subjectName = req.query.subject;
+	var page = req.query.page;
+	console.log(page);
 	Subject.findOne({"subjectName": subjectName}, function(err, subject) {
-		if(!(req.query.page)) {
-			req.query.page = 1;
-		}
-		Finding.paginate( {subject: subject._id}, { 
-			limit: resultsToShow, 
-			populate: 'subject subjectGroup category postAuthor',
-			sort: {datePosted: -1}, 
-			page: req.query.page 
-		}, function(err, filteredFindings) {
-			if(err) {
-				req.flash("error", "Something went wrong...");
-				res.redirect('/findings');
-			} else {
-				res.render('findings/subject', {findings: filteredFindings, subject: subjectName});
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			console.log(err);
+			res.redirect('/findings');
+		} else {
+			if(!(req.query.page)) {
+				req.query.page = 1;
 			}
-		});
+			Finding.paginate( {subject: subject._id}, { 
+				limit: resultsToShow, 
+				populate: 'subject subjectGroup category postAuthor',
+				sort: {datePosted: -1}, 
+				page: req.query.page 
+			}, function(err, filteredFindings) {
+				if(err) {
+					req.flash("error", "Something went wrong...");
+					res.redirect('/findings');
+				} else {
+					res.render('findings/subject', {findings: filteredFindings, subject: subjectName, queryString: queryString});
+				}
+			});
+		}
 	});
 });
 
 //	INDEX BY KEYWORD route
 router.get('/k', function(req, res) {
+	var queryString = 'findings/k?keyword=' + req.query.keyword;
 	var keyword = req.query.keyword;
+	var page = req.query.page;
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
@@ -92,28 +104,7 @@ router.get('/k', function(req, res) {
 			req.flash("error", "Something went wrong...");
 			res.redirect('/findings');
 		} else {
-			res.render('findings/keyword', {findings: filteredFindings, keyword: keyword});
-		}
-	});
-});
-
-//	INDEX BY POSTEDBY route 			-- Not currently in use (postAuthor links go to user profile instead).
-router.get('/p', function(req, res) {
-	var postAuthor = req.query.postAuthor;
-	if(!(req.query.page)) {
-		req.query.page = 1;
-	}
-	Finding.paginate({'postAuthor.username': postAuthor}, { 
-		limit: resultsToShow, 
-		populate: 'subject subjectGroup category postAuthor',
-		sort: {datePosted: -1}, 
-		page: req.query.page 
-	}, function(err, filteredFindings) {
-		if(err) {
-			req.flash("error", "Something went wrong...");
-			res.redirect('/findings');
-		} else {
-			res.render('findings/postAuthor', {findings: filteredFindings, postAuthor: postAuthor});
+			res.render('findings/keyword', {findings: filteredFindings, keyword: keyword, queryString: queryString});
 		}
 	});
 });
