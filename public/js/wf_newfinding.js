@@ -66,20 +66,21 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#imageUploadInput').on('change', function() {
-		if(typeof(FileReader) == "undefined") {
-			alert("Your browser does not support HTML5, which is required for this functionality.");
-		} else {
-			var container = $("#imagePreview");
-			container.empty();
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				$('<img />', {'src': e.target.result }).appendTo(container);
-				$('#imageUploadData').val(e.target.result);
-			}
-			reader.readAsDataURL($(this)[0].files[0]);
-		}
-	});
+	//	Image upload functionality (not working, still to add)
+	// $('#imageUploadInput').on('change', function() {
+	// 	if(typeof(FileReader) == "undefined") {
+	// 		alert("Your browser does not support HTML5, which is required for this functionality.");
+	// 	} else {
+	// 		var container = $("#imagePreview");
+	// 		container.empty();
+	// 		var reader = new FileReader();
+	// 		reader.onload = function(e) {
+	// 			$('<img />', {'src': e.target.result }).appendTo(container);
+	// 			$('#imageUploadData').val(e.target.result);
+	// 		}
+	// 		reader.readAsDataURL($(this)[0].files[0]);
+	// 	}
+	// });
 
 	//	Show available Subject Groups when Category is changed
 	$('#newCategoryList').change(function() {
@@ -294,6 +295,77 @@ $(document).ready(function() {
 		});
 		return false;
 	}
+
+	//	AJAX search for Following / Preceding findings by title
+	String.prototype.isEmpty = function() {
+		return(this.length === 0 || !this.trim());										//	Checks whether string is empty or contains only whitespace
+	}
+	$('#precedingTitleInput').keyup(function() {
+		var URL = "/findings/t/" + $('#precedingTitleInput').val();						//	Get string currently contained in Title search field & concat to AJAX URL
+		$.ajax({
+			type: "GET",
+			url: URL,
+			error: function() {															//	Error handling, shouldn't ever be hit
+				$('#precedingSearchWarning').html("<span class='warningSpan'>Database error!</span>");
+			},
+			success: function(findings) {
+				$('#precedingSearchResults').empty();									//	Clear previous results
+				if(!$('#precedingTitleInput').val().isEmpty()) {						//	Take no action if search string is empty
+					if(typeof findings !== 'undefined' && findings.length > 0) {		//	Take action if 1 or more search results
+						$('#precedingSearchWarning').html('');							//	Clear any previous warning message
+						if(findings.length >= 5) {										//	Show message if DB 'limit' search results returned
+							$('#precedingSearchWarning').html('<span class="successSpan">Success (showing the 5 most recent results only)</span>');							
+						}
+						findings.forEach(function(finding, index) {						//	Create search result spans & add short IDs as data attributes
+							$('#precedingSearchResults').last().append('<span class="searchResult" data-sid="' + findings[index].shortID + '">' + findings[index].title + "</span>");
+						});
+						$('.searchResult').click(function() {							//	Add listeners to spans
+							$('#precedingID').val($(this).attr('data-sid'));			//	Get short ID from data attribute, enter into ID search box
+							$('#precedentSearchBtn').trigger('click');					//	Trigger AJAX search based on short ID (use existing functionality)
+							$('#precedingTitleInput').val('');							//	Clear title search field
+							$('#precedingTitleInput').trigger('keyup');					//	Trigger keyup event on search field to retrigger this script (for cleanup)
+							$('#precedingID').val('');									//	Clear short ID search field
+						});
+					} else if(typeof findings !== 'undefined') {						//	If no results returned, display warning message
+						$('#precedingSearchWarning').html("<span class='warningSpan'>No matches found...</span>");
+					}
+				}
+			}		
+		});
+	});
+	$('#followingTitleInput').keyup(function() {
+		var URL = "/findings/t/" + $('#followingTitleInput').val();						//	Get string currently contained in Title search field & concat to AJAX URL
+		$.ajax({
+			type: "GET",
+			url: URL,
+			error: function() {															//	Error handling, shouldn't ever be hit
+				$('#followingSearchWarning').html("<span class='warningSpan'>Database error!</span>");
+			},
+			success: function(findings) {
+				$('#followingSearchResults').empty();									//	Clear previous results
+				if(!$('#followingTitleInput').val().isEmpty()) {						//	Take no action if search string is empty
+					if(typeof findings !== 'undefined' && findings.length > 0) {		//	Take action if 1 or more search results
+						$('#followingSearchWarning').html('');							//	Clear any previous warning message
+						if(findings.length >= 5) {										//	Show message if DB 'limit' search results returned
+							$('#followingSearchWarning').html('<span class="successSpan">Success (showing the 5 most recent results only)</span>');							
+						}
+						findings.forEach(function(finding, index) {						//	Create search result spans & add short IDs as data attributes
+							$('#followingSearchResults').last().append('<span class="searchResult" data-sid="' + findings[index].shortID + '">' + findings[index].title + "</span>");
+						});
+						$('.searchResult').click(function() {							//	Add listeners to spans
+							$('#followingID').val($(this).attr('data-sid'));			//	Get short ID from data attribute, enter into ID search box
+							$('#followingSearchBtn').trigger('click');					//	Trigger AJAX search based on short ID (use existing functionality)
+							$('#followingTitleInput').val('');							//	Clear title search field
+							$('#followingTitleInput').trigger('keyup');					//	Trigger keyup event on search field to retrigger this script (for cleanup)
+							$('#followingID').val('');									//	Clear short ID search field
+						});
+					} else if(typeof findings !== 'undefined') {						//	If no results returned, display warning message
+						$('#followingSearchWarning').html("<span class='warningSpan'>No matches found...</span>");
+					}
+				}
+			}		
+		});
+	});
 
 	//	Functions to run on document ready
 	$('#newCategoryList').trigger('change');

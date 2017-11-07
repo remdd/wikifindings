@@ -135,9 +135,6 @@ router.get('/new', middleware.isLoggedIn, function(req, res) {
 	}).populate({path: 'subjectGroups', options: { sort: 'subjectGroupName'}, populate: {path: 'subjects', options: { sort: 'subjectName'}}}).sort({'categoryName': 'asc'});
 });
 
-//	IMAGE UPLOAD route
-
-
 //	CREATE new finding route
 router.post('/', middleware.isLoggedIn, function(req, res) {
 	req.body.finding.shortID = shortid.generate();		// need to add in validation to ensure that shortid is available
@@ -511,6 +508,23 @@ router.get('/i/:sid', function(req, res) {
 			res.redirect('/findings');
 		} else {
 			res.json(shownFinding);
+		}
+	});
+});
+
+//	Search for Finding based on substring in Title
+router.get('/t/:substr', function(req, res) {
+	var substr = new RegExp(".*" + req.params.substr + ".*", "i");
+	console.log(substr);
+	Finding.find( { "title" : {$regex : substr } } )							//	Regex may not be the most efficient method of search when DB scales - keep an eye on performance
+	.limit(5)						//	Limit number of matches returned
+	.sort( { 'datePosted': - 1 } )
+	.exec(function(err, findings) {
+		if(err) {
+			req.flash("error", "Something went wrong...");
+			res.redirect('/findings');
+		} else {
+			res.json(findings);
 		}
 	});
 });

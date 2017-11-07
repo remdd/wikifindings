@@ -24,7 +24,6 @@
 
 			keywords.forEach(function(keyword) {	
 				$('#editKeywords').tagsinput('add', keyword);
-				console.log(keyword);
 			});
 
 			$('#newCategoryList').children().each(function() {
@@ -67,6 +66,61 @@
 
 	<h4>Accompanying image</h4>
 	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings" value="<%= finding.image %>">
+	<hr />
+
+<!-- Preceded by -->
+
+	<label for="finding[precededBy]"><h4>Preceded by</h4></label>
+		<% if(finding.precededBy) {
+			finding.precededBy.forEach(function(result) { %>
+				<div class="precedingTitle relativeTitle">
+					<input type="checkbox" checked="checked" name="finding[precededBy]" value="<%= result._id %>"> 
+						<%= result.title %>
+						<br>
+						<%= result.citation.full %>
+					</input>
+				</div>
+			<% });
+		} %>
+		<div id="precedentFindings"></div>
+		<input id="precedingID" type="text" placeholder="Preceding article ID">
+		<div class="btn btn-primary" id="precedentSearchBtn">Add by ID</div>
+		<span class="titleSearchSpan">...or search for a Finding by title:</span>
+		<input id="precedingTitleInput" type="text" placeholder="Preceding article Title">
+		<div id="precedingSearchWarning" class="findingSearchWarning"></div>
+		<div class="container">
+			<div class="row searchRow">
+				<div id="precedingSearchResults"></div>
+			</div>
+		</div>
+
+	<hr />
+
+<!-- Followed by -->
+
+	<label for="finding[followedBy]"><h4>Followed by</h4></label>
+		<% if(finding.followedBy) {
+			finding.followedBy.forEach(function(result) { %>
+				<div class="followingTitle relativeTitle">
+					<input type="checkbox" checked="checked" name="finding[followedBy]" value="<%= result._id %>"> 
+						<%= result.title %>
+						<br>
+						<%= result.citation.full %>
+					</input>
+				</div>
+			<% });
+		} %>
+		<div id="followingFindings"></div>
+		<input id="followingID" type="text" placeholder="Following article ID">
+		<div class="btn btn-primary" id="followingSearchBtn">Add by ID</div>
+		<span class="titleSearchSpan">...or search for a Finding by title:</span>
+		<input id="followingTitleInput" type="text" placeholder="Following article Title">
+		<div id="followingSearchWarning" class="findingSearchWarning"></div>
+		<div class="container">
+			<div class="row searchRow">
+				<div id="followingSearchResults"></div>
+			</div>
+		</div>
 	<hr />
 
 
@@ -146,54 +200,12 @@
 		});
 	</script>
 
-
-<!-- Preceded by -->
-
-	<label for="finding[precededBy]"><h4>Preceded by</h4></label>
-		<% if(finding.precededBy) {
-			finding.precededBy.forEach(function(result) { %>
-				<div class="precedingTitle relativeTitle">
-					<input type="checkbox" checked="checked" name="finding[precededBy]" value="<%= result._id %>"> 
-						<%= result.title %>
-						<br>
-						<%= result.citation.full %>
-					</input>
-				</div>
-			<% });
-		} %>
-		<div id="precedentFindings"></div>
-		<input id="precedingID" type="text" placeholder="Preceding article ID">
-		<div class="btn btn-primary" id="precedentSearchBtn">Add</div>
-		<div id="precedingSearchWarning" class="findingSearchWarning"></div>
-	<hr />
-
-
-<!-- Followed by -->
-
-	<label for="finding[followedBy]"><h4>Followed by</h4></label>
-		<% if(finding.followedBy) {
-			finding.followedBy.forEach(function(result) { %>
-				<div class="followingTitle relativeTitle">
-					<input type="checkbox" checked="checked" name="finding[followedBy]" value="<%= result._id %>"> 
-						<%= result.title %>
-						<br>
-						<%= result.citation.full %>
-					</input>
-				</div>
-			<% });
-		} %>
-		<div id="followingFindings"></div>
-		<input id="followingID" type="text" placeholder="Following article ID">
-		<div class="btn btn-primary" id="followingSearchBtn">Add</div>
-		<div id="followingSearchWarning" class="findingSearchWarning"></div>
-	<hr />
-
-
 <!-- Submit btn -->
 
 	<button class="btn btn-primary" form="editFindingForm" value="submit" id="submitBtn">Submit</button>
 	<a class="btn btn-danger" href="/findings">Cancel</a>
 
 </form>
+
 
 <% include ../partials/footer %>

@@ -230,6 +230,31 @@ form select {
 	display: block;
 	visibility: none;
 }
+.searchRow {
+	width: 100%;
+	height: 30px;
+	position: relative;
+	z-index: 5;
+}
+#precedingSearchResults {
+	width: inherit;
+	position: absolute;
+}
+#followingSearchResults {
+	width: inherit;
+	position: absolute;
+}
+.searchResult {
+	display: block;
+	float: left;
+	clear: both;
+	background: #c1d9ff;
+	width: inherit;
+	border: 3px solid white;
+	padding: 0 5px;
+	overflow-x: hidden;
+	cursor: pointer;
+}
 
 .spacedDownBtn {
 	margin-top: 20px;
@@ -429,10 +454,15 @@ form select {
 	border-bottom: 1px dotted blue;
 }
 
+.titleSearchSpan {
+	margin-left: 10px;
+}
 .relativeTitle {
 	width: 100%;
 	background: lightgrey;
 	margin-bottom: 10px;
+	padding: 5px 10px;
+	border-radius: 5px;
 } .relativeTitle input {
 	margin-right: 10px;
 }
