@@ -174,9 +174,14 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 	} else {
 		Finding.create(req.body.finding, function(err, finding) {
 			if(err) {
+				if(err.code === 11000) {
+					console.log("E 11000!!!!!!!!!!!!!!!!!");
+					req.flash("error", "This Finding already exists in the database.");
+				}
 				if(!(req.flash)) {
 					req.flash("error", "Something went wrong...");
 				}
+				console.log(err);
 				res.redirect('back');
 			} else {
 				if(req.body.finding.precededBy) {
@@ -415,6 +420,10 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 				//	Update Finding in DB
 				Finding.findByIdAndUpdate(req.params.id, req.body.finding, { runValidators: true }, function(err, findingPreUpdate) {
 					if(err) {
+						if(err.code === 11000) {
+							console.log("E 11000!!!!!!!!!!!!!!!!!");
+							req.flash("error", "This Finding already exists in the database.");
+						}
 						if(!(req.flash)) {
 							req.flash("error", "Something went wrong...");
 						}
@@ -585,6 +594,8 @@ function validateFinding(req) {			// 	Server side validation as protection again
 		req.flash('error', 'You cannot leave the Implications field blank.');
 	} else if(!req.body.finding.citation.authors) {
 		req.flash('error', 'You must enter the author(s) of the original article.');
+	} else if(!req.body.finding.citation.DOI) {
+		req.flash('error', 'You must enter the DOI of the original article.');
 	} else if(!req.body.finding.citation.title) {
 		req.flash('error', 'You must enter the title of the original article.');
 	} else if(!req.body.finding.citation.journal) {

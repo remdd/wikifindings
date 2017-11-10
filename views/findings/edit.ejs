@@ -130,10 +130,10 @@
 	<div class="row">
 		<div class="citationDiv col col-lg-8 col-md-10 col-sm-12">
 			<label for="finding[citation][DOI]" class="twoLineLabel">
-				<h5 class="labelInline">DOI (Digital Object Identifier - optional)</h5>
+				<h5 class="labelInline">DOI (Digital Object Identifier)</h5>
 				<h5 class="labelInfo"></h5>
 			</label>
-			<input type="text" name="finding[citation][DOI]" placeholder="DOI of original article" class="newFindingTextField" value="<%= finding.citation.DOI %>" id="citation_DOI">
+			<input required type="text" name="finding[citation][DOI]" placeholder="DOI of original article" class="newFindingTextField" value="<%= finding.citation.DOI %>" id="citation_DOI">
 
 			<span id="checkDOI"><a href="#">Autocomplete from DOI</a></span>
 			<div id="DOIWarning" class="findingSearchWarning"></div>
