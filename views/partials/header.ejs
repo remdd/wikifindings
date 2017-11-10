@@ -72,7 +72,7 @@
 								<li><a href="/register">Register</a></li>
 								<li><a href="/login">Log in</a></li>
 			   				<% } else { %>
-			   					<li><a href="/users/<%= currentUser.username %>"><%= currentUser.username %></a></li>
+			   					<li><a href="/users/?username=<%= currentUser.username %>"><%= currentUser.username %></a></li>
 								<li><a href="/logout">Log out</a></li>
 							<% } %>
 						</ul>

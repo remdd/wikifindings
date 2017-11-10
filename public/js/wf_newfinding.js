@@ -264,8 +264,6 @@ $(document).ready(function() {
 				var location = '';
 				if(res.message.volume) {
 					location += res.message.volume;
-				} if(res.message.issue) {
-					location += '(' + res.message.issue + ')';
 				} if(res.message.page) {
 					location += ':' + res.message.page;
 				}
