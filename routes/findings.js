@@ -89,12 +89,13 @@ router.get('/s', function(req, res) {
 //	INDEX BY KEYWORD route
 router.get('/k', function(req, res) {
 	var queryString = 'findings/k?keyword=' + req.query.keyword;
+	var substr = new RegExp(".*" + req.query.keyword + ".*", "i");			//	Regex may not be the most efficient method of search when DB scales - keep an eye on performance
 	var keyword = req.query.keyword;
 	var page = req.query.page;
 	if(!(req.query.page)) {
 		req.query.page = 1;
 	}
-	Finding.paginate({keywords_lower: { $all: [keyword.toLowerCase()] } }, { 
+	Finding.paginate( { $or: [ { keywords_lower: { $all: [ keyword.toLowerCase() ] } }, { "title" : { $regex: substr } } ] }, { 
 		limit: resultsToShow, 
 		populate: 'subject subjectGroup category postAuthor',
 		sort: {datePosted: -1}, 

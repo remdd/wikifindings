@@ -1,6 +1,4 @@
 $(document).ready(function() {
-	console.log("wikifindings.js connected");
-
 	$(window).scroll(function () { 
 
 		if ($(window).scrollTop() > 200) {
@@ -11,4 +9,9 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#keywordSearch').submit(function (e) {
+		if($('#keywordSearchInput').val() === '') {
+			e.preventDefault();
+		}
+	});
 });
