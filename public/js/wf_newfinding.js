@@ -308,11 +308,13 @@ $(document).ready(function() {
 			},
 			success: function(findings) {
 				$('#precedingSearchResults').empty();									//	Clear previous results
-				if(!$('#precedingTitleInput').val().isEmpty()) {						//	Take no action if search string is empty
+				if(!$('#precedingTitleInput').val().isEmpty()) {						//	Continue if search string is not empty
 					if(typeof findings !== 'undefined' && findings.length > 0) {		//	Take action if 1 or more search results
 						$('#precedingSearchWarning').html('');							//	Clear any previous warning message
 						if(findings.length >= 5) {										//	Show message if DB 'limit' search results returned
-							$('#precedingSearchWarning').html('<span class="successSpan">Success (showing the 5 most recent results only)</span>');							
+							$('#precedingSearchWarning').html('<span class="successSpan">Success - showing the 5 most recent results only</span>');							
+						} else {
+							$('#precedingSearchWarning').html('<span class="successSpan">Success - showing all results</span>');							
 						}
 						findings.forEach(function(finding, index) {						//	Create search result spans & add short IDs as data attributes
 							$('#precedingSearchResults').last().append('<span class="searchResult" data-sid="' + findings[index].shortID + '">' + findings[index].title + "</span>");
@@ -327,6 +329,8 @@ $(document).ready(function() {
 					} else if(typeof findings !== 'undefined') {						//	If no results returned, display warning message
 						$('#precedingSearchWarning').html("<span class='warningSpan'>No matches found...</span>");
 					}
+				} else {
+					$('#precedingSearchWarning').html('');								//	Clear any previous warning message if no search string is empty
 				}
 			}		
 		});
@@ -341,11 +345,13 @@ $(document).ready(function() {
 			},
 			success: function(findings) {
 				$('#followingSearchResults').empty();									//	Clear previous results
-				if(!$('#followingTitleInput').val().isEmpty()) {						//	Take no action if search string is empty
+				if(!$('#followingTitleInput').val().isEmpty()) {						//	Continue if search string is not empty
 					if(typeof findings !== 'undefined' && findings.length > 0) {		//	Take action if 1 or more search results
 						$('#followingSearchWarning').html('');							//	Clear any previous warning message
 						if(findings.length >= 5) {										//	Show message if DB 'limit' search results returned
-							$('#followingSearchWarning').html('<span class="successSpan">Success (showing the 5 most recent results only)</span>');							
+							$('#followingSearchWarning').html('<span class="successSpan">Success - showing the 5 most recent results only</span>');							
+						} else {
+							$('#followingSearchWarning').html('<span class="successSpan">Success - showing all results</span>');							
 						}
 						findings.forEach(function(finding, index) {						//	Create search result spans & add short IDs as data attributes
 							$('#followingSearchResults').last().append('<span class="searchResult" data-sid="' + findings[index].shortID + '">' + findings[index].title + "</span>");
@@ -360,6 +366,8 @@ $(document).ready(function() {
 					} else if(typeof findings !== 'undefined') {						//	If no results returned, display warning message
 						$('#followingSearchWarning').html("<span class='warningSpan'>No matches found...</span>");
 					}
+				} else {
+					$('#followingSearchWarning').html('');								//	Clear any previous warning message if no search string is empty
 				}
 			}		
 		});

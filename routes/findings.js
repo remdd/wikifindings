@@ -86,7 +86,7 @@ router.get('/s', function(req, res) {
 	});
 });
 
-//	INDEX BY KEYWORD route
+//	INDEX BY KEYWORD (or substring of Title) route
 router.get('/k', function(req, res) {
 	var queryString = 'findings/k?keyword=' + req.query.keyword;
 	var substr = new RegExp(".*" + req.query.keyword + ".*", "i");			//	Regex may not be the most efficient method of search when DB scales - keep an eye on performance
@@ -522,11 +522,11 @@ router.get('/i/:sid', function(req, res) {
 	});
 });
 
-//	Search for Finding based on substring in Title
+//	Search for Finding based on substring in Title / keywords
 router.get('/t/:substr', function(req, res) {
 	var substr = new RegExp(".*" + req.params.substr + ".*", "i");
-	console.log(substr);
-	Finding.find( { "title" : {$regex : substr } } )							//	Regex may not be the most efficient method of search when DB scales - keep an eye on performance
+	//	Regex may not be the most efficient method of search when DB scales - keep an eye on performance
+	Finding.find(  { $or: [ { keywords_lower: { $all: [ substr ] } }, { "title" : { $regex: substr } } ] } )							
 	.limit(5)						//	Limit number of matches returned
 	.sort( { 'datePosted': - 1 } )
 	.exec(function(err, findings) {
