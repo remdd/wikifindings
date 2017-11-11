@@ -31,9 +31,7 @@
 
 
 <h3>Thread Network</h3>
-<h4><a id="aboutLink" href="#null"><i class="fa fa-info-circle headerIcon" aria-hidden="true"></i>About</a></h4>
-
-<h4 id="keywordToggle"><a href="#null"><i class="fa fa-toggle-off headerIcon" aria-hidden="true"></i>Display keywords (currently showing titles)</a></h4>
+<h4><a id="aboutLink" href="#"><i class="fa fa-info-circle headerIcon" aria-hidden="true"></i>About</a></h4>
 
 <div id="tm_container"></div>
 
@@ -55,45 +53,6 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		var displayingKeywords = false;
-
-		function toggleKeywords() {
-			if(!displayingKeywords) {
-				console.log("Toggling...");
-				nodes.forEach(function(node) {
-					console.log("Updating node " + node.id);
-					var thread = $.grep(threads, function(el) {
-						return el._id === node.id;
-					});
-					if(thread.length > 0) {
-						console.log(thread);
-						var keywords = '';
-						thread[0].keywords.forEach(function(keyword) {
-							keywords += keyword + '\n';
-						});
-						nodes.update([ { id: node.id, label: keywords } ]);
-					}
-				});
-				displayingKeywords = true;
-				$('#keywordToggle').html('<a href="#null" id="keywordToggleBtn"><i class="fa fa-toggle-on headerIcon" aria-hidden="true"></i>Display titles (currently showing keywords)</a>')
-			} else {
-				console.log("Toggling...");
-				nodes.forEach(function(node) {
-					console.log("Updating node " + node.id);
-					var thread = $.grep(threads, function(el) {
-						return el._id === node.id;
-					});
-					if(thread.length > 0) {
-						console.log(thread);
-						nodes.update([ { id: node.id, label: thread[0].title } ]);
-					}
-				});
-				displayingKeywords = false;
-				$('#keywordToggle').html('<a href="#null" id="keywordToggleBtn"><i class="fa fa-toggle-off headerIcon" aria-hidden="true"></i>Display keywords (currently showing titles)</a>')
-			}
-		}
-		$('#keywordToggle').click(toggleKeywords);
-
 		// $('.headerRow').css('display', 'none');
 
 		var threads = <%- JSON.stringify(threads) %>;				//	Note to self - remember EJS calls JSON.stringify, not client!!
@@ -107,11 +66,19 @@
 		var groups = {};
 		var distants = [];					//	Distants are Findings that are at the final degree of separation - returned from DB as ObjectIDs only (not populated)
 		var distant_edges = [];				//	Distant_edges are used to connect Distants to Nodes
+		var years = [];						//	Array to hold the unique years of publication to establish heirarchy
+		var uniqueYears = [];
 
 		var threadIDs = [];
 		threads.forEach(function(thread) {
 			threadIDs.push(thread._id);
+			years.push(thread.citation.year);
 		});
+		$.each(years, function(i, year) {
+			if($.inArray(year, uniqueYears) === -1) uniqueYears.push(year);
+		});
+		uniqueYears.sort();
+		
 		console.log(threadIDs.length + " threads: " + threadIDs);
 		threads.forEach(function(thread) {
 			if(typeof thread.followedBy !== 'undefined' && thread.followedBy.length > 0) {
@@ -128,20 +95,20 @@
 					}
 				}
 			}
-
+			thread.level = uniqueYears.indexOf(thread.citation.year);
 		});
 		console.log(distants.length + " distants: " + distants);
 
-		distants.forEach(function(distant) {
-			console.log(distant);
-			var node = {
-				id: distant,
-				shape: 'dot',
-				color: 'lightgrey',
-				size: 15
-			}
-			nodes.push(node);
-		});
+		// distants.forEach(function(distant) {
+		// 	console.log(distant);
+		// 	var node = {
+		// 		id: distant,
+		// 		shape: 'dot',
+		// 		color: 'lightgrey',
+		// 		size: 15
+		// 	}
+		// 	nodes.push(node);
+		// });
 
 		//	Add threads to Nodes and add 'followed by' connections as 'edges'
 		threads.forEach(function(thread) {
@@ -152,7 +119,8 @@
 				label: thread.title,
 				group: thread.subject.subjectName,
 				relatives: thread.followedBy.length + thread.precededBy.length,
-				title: thread.subject.subjectName							//	Can use to set tooltip text if desired
+				title: thread.subject.subjectName,							//	Can use to set tooltip text if desired
+				level: thread.level
 			}
 			nodes.push(node);
 
@@ -231,7 +199,7 @@
 		var options = {
 			edges: {
 				arrows: 'to',				//	Arrows point to 'followed by' findings
-				length: 180,
+				length: 60,
 				width: 3
 			},
 			groups: {},
@@ -240,8 +208,15 @@
 				navigationButtons: true
 			},
 			layout: {
-				randomSeed: 233318,			//233318,
-				improvedLayout: true
+				// randomSeed: 233318,			//233318,
+				// improvedLayout: true,
+				hierarchical: {
+					enabled: true,
+					direction: 'LR',
+					sortMethod: 'directed',
+					nodeSpacing: 220,
+					levelSeparation: 220
+				}
 			},
 			nodes: {
 				borderWidth: 2,
