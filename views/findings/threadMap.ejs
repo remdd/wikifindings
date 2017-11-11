@@ -65,7 +65,7 @@
 					var thread = $.grep(threads, function(el) {
 						return el._id === node.id;
 					});
-					if(thread.length > 0) {
+					if(thread.length > 0 && thread[0].keywords.length > 0) {
 						console.log(thread);
 						var keywords = '';
 						thread[0].keywords.forEach(function(keyword) {
