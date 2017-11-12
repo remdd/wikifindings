@@ -52,20 +52,39 @@ router.get('/', function(req, res) {
 	});
 });
 
-//	Username availability check for new username registrations
-router.get('/s/?:username', function(req, res) {
-	console.log(req.params.username);
+//	Username availability check for new user registrations
+router.get('/u/?:username', function(req, res) {
+	var user = req.params.username;
 	var message = "";
-	User.findOne( { username: req.params.username }, function(err, foundUser) {
-		console.log(message);
+	User.findOne( { username: user } )
+	.collation( { locale: "en", strength: 2 } )						//	Case-sensitive enquiry (requires case-insensitive collated index)
+	.exec(function(err, foundUser) {
 		if(err) {
 			console.log(err);
-			req.flash("error", "Something went wrong...");
 			res.json({ message });
 		} else if(!foundUser) {
 			res.json({ message });
 		} else {
-			message = "Sorry, that username already exists.";
+			message = "Sorry, that username is in use.";
+			res.json({ message });
+		}
+	});
+});
+
+//	Email availability check for new user registrations
+router.get('/e/?:email', function(req, res) {
+	var email = req.params.email;
+	var message = "";
+	User.findOne( { email: email } )
+	.collation( { locale: "en", strength: 2 } )
+	.exec(function(err, foundUser) {
+		if(err) {
+			console.log(err);
+			res.json({ message });
+		} else if(!foundUser) {
+			res.json({ message });
+		} else {
+			message = "Email already exists in the database.";
 			res.json({ message });
 		}
 	});

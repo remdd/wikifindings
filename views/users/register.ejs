@@ -89,6 +89,7 @@
 </div>
 
 <script type="text/javascript">
+	scientistCheck();
 	$('.accTypeInfoLink').click(function() { console.log("click"); $('.accTypeInfo').toggle('fast'); });
 	function scientistCheck() {
 		if(register.isScientist.value == 'true') {
@@ -99,12 +100,24 @@
 			$('#ORCIDiD').removeAttr('required');
 		}
 	}
-	scientistCheck();
 	function checkEmails() {
+		$('#emailWarningSpan').html('');
 		if($('#confirmEmail').val() && $('#email').val() != $('#confirmEmail').val()) {
-			$('#emailWarningSpan').text('Warning - emails do not match!');
+			$('#emailWarningSpan').html("<span class='warningSpan'>Warning - emails do not match!</span>");
 		} else {
-			$('#emailWarningSpan').text('');
+			if($('#email').val().trim() != '') {												//	Execute if input is not empty or just whitespace
+				var URL = "/users/e/" + $('#email').val();										//	Get string currently contained in Username field & convert to URL
+				$.ajax({
+					type: "GET",
+					url: URL,
+					error: function() {															//	Error handling, shouldn't ever be hit
+						$('#emailWarningSpan').html("<span class='warningSpan'>Database error!</span>");
+					},
+					success: function(res) {
+						$('#emailWarningSpan').html("<span class='warningSpan'>" + res.message + "</span>");
+					}		
+				});
+			}
 		}
 	}
 	function checkPasswords() {
@@ -117,7 +130,7 @@
 	function checkUsername() {
 		$('#usernameWarningSpan').html("");													//	Clear any previous warning
 		if($('#usernameInput').val().trim() != '') {										//	Execute if input is not empty or just whitespace
-			var URL = "/users/s/" + $('#usernameInput').val();								//	Get string currently contained in Username field & convert to URL
+			var URL = "/users/u/" + $('#usernameInput').val();								//	Get string currently contained in Username field & convert to URL
 			$.ajax({
 				type: "GET",
 				url: URL,
