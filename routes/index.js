@@ -38,7 +38,7 @@ router.post('/register', function(req, res) {
 				User.register(newUser, req.body.password, function(err, user) {
 					if(err) {
 						if(err.code === 11000) {
-							req.flash("error", "Error: Email address already exists in the database");
+							req.flash("error", "Error: user already exists in the database");
 							res.redirect('/register');
 						} else {
 							req.flash("error", "Error: " + err.message);

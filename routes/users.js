@@ -52,6 +52,26 @@ router.get('/', function(req, res) {
 	});
 });
 
+//	Username availability check for new username registrations
+router.get('/s/?:username', function(req, res) {
+	console.log(req.params.username);
+	var message = "";
+	User.findOne( { username: req.params.username }, function(err, foundUser) {
+		console.log(message);
+		if(err) {
+			console.log(err);
+			req.flash("error", "Something went wrong...");
+			res.json({ message });
+		} else if(!foundUser) {
+			res.json({ message });
+		} else {
+			message = "Sorry, that username already exists.";
+			res.json({ message });
+		}
+	});
+});
+
+//	Update username route
 router.put('/:username', function(req, res) {
 	if(req.user && (req.user._id.toString() === req.body.user._id) || req.user.isAdministrator) {
 		User.findByIdAndUpdate(req.body.user._id, req.body.user, function(err, foundUser) {

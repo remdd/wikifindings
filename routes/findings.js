@@ -422,7 +422,6 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 				Finding.findByIdAndUpdate(req.params.id, req.body.finding, { runValidators: true }, function(err, findingPreUpdate) {
 					if(err) {
 						if(err.code === 11000) {
-							console.log("E 11000!!!!!!!!!!!!!!!!!");
 							req.flash("error", "This Finding already exists in the database.");
 						}
 						if(!(req.flash)) {

@@ -7,7 +7,16 @@
 		<form action="/register" method="POST" name="register">
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Username: </h5>
-				<input required type="text" name="user[username]" placeholder="Username">
+				<input id="usernameInput" required type="text" name="user[username]" placeholder="Username" pattern="[a-zA-Z0-9_]{5,20}" onblur="checkUsername();">
+				<i class="fa fa-info-circle tooltip" aria-hidden="true">
+					<span class="tooltiptext">Usernames must:
+						<ul>
+							<li>be 5 - 20 characters long</li>
+							<li>include letters, numbers and/or underscore characters only</li>
+						</ul>
+					</span>
+				</i>
+				<span class="inlineWarning" id="usernameWarningSpan"></span>
 			</div>
 
 			<hr />
@@ -103,6 +112,22 @@
 			$('#passwordWarningSpan').text('Warning - passwords do not match!');
 		} else {
 			$('#passwordWarningSpan').text('');
+		}
+	}
+	function checkUsername() {
+		$('#usernameWarningSpan').html("");													//	Clear any previous warning
+		if($('#usernameInput').val().trim() != '') {										//	Execute if input is not empty or just whitespace
+			var URL = "/users/s/" + $('#usernameInput').val();								//	Get string currently contained in Username field & convert to URL
+			$.ajax({
+				type: "GET",
+				url: URL,
+				error: function() {															//	Error handling, shouldn't ever be hit
+					$('#usernameWarningSpan').html("<span class='warningSpan'>Database error!</span>");
+				},
+				success: function(res) {
+					$('#usernameWarningSpan').html("<span class='warningSpan'>" + res.message + "</span>");
+				}		
+			});
 		}
 	}
 </script>
