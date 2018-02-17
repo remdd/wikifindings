@@ -12,6 +12,10 @@ var UserSchema = new mongoose.Schema({
 	isVerifiedScientist: { type: Boolean, default: false },
 	isAdministrator: { type: Boolean, default: false },
 
+	//	Login tracking
+	loginCount: Number,
+	lastLoginDate: Date,
+
 	//	Password reset email variables
 	resetPasswordToken: String,
 	resetPasswordExpires: Date

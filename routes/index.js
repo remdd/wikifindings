@@ -107,10 +107,10 @@ router.get('/login', function(req, res) {
 
 //	Login route
 router.post('/login', passport.authenticate('local', {
-	successRedirect: '/findings',
-	failureRedirect: '/login',
-	failureFlash: true,
-	successFlash: 'Welcome!'
+		successRedirect: '/findings',
+		failureRedirect: '/login',
+		failureFlash: true,
+		successFlash: 'Welcome!'
 }));
 
 //	Logout route

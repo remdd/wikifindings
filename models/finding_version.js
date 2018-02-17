@@ -72,7 +72,8 @@ var findingVersionSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Comment"
 		}
-	]
+	],
+	viewCount: Number
 });
 
 findingVersionSchema.plugin(mongoosePaginate);

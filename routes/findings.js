@@ -230,7 +230,13 @@ router.get('/:id', function(req, res) {
 		} else if(!shownFinding) {
 			res.render('404');
 		} else {
-			res.render('findings/show', {finding: shownFinding});
+			Finding.findByIdAndUpdate(shownFinding.id, { $inc: { viewCount: 1 }}, function(err) {
+				if(err) {
+					console.log(err)
+				} else {
+					res.render('findings/show', {finding: shownFinding});
+				}
+			})
 		};
 	});
 });

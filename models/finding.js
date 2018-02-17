@@ -72,7 +72,8 @@ var findingSchema = new mongoose.Schema({
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Comment"
 		}
-	]
+	],
+	viewCount: Number
 });
 
 findingSchema.plugin(mongoosePaginate);
