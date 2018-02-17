@@ -140,7 +140,7 @@
 		<div class="shownCommentText"><%= comment.text %></div>
 		<div class="shownCommentInfo">
 			<div class="shownCommentAuthorDateDiv">
-				<%= comment.author.username %> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span>
+				<a href="/users/?username=<%= comment.author.username %>"><%= comment.author.username %></a> - <span class="shownCommentPostedDate"><%= comment.datePosted.toDateString() %></span>
 			</div>
 			<div class="shownCommentButtonsDiv">
 				<% if( (currentUser && !comment.author.id) 

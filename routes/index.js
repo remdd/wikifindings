@@ -106,12 +106,42 @@ router.get('/login', function(req, res) {
 });
 
 //	Login route
-router.post('/login', passport.authenticate('local', {
-		successRedirect: '/findings',
-		failureRedirect: '/login',
-		failureFlash: true,
-		successFlash: 'Welcome!'
-}));
+// router.post('/login', passport.authenticate('local', {
+// 		successRedirect: '/findings',
+// 		failureRedirect: '/login',
+// 		failureFlash: true,
+// 		successFlash: 'Welcome!'
+// 	})
+// );
+
+//	Login route
+router.post('/login', function(req, res, next) {
+	passport.authenticate('local', function(err, user, info) {
+		if(err) {
+			req.flash('error', err)
+			return next(err);
+		}
+		if(!user) {
+			console.log(info);
+			req.flash('error', info.message);
+			return res.redirect('/login');
+		}
+		req.logIn(user, function(err) {
+			if(err) {
+				req.flash('error', err)
+				return next(err);
+			}
+			User.findByIdAndUpdate(user._id,  { $inc: { loginCount: 1 }, lastLoginDate: Date.now() }, function(err) {
+				if(err) {
+					console.log(err);
+				}
+				req.flash('success', 'Welcome!');
+				return res.redirect('/findings');
+			});
+		});
+	}) (req, res, next);
+});
+
 
 //	Logout route
 router.get('/logout', function(req, res) {
