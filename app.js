@@ -1,36 +1,34 @@
-// require('use-strict');
-
 var express 					= require('express'),
 	bodyParser 					= require('body-parser'),
-	mongoose 					= require('mongoose'),
-	methodOverride				= require('method-override'),
-	User						= require('./models/user'),
-	Category					= require('./models/category'),
+	mongoose 						= require('mongoose'),
+	methodOverride			= require('method-override'),
+	User								= require('./models/user'),
+	Category						= require('./models/category'),
 	SubjectGroup				= require('./models/subjectgroup'),
-	Subject 					= require('./models/subject'),
-	passport					= require('passport'),
+	Subject 						= require('./models/subject'),
+	passport						= require('passport'),
 	LocalStrategy				= require('passport-local'),
-	expressSession				= require('express-session'),
-	bcrypt						= require('bcrypt-nodejs'),				//	
-	logger						= require('morgan'),					//	http request logger
+	expressSession			= require('express-session'),
+	bcrypt							= require('bcrypt-nodejs'),				//	
+	logger							= require('morgan'),					//	http request logger
 	cookieParser				= require('cookie-parser'),				//	?
-	dotenv						= require('dotenv'),					//	environment variable manager
-	flash						= require('connect-flash'),				//	flash messages
-	mongoosePaginate 			= require('mongoose-paginate'),
+	dotenv							= require('dotenv'),					//	environment variable manager
+	flash								= require('connect-flash'),				//	flash messages
+	mongoosePaginate 		= require('mongoose-paginate'),
 	mongoDBStore				= require('connect-mongodb-session')(expressSession),	//	MongoDB sessions
-	favicon						= require('serve-favicon'),
-	path						= require('path'),						//	native Node module
-	app 						= express();
+	favicon							= require('serve-favicon'),
+	path								= require('path'),						//	native Node module
+	app 								= express();
 
-var commentRoutes				= require('./routes/comments'),
+var commentRoutes			= require('./routes/comments'),
 	findingRoutes				= require('./routes/findings'),
 	indexRoutes					= require('./routes/index'),
 	adminRoutes					= require('./routes/admin'),
 	userRoutes					= require('./routes/users'),
 	subjectRoutes				= require('./routes/subjects'),
-	threadMapRoutes				= require('./routes/threadMap');
+	threadMapRoutes			= require('./routes/threadMap');
 
-//	Clears database & re-seeds with data from seed file
+//	Clears database & re-seeds with dummy data from seed file
 // seedDB();
 
 //	Configure DEV environment variables
@@ -43,7 +41,6 @@ mongoose.connect(process.env.DBPATH, {useMongoClient: true});
 
 //	Instructs Express to serve contents of public directory
 process.env.PWD = process.cwd();
-console.log(process.env.PWD);
 app.use(express.static(process.env.PWD + '/public'));
 
 //	Serves Favicon
@@ -79,11 +76,11 @@ store.on('error', function(err) {
 //	Express-session and Passport usage
 app.use(expressSession({
 	secret: process.env.EXP_KEY,
-	store: store,									//	Connects to MongoDBStore
-	resave: true,									//	Was false - need to read into, is 'true' a risk?
-	saveUninitialized: true,						//	Was false - need to read into, is 'true' a risk?
-	httpOnly: true,									//	Don't let browser javascript access cookies
-	secure: false									//	Set to true to limit cookies to https only (SET FOR PRODUCTION)
+	store: store,												//	Connects to MongoDBStore
+	resave: true,												//	Was false - need to research this, is 'true' a risk?
+	saveUninitialized: true,						//	Was false - need to research this, is 'true' a risk?
+	httpOnly: true,											//	Don't let browser javascript access cookies
+	secure: false												//	Set to true to limit cookies to https only (***SET TRUE FOR PRODUCTION***)
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -126,7 +123,7 @@ app.get('*', function(req, res) {
 	res.render('404');
 });
 
-
+//	Start server
 app.listen(process.env.PORT, process.env.IP, function() {
 	console.log("Server started");
 });

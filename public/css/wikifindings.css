@@ -267,6 +267,9 @@ form select {
 }
 
 /* Show page fomatting */
+#deleteConfirmationDiv {
+	margin-top: 20px;
+}
 .shownBox {
 	line-height: 2;
 	border: 1px solid lightgrey;
