@@ -110,6 +110,7 @@ hr {
 	border-radius: 10px;
 	position: relative;
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+	cursor: pointer;
 }
 .fThumbDiv h4 {
 	line-height: 1.25;
@@ -287,6 +288,7 @@ form select {
 	max-width: 100%;
 	padding: 20px;
 	margin-bottom: 20px;
+	cursor: pointer;
 }
 .zoomedImageDiv {
 	position: fixed;

@@ -1,27 +1,29 @@
 <% include ../partials/header %>
 
 <% if(currentUser) {
-	if(!finding.postAuthor.id || finding.postAuthor.equals(currentUser._id) || currentUser.isAdministrator) { %>
+	if(currentUser.isScientist || currentUser.isAdministrator) { %>
+
 	<div class="shownFindingBtns">
 		<a href="/findings/<%= finding._id %>/edit" class="btn btn-warning">Edit</a>
-		<button class="btn btn-danger" onclick="showDeleteConfirmation();">Delete</button>
 
+		<% if(currentUser.isAdministrator) { %>
 
+			<button class="btn btn-danger" onclick="showDeleteConfirmation();">Delete</button>
+				<script type="text/javascript">
+					showDeleteConfirmation = function() {
+						$('#deleteConfirmationDiv').show('fast');
+					}
+				</script>
 
-			<script type="text/javascript">
-				showDeleteConfirmation = function() {
-					$('#deleteConfirmationDiv').show('fast');
-				}
-			</script>
-
-		<div id="deleteConfirmationDiv" hidden>
-			<button class="btn btn-success" onclick="$('#deleteConfirmationDiv').hide('fast');">Cancel</button>
-			<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
-				<button class="btn btn-danger">Confirm</button>
-			</form>
-			<span>Are you sure you want to entirely delete this Finding?</span>
-		</div>
-	
+			<div id="deleteConfirmationDiv" hidden>
+				<button class="btn btn-success" onclick="$('#deleteConfirmationDiv').hide('fast');">Cancel</button>
+				<form action="/findings/<%= finding._id %>?_method=DELETE" method="POST" class="inlineForm">
+					<button class="btn btn-danger">Confirm</button>
+				</form>
+				<span>Are you sure you want to entirely delete this Finding?</span>
+			</div>
+		
+		<% } %>	
 
 	</div>
 <% }} %>

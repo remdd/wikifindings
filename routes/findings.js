@@ -242,7 +242,7 @@ router.get('/:id', function(req, res) {
 });
 
 //	EDIT a finding
-router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
+router.get('/:id/edit', middleware.isScientist, function(req, res) {
 	Category.find({}, function(err, categories) {
 		if(err) {
 			console.log(err);
@@ -278,7 +278,7 @@ router.get('/:id/edit', middleware.isUsersFinding, function(req, res) {
 });
 
 //	UPDATE a finding
-router.put('/:id', middleware.isUsersFinding, function(req, res) {
+router.put('/:id', middleware.isScientist, function(req, res) {
 	
 	//	If present, ensure keywords are in array & copy to keywords_lower
 	if(req.body.finding.keywords) {
@@ -458,7 +458,7 @@ router.put('/:id', middleware.isUsersFinding, function(req, res) {
 
 
 //	DELETE a finding (storing a copy to Versions)
-router.delete('/:id', middleware.isUsersFinding, function(req, res) {
+router.delete('/:id', middleware.isAdministrator, function(req, res) {
 	Finding.findById(req.params.id, function(err, findingToDelete) {
 		if(err) {
 			req.flash("error", "Something went wrong...");
