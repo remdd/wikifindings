@@ -16,6 +16,14 @@
 
 <hr />
 
+<form action="/forgot" method="POST">
+	<h4>Change account password by email</h4>
+	<input type="hidden" name="email" type="email" value="<%= user.email %>">
+	<button class="btn btn-primary">Send email</button>
+</form>
+
+<hr />
+
 <form action="/users/<%= currentUser.username %>?_method=PUT" method="POST" id="updateUserForm">
 
 	<input type="hidden" name="user[_id]" form="updateUserForm" value="<%= user._id %>">		

@@ -38,7 +38,7 @@ router.post('/register', function(req, res) {
 				User.register(newUser, req.body.password, function(err, user) {
 					if(err) {
 						if(err.code === 11000) {
-							req.flash("error", "Error: user already exists in the database");
+							req.flash("error", "User already exists in the database");
 							res.redirect('/register');
 						} else {
 							req.flash("error", "Error: " + err.message);
@@ -169,7 +169,7 @@ router.post('/forgot', function(req, res, next) {
 			User.findOne({ email: req.body.email }, function(err, user) {
 				if (!user) {
 					req.flash("error", "Error: No account exists with that email address.");
-					return res.redirect('/forgot');
+					return res.redirect('back');
 				}
 				user.resetPasswordToken = token;
 				user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
@@ -198,6 +198,7 @@ router.post('/forgot', function(req, res, next) {
 			};
 			smtpTransport.sendMail(mailOptions, function(err) {
 				req.flash("success", "An email with a reset link has been sent to " + user.email + ".");
+				res.redirect('back');
 				done(err, 'done');
 			});
 		}

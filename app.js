@@ -74,13 +74,15 @@ store.on('error', function(err) {
 });
 
 //	Express-session and Passport usage
+var secure = process.env.COOKIES_HTTPS_ONLY === 'false' ? false : true;				//	Set to true to limit cookies to https only (***SET TRUE FOR PRODUCTION***)
+console.log("Cookies on HTTPS only: " + secure);
 app.use(expressSession({
 	secret: process.env.EXP_KEY,
-	store: store,												//	Connects to MongoDBStore
-	resave: true,												//	Was false - need to research this, is 'true' a risk?
-	saveUninitialized: true,						//	Was false - need to research this, is 'true' a risk?
-	httpOnly: true,											//	Don't let browser javascript access cookies
-	secure: false												//	Set to true to limit cookies to https only (***SET TRUE FOR PRODUCTION***)
+	store: store,																	//	Connects to MongoDBStore
+	resave: true,																	//	Was false - need to research this, is 'true' a risk?
+	saveUninitialized: true,											//	Was false - need to research this, is 'true' a risk?
+	httpOnly: true,																//	Don't let browser javascript access cookies
+	secure: secure 
 }));
 app.use(passport.initialize());
 app.use(passport.session());
