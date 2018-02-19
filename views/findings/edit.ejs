@@ -65,7 +65,11 @@
 	<textarea required id="newImplicationsTextArea" class="newFindingTextArea" name="finding[implications]" form="editFindingForm" placeholder="Enter a summary of the implications of the article's findings in plain English"><%= finding.implications %></textarea>
 
 	<h4>Accompanying image</h4>
+	<h5><strong>Images may only be shared with the express permission of the copyright holder. By saving an image URL here you are confirming that you have this permission.</strong></h5>
 	<input type="url" class="newFindingTextField" name="finding[image]" placeholder="Enter the URL of a visual abstract or other appropriate image to include with the article's findings" value="<%= finding.image %>">
+	<h5>Image attribution:</h5>
+	<input type="text" class="newFindingTextField" name="finding[imageCredit]" placeholder="Enter any image attribution or credit appropriate for your image." value="<%= finding.imageCredit %>">
+
 	<hr />
 
 <!-- Preceded by -->

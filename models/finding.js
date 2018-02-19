@@ -27,6 +27,7 @@ var findingSchema = new mongoose.Schema({
 	findings: { type: String, required: true },
 	implications: { type: String, required: true },
 	image: String,
+	imageCredit: String,
 	citation: {
 		full: String,
 		authors: { type: Array, required: true },

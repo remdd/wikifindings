@@ -313,6 +313,9 @@ form select {
 	left: 50%;
 	transform: translateX(-50%);
 }
+.imageCreditText {
+	padding-bottom: 15px;
+}
 .shownP {
 	padding: 25px 50px;
 	font-size: 1.2em;

@@ -58,19 +58,46 @@ router.post('/register', function(req, res) {
 						var mailOptions = {
 							to: user.email,
 							from: adminEmailAddress,
-							subject: 'Welcome to WikiFindings! Please confirm your email.',
+							subject: 'Welcome to WikiFindings! Please confirm your email to complete your registration.',
 							html:     
 							'<p>Hello,</p>' +
-							'<p>Thank you for signing up for a WikiFindings account!<p>' +
-							'<p><a target=_blank href=\"' + authenticationURL + '\">Please click here to confirm your email and complete your registration.</a></p>' +
+							'<p>Thank you for joining WikiFindings!<p>' +
+							'<p><a target=_blank href=\"' + authenticationURL + '\">Please click here to confirm your email and activate your account.</a></p>' +
 							'<p>If you have received this email in error, please disregard it.</p>'
 						};
 						smtpTransport.sendMail(mailOptions, function(err) {
-							req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
-							res.redirect('/findings');
-							done(err);
+							//	Email WikiFindings admin if new user is a Scientist
+							if(newUser.isScientist) {
+								console.log("Emailing WikiFindings admin!!");								
+								var smtpTransport = nodemailer.createTransport({
+									service: 'SendGrid',
+									auth: {
+										user: process.env.SG_USER,
+										pass: process.env.SG_PASS
+									},
+									tls: { rejectUnauthorized: false }
+								});
+								var mailOptions = {
+									to: 'munkrat@gmail.com',
+									from: adminEmailAddress,
+									subject: 'New Scientist signup alert.',
+									html:
+									'<p>Hello WikiFindings admin,</p>' +
+									'<p>A new Scientist user has registered on WikiFindings with username <strong>' + newUser.username + '</strong>.</p>' +
+									'<p>As a reminder, newly registered Scientist users are currently able to create new and edit all existing Findings, including those created by other users, immediately on signup - without any additional approval from WikiFindings administrators.</p>'
+								};
+								smtpTransport.sendMail(mailOptions, function(err) {
+									req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
+									res.redirect('/findings');
+									done(err);
+								});
+							} else {
+								req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
+								res.redirect('/findings');
+								done(err);
+							}
 						});
-					}
+					};
 				});
 			} else {
 				req.flash("error", "Error: Password does not meet complexity requirements");

@@ -67,6 +67,12 @@
 				<input id="ORCIDiD" type="text" name="user[ORCIDiD]" placeholder="ORCID iD">
 			</div>
 
+			<script type="text/javascript">
+				$(function() {
+					$('#ORCIDiD').mask('9999-9999-9999-999*');
+				});
+			</script>
+
 			<p class="accTypeInfoLink"><span class="inlineLink">What's the difference between account types?</span></p>
 			<div class="accTypeInfo hiddenDiv">
 				<p>With a <strong>Regular user</strong> account, you can explore all of the research posted on WikiFindings and join in the discussion by commenting on articles.</p>

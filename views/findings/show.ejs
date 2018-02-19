@@ -42,6 +42,9 @@
 		<h4 class="infoPaneLabel">Subject</h4>
 		<h4 class="infoPaneInfo"><a href="/findings/s?subject=<%= finding.subject.subjectName %>"><%= finding.subject.subjectName %></a></h4>
 		<br />
+		<h4 class="infoPaneLabel">Subject Group</h4>
+		<h4 class="infoPaneInfo"><%= finding.subjectGroup.subjectGroupName %></h4>
+		<br />
 		<h4 class="infoPaneLabel">Keywords</h4>
 			<% if(finding.keywords) {
 				for(var i = 0; i < finding.keywords.length; i++) { %>
@@ -57,7 +60,12 @@
 				<img class="zoomedImage shownBox" src="<%= finding.image %>">	
 				<button class="closeZoomedImageBtn btn btn-primary" onclick="closeZoomedImage();">X</button>
 			</div>
-			
+
+			<% if(finding.imageCredit) { %>
+				<h5 lcass="infoPaneLabel">Image credit:</h5>
+				<p class="infoPaneInfo imageCreditText"><%= finding.imageCredit %></p>
+			<% } %>
+
 			<script type="text/javascript">
 				$('.imageThumbnail').click(function() {
 					$('.zoomedImageDiv').show('fast');

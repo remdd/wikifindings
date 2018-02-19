@@ -222,6 +222,7 @@ router.get('/:id', function(req, res) {
 	.populate({path: "precededBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject postAuthor"}}})
 	.populate({path: "followedBy", options: { sort: { 'datePosted': - 1 }, populate: {path: "subject postAuthor"}}})
 	.populate({path: "subject"})
+	.populate({path: "subjectGroup"})
 	.populate({path: "postAuthor"})
 	.exec(function(err, shownFinding) {
 		if(err) {
