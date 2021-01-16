@@ -15,21 +15,11 @@ var mongoose 		= require('mongoose');
 var wordCount		= require('word-count');
 var	dotenv			= require('dotenv');
 var async			= require('async');
-// var Uploader		= require('s3-image-uploader');
 
 var resultsToShow = 10;
 
 //	Configure DEV environment variables
 dotenv.config({path: '.env'});				//	Loads environment variables file
-
-//	Instantiate S3 Image Uploader
-// var uploader = new Uploader({
-// 	aws: {
-// 		key: process.env.NODE_AWS_KEY,
-// 		secret: process.env.NODE_AWS_SECRET
-// 	},
-// 	websockets: false
-// });
 
 //	INDEX ALL FINDINGS route
 router.get('/', function(req, res) {
