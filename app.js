@@ -58,7 +58,7 @@ app.use(flash());
 //	MongoDBStore config
 var store = new mongoDBStore(
 	{
-		uri: process.env.DBPATH,
+		uri: process.env.DBPATH + '?retryWrites=false',
 		collection: 'sessions'
 	}, function(err) {
 		if(err) {
