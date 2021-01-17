@@ -3,9 +3,9 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
 	function onSubmit(event) {
-		event.preventDefault()
 		const response = grecaptcha.getResponse()
 		console.log(response)
+		event.preventDefault()
 		if (!response.length) {
 			alert('please verify that you are human!')
 			return false
@@ -104,7 +104,7 @@
 			</div>
 
 			<hr />
-			<!-- <div class="g-recaptcha" data-sitekey="6LcXjS8aAAAAAI53jyNAaQsK7cOtp_reIr0fc1XR"></div> -->
+			<div class="g-recaptcha" data-sitekey="6LcXjS8aAAAAAI53jyNAaQsK7cOtp_reIr0fc1XR"></div>
 			<button class="btn btn-primary" role="submit">Submit</button>
 		</form>
 	</div>
