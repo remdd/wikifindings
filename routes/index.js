@@ -44,11 +44,12 @@ router.post('/register', function(req, res, next) {
 							return res.redirect('/register');
 						}
 					} else {
-						const authURL =
-							`http://${req.headers.host}/verify/${user.authToken}`
+						const link =
+							`https://${req.headers.host}/verify/${user.authToken}`
+						console.log(link)
 						try {
 							console.log('successful registration')
-							email.send('userReg', user.email, { authUrl: authURL })
+							email.send('userReg', user.email, { link: link })
 
 							if(newUser.isScientist) {
 								console.log("Emailing WikiFindings admin");

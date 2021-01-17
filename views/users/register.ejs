@@ -3,8 +3,9 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
 	function onSubmit(event) {
+		// document.getElementById('registerForm').submit()
 		const response = grecaptcha.getResponse()
-		console.log(response)
+		// console.log(response)
 		event.preventDefault()
 		if (!response.length) {
 			alert('please verify that you are human!')
