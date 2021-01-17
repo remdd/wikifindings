@@ -4,13 +4,10 @@ var passport = require('passport');
 var User = require('../models/user');
 var	async = require('async');
 var	crypto = require('crypto');
-var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
 const email = require('../email')
 
 var regEx = /(?=.*\d)(?=.*[a-zA-Z]).{8,20}/;			// Password complexity regEx - at least 1 number & 1 letter
-
-var adminEmailAddress = "admin@wikifindings.net";
 
 //	Home route
 router.get('/', function(req, res) {
@@ -171,28 +168,14 @@ router.post('/forgot', function(req, res, next) {
 			});
 		},
 		function(token, user, done) {
-			var smtpTransport = nodemailer.createTransport({
-				service: 'SendGrid',
-				auth: {
-					user: process.env.SG_USER,
-					pass: process.env.SG_PASS
-				},
-				tls: { rejectUnauthorized: false }
-			});
-			var mailOptions = {
-				to: user.email,
-				from: adminEmailAddress,
-				subject: 'WikiFindings password reset',
-				text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-				'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-				'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-				'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-			};
-			smtpTransport.sendMail(mailOptions, function(err) {
+			try {
+				const link = 'http://' + req.headers.host + '/reset/' + token
+				email.send('pwResetRequest', user.email, { link: link })
 				req.flash("success", "An email with a reset link has been sent to " + user.email + ".");
-				res.redirect('back');
+				return res.redirect('back');
+			} catch (err) {
 				done(err, 'done');
-			});
+			}
 		}
 	], function(err) {
 		if (err) return next(err);
@@ -214,7 +197,7 @@ router.get('/reset/:token', function(req, res) {
 });
 
 //	Token password reset route
-router.post('/reset/:token', function(req, res) {
+router.post('/reset/:token', async (req, res) => {
 	async.waterfall([
 		function(done) {
 			User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
@@ -228,15 +211,22 @@ router.post('/reset/:token', function(req, res) {
 						user.setPassword(req.body.password, function(err) {
 							user.resetPasswordToken = undefined;
 							user.resetPasswordExpires = undefined;
-							user.save(function(err) {
-								req.logIn(user, function(err) {
-									done(err, user);
+							user.save(function() {
+								req.logIn(user, (err) => {
+									if (err) {
+										req.flash("error", err);
+										return res.redirect('back');
+									} else {
+										email.send('pwChangeConfirmation', user.email, { user_email: user.email })
+										req.flash("success", "You have successfully reset your password.");
+										return res.redirect('/findings');
+									}
 								});
 							});
 						});
 					} else {
 						req.flash("error", "Error: Password does not meet complexity requirements");
-						res.redirect('back');
+						return res.redirect('back');
 					}
 				} else {
 					req.flash("error", "Error: Passwords do not match");
@@ -244,28 +234,6 @@ router.post('/reset/:token', function(req, res) {
 				}
 			});
 		},
-		function(user, done) {
-			var smtpTransport = nodemailer.createTransport({
-				service: 'SendGrid',
-				auth: {
-					user: process.env.SG_USER,
-					pass: process.env.SG_PASS
-				},
-				tls: { rejectUnauthorized: false }
-			});
-			var mailOptions = {
-				to: user.email,
-				from: adminEmailAddress,
-				subject: 'Your WikiFindings password has been changed',
-				text: 'Hello,\n\n' +
-				'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
-			};
-			smtpTransport.sendMail(mailOptions, function(err) {
-				req.flash("success", "You have successfully reset your password.");
-				res.redirect('/findings');
-				done(err);
-			});
-		}
 	], function(err) {
 		req.flash("Error: " + err.message)
 		console.log(err);

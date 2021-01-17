@@ -5,7 +5,6 @@ var User = require('../models/user');
 var Finding = require('../models/finding');
 var	async = require('async');
 var	crypto = require('crypto');
-var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
 var	mongoosePaginate = require('mongoose-paginate');
 
