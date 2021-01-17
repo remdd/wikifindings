@@ -37,7 +37,7 @@ console.log(process.env.SG_USER);
 
 //	Connects mongoose to db
 mongoose.Promise = global.Promise;			//	Re deprecation warning - need to look into implications
-mongoose.connect(process.env.DBPATH, {useMongoClient: true});
+mongoose.connect(process.env.DBPATH);
 
 //	Instructs Express to serve contents of public directory
 process.env.PWD = process.cwd();

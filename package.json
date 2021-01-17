@@ -34,10 +34,13 @@
     "node": "8.8.1",
     "npm": "5.5.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.18.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "Robin Marsden",
   "license": "ISC"

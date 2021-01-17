@@ -1,10 +1,22 @@
 <% include ../partials/header %>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+	function onSubmit(event) {
+		console.log(event)
+		event.preventDefault()
+		return false
+		// document.getElementById('registerForm').submit()
+		//	/register
+		// onsubmit="return onSubmit(event);"
+}
+</script>
+
 <div class="row">
 	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
 	<div class="col col-xs-12 col-sm-8 col-md-6">
 		<h3>Sign up for a WikiFindings account</h3>
-		<form action="/register" method="POST" name="register">
+		<form id="registerForm" action="/register" method="POST" name="register">
 			<div class="registerFormDiv">
 				<h5 class="registerLabel">Username: </h5>
 				<input id="usernameInput" required type="text" name="user[username]" placeholder="Username" pattern="[a-zA-Z0-9_]{5,20}" onblur="checkUsername();">
@@ -87,8 +99,8 @@
 			</div>
 
 			<hr />
-
-			<button class="btn btn-primary">Submit</button>
+			<div class="g-recaptcha" data-sitekey="6LcXjS8aAAAAAI53jyNAaQsK7cOtp_reIr0fc1XR"></div>
+			<button class="btn btn-primary" role="submit">Submit</button>
 		</form>
 	</div>
 	<div class="col col-xs-0 col-sm-2 col-md-3"></div>
@@ -121,7 +133,7 @@
 					},
 					success: function(res) {
 						$('#emailWarningSpan').html("<span class='warningSpan'>" + res.message + "</span>");
-					}		
+					}
 				});
 			}
 		}
@@ -145,7 +157,7 @@
 				},
 				success: function(res) {
 					$('#usernameWarningSpan').html("<span class='warningSpan'>" + res.message + "</span>");
-				}		
+				}
 			});
 		}
 	}

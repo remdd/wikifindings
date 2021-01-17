@@ -6,6 +6,7 @@ var	async = require('async');
 var	crypto = require('crypto');
 var nodemailer = require('nodemailer');
 var middleware 	= require('../middleware');
+const email = require('../email')
 
 var regEx = /(?=.*\d)(?=.*[a-zA-Z]).{8,20}/;			// Password complexity regEx - at least 1 number & 1 letter
 
@@ -28,7 +29,7 @@ router.get('/register', function(req, res) {
 });
 
 //	Register new user route
-router.post('/register', function(req, res) {
+router.post('/register', function(req, res, done) {
 	var newUser = new User(req.body.user);
 	newUser.isScientist = req.body.isScientist;
 	if(req.body.password === req.body.confirmPassword) {
@@ -46,59 +47,23 @@ router.post('/register', function(req, res) {
 							res.redirect('/register');
 						}
 					} else {
-						var authenticationURL = 'http://' + req.headers.host + '/verify/' + user.authToken;
-						var smtpTransport = nodemailer.createTransport({
-							service: 'SendGrid',
-							auth: {
-								user: process.env.SG_USER,
-								pass: process.env.SG_PASS
-							},
-							tls: { rejectUnauthorized: false }
-						});
-						var mailOptions = {
-							to: user.email,
-							from: adminEmailAddress,
-							subject: 'Welcome to WikiFindings! Please confirm your email to complete your registration.',
-							html:     
-							'<p>Hello,</p>' +
-							'<p>Thank you for joining WikiFindings!<p>' +
-							'<p><a target=_blank href=\"' + authenticationURL + '\">Please click here to confirm your email and activate your account.</a></p>' +
-							'<p>If you have received this email in error, please disregard it.</p>'
-						};
-						smtpTransport.sendMail(mailOptions, function(err) {
-							//	Email WikiFindings admin if new user is a Scientist
+						const authURL =
+							`http://${req.headers.host}/verify/${user.authToken}`
+						try {
+							email.send('userReg', user.email, { authUrl: authURL })
+
 							if(newUser.isScientist) {
-								console.log("Emailing WikiFindings admin!!");								
-								var smtpTransport = nodemailer.createTransport({
-									service: 'SendGrid',
-									auth: {
-										user: process.env.SG_USER,
-										pass: process.env.SG_PASS
-									},
-									tls: { rejectUnauthorized: false }
-								});
-								var mailOptions = {
-									to: 'munkrat@gmail.com',
-									from: adminEmailAddress,
-									subject: 'New Scientist signup alert.',
-									html:
-									'<p>Hello WikiFindings admin,</p>' +
-									'<p>A new Scientist user has registered on WikiFindings with username <strong>' + newUser.username + '</strong>.</p>' +
-									'<p>As a reminder, newly registered Scientist users are currently able to create new and edit all existing Findings, including those created by other users, immediately on signup - without any additional approval from WikiFindings administrators.</p>'
-								};
-								smtpTransport.sendMail(mailOptions, function(err) {
-									req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
-									res.redirect('/findings');
-									done(err);
-								});
-							} else {
-								req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
-								res.redirect('/findings');
-								done(err);
+								console.log("Emailing WikiFindings admin");
+								email.send('scientistReg', process.env.ADMIN_EMAILS, { username: user.username })
 							}
-						});
-					};
-				});
+							req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
+							res.redirect('/findings');
+							done(err);
+						} catch (err) {
+							console.log(err)
+						}
+					}
+				})
 			} else {
 				req.flash("error", "Error: Password does not meet complexity requirements");
 				res.redirect('/register');
@@ -269,7 +234,7 @@ router.post('/reset/:token', function(req, res) {
 								});
 							});
 						});
-					} else {				
+					} else {
 						req.flash("error", "Error: Password does not meet complexity requirements");
 						res.redirect('back');
 					}

@@ -135,20 +135,7 @@ router.post('/', middleware.isLoggedIn, function(req, res) {
 	if(req.body.finding.imageURL) {
 		req.body.finding.image = req.body.finding.imageURL;
 	} else if (req.body.finding.imageUpload) {
-		// console.log(req.body.finding.imageUpload);
-		// var filename = shortid.generate();
-		// uploader.upload({
-		// 	fileId: filename,
-		// 	bucket: process.env.S3_BUCKET,
-		// 	source: req.body.finding.imageUpload,
-		// 	name: filename
-		// },
-		// function(data) {
-		// 	console.log('upload success: ', data);
-		// },
-		// function(errMsg, errObject) {
-		// 	console.error('unable to upload: ' + errMsg + ' : ' + errObject);
-		// });
+		//
 	}
 
 	if(req.body.finding.keywords) {
