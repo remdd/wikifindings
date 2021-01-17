@@ -29,7 +29,7 @@ router.get('/register', function(req, res) {
 });
 
 //	Register new user route
-router.post('/register', function(req, res, done) {
+router.post('/register', function(req, res, next) {
 	var newUser = new User(req.body.user);
 	newUser.isScientist = req.body.isScientist;
 	if(req.body.password === req.body.confirmPassword) {
@@ -40,11 +40,11 @@ router.post('/register', function(req, res, done) {
 					if(err) {
 						if(err.code === 11000) {
 							req.flash("error", "User already exists in the database");
-							res.redirect('/register');
+							return res.redirect('/register');
 						} else {
 							req.flash("error", "Error: " + err.message);
 							console.log(err);							// Need to test validations & handle different user errors here
-							res.redirect('/register');
+							return res.redirect('/register');
 						}
 					} else {
 						const authURL =
@@ -57,24 +57,24 @@ router.post('/register', function(req, res, done) {
 								email.send('scientistReg', process.env.ADMIN_EMAILS, { username: user.username })
 							}
 							req.flash("success", "Welcome! To complete your registration, please click the link in the email you have just been sent.");
-							res.redirect('/findings');
-							done(err);
+							return res.redirect('/findings');
 						} catch (err) {
 							console.log(err)
+							return res.redirect('/register');
 						}
 					}
 				})
 			} else {
 				req.flash("error", "Error: Password does not meet complexity requirements");
-				res.redirect('/register');
+				return res.redirect('/register');
 			}
 		} else {
 			req.flash("error", "Error: Emails do not match");
-			res.redirect('/register');
+			return res.redirect('/register');
 		}
 	} else {
 		req.flash("error", "Error: Passwords do not match");
-		res.redirect('/register');
+		return res.redirect('/register');
 	}
 });
 
@@ -85,7 +85,7 @@ router.get('/verify/:token', function(req, res) {
 			req.flash('error', err);
 		} else {
 			console.log("Success!");
-			res.render('users/verify');
+			return res.render('users/verify');
 		}
 	});
 });
