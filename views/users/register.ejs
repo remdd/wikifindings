@@ -3,15 +3,16 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
 	function onSubmit(event) {
-		console.log(event)
+		event.preventDefault()
 		const response = grecaptcha.getResponse()
 		console.log(response)
 		if (!response.length) {
 			alert('please verify that you are human!')
-			event.preventDefault()
 			return false
 		} else {
+			alert('submitting')
 			document.getElementById('registerForm').submit()
+			return false
 		}
 	}
 </script>
@@ -103,7 +104,7 @@
 			</div>
 
 			<hr />
-			<div class="g-recaptcha" data-sitekey="6LcXjS8aAAAAAI53jyNAaQsK7cOtp_reIr0fc1XR"></div>
+			<!-- <div class="g-recaptcha" data-sitekey="6LcXjS8aAAAAAI53jyNAaQsK7cOtp_reIr0fc1XR"></div> -->
 			<button class="btn btn-primary" role="submit">Submit</button>
 		</form>
 	</div>

@@ -47,6 +47,7 @@ router.post('/register', function(req, res, next) {
 						const authURL =
 							`http://${req.headers.host}/verify/${user.authToken}`
 						try {
+							console.log('successful registration')
 							email.send('userReg', user.email, { authUrl: authURL })
 
 							if(newUser.isScientist) {
