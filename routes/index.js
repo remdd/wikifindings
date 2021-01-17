@@ -27,6 +27,12 @@ router.get('/register', function(req, res) {
 
 //	Register new user route
 router.post('/register', function(req, res, next) {
+	console.log(req.body.source)
+	const sources = ['wikifindings-signup-form-v1']
+	if (!sources.includes(req.body.source)) {
+		req.flash("error", "Error: Registration source not allowed");
+		return res.redirect('/register');
+	}
 	var newUser = new User(req.body.user);
 	newUser.isScientist = req.body.isScientist;
 	if(req.body.password === req.body.confirmPassword) {
