@@ -530,6 +530,9 @@ form select {
 	margin-left: 10px;
 }
 
+.g-recaptcha {
+	margin-bottom: 8px;
+}
 
 /* Todo list only - remove for production */
 .done {
