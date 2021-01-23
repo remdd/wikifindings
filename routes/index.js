@@ -27,8 +27,12 @@ router.get('/register', function(req, res) {
 
 //	Register new user route
 router.post('/register', function(req, res, next) {
-	if (req.body['source-category'] !== '') {
-		req.flash("error", "Error: Registration source not allowed");
+	console.log(req.headers.origin)
+	if (
+		req.body['source-category'] !== '' ||
+		req.headers.origin !== 'https://www.wikifindings.net/'
+	) {
+		req.flash("error", "Error: Registration blocked");
 		return res.redirect('/register');
 	}
 	var newUser = new User(req.body.user);
