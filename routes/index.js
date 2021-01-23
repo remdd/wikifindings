@@ -27,10 +27,9 @@ router.get('/register', function(req, res) {
 
 //	Register new user route
 router.post('/register', function(req, res, next) {
-	console.log(req.headers.origin)
 	if (
 		req.body['source-category'] !== '' ||
-		req.headers.origin !== 'https://www.wikifindings.net/'
+		req.headers.origin !== 'https://www.wikifindings.net'
 	) {
 		req.flash("error", "Error: Registration blocked");
 		return res.redirect('/register');
