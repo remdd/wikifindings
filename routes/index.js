@@ -30,7 +30,7 @@ router.post("/register", function (req, res, next) {
   console.log(req.headers);
   if (
     req.body["source-category"] !== "" ||
-    req.headers.origin !== "https://www.wikifindings.net"
+    !req.headers.origin.includes("wikifindings.net")
   ) {
     console.log("registration error");
     req.flash("error", "Error: Registration blocked");
